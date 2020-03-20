@@ -1,5 +1,12 @@
 package models
 
+// StudentID is a unique identifier of the student
+type StudentID struct {
+	Branch  [3]byte `json:"brcnh"`
+	Year    [4]byte `json:"yr"`
+	AdminNo [3]byte `json:"aNo"`
+}
+
 // Student struct hold's student data
 type Student struct {
 	// TODO make a proper ID just like classID
