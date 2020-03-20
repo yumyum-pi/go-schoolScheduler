@@ -10,6 +10,7 @@ type ClassID struct {
 	Standerd [2]byte `json:"stn"`
 	Section  [2]byte `json:"sec"`
 	Group    [2]byte `json:"grp"`
+	Year     [4]byte `json:"year"`
 }
 
 // Bytes return combined bytes of the ID
@@ -18,11 +19,12 @@ func (i *ClassID) Bytes() [6]byte {
 }
 
 // Create return a new ClassID
-func (i ClassID) Create(st, sec, grp [2]byte) ClassID {
+func (i ClassID) Create(st, sec, grp [2]byte, yr [4]byte) ClassID {
 	return ClassID{
 		Standerd: st,
 		Section:  sec,
 		Group:    grp,
+		Year:     yr,
 	}
 }
 

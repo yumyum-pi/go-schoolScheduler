@@ -10,32 +10,33 @@ type classIDTestUnit struct {
 	Stn [2]byte
 	Sec [2]byte
 	Grp [2]byte
+	Yr  [4]byte
 }
 
 var classIDTestGrp []classIDTestUnit = []classIDTestUnit{
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}},
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}},
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}},
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}},
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}},
+	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
 }
 
 var classIDs []ClassID = []ClassID{
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}},
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}},
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}},
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}},
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}}, //
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}},
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}},
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}},
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}},
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}}, //
+	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}}, //
+	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
+	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}}, //
 }
 
 var createTestResultBool []bool = []bool{
@@ -89,7 +90,7 @@ func classIDTestUnitF(n int) (e error) {
 	// Get the classID Unit for testing
 	var unit classIDTestUnit = classIDTestGrp[n]
 	// Create a new test classID
-	testID = testID.Create(unit.Stn, unit.Sec, unit.Grp)
+	testID = testID.Create(unit.Stn, unit.Sec, unit.Grp, unit.Yr)
 
 	// Compare the testID with the classIDUnit classID
 	t = testID == classIDs[n]

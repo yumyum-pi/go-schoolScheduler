@@ -38,6 +38,7 @@ var standerds = [][2]byte{
 
 var noOfSection = minMax{1, 4}
 var group = [2]byte{0, 1}
+var year = [4]byte{2, 0, 0, 20}
 
 // genereateSubject return an array of subjects
 func generateSubject(i int) (subjects []models.Subject) {
@@ -94,7 +95,7 @@ func generateSection(i int) (classes []models.Class) {
 		var class models.Class               // create a new class
 		sec := [2]byte{0, byte(noOfSec + 1)} // create section data
 		var id models.ClassID                // generate ClassID
-		id = id.Create(*standerd, sec, group)
+		id = id.Create(*standerd, sec, group, year)
 
 		class.ID = id                       // assign the classID
 		class.Subjects = generateSubject(i) // generate subject data
