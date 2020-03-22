@@ -4,17 +4,10 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/models"
 )
 
-// ClassRLE holds data that contain class id and no. of period required
-type ClassRLE struct {
-	ID  models.ClassID // unique identifier for the class
-	Req int            // total no. of period required by class of the subject
-}
-
 // SubjectRLE is struct of requirement of a subject
 // This struct contains the subjectID,
-// list of class ID'd that require this subject
+// list of class ID's that require this subject
 // Total No. of requirement
-// Total Teacher required
 type SubjectRLE struct {
 	SubjectID models.SubjectID // for identification of the class
 	Classes   []ClassRLE       // list of classes that require this subject
