@@ -18,6 +18,8 @@ func Get() (classes []models.Class, teachers []models.Teacher) {
 
 	// get class data
 	getClass(&classes)
+
+	// return the data
 	return
 }
 

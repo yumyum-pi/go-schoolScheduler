@@ -2,6 +2,7 @@ package generate
 
 import (
 	"math/rand"
+	"time"
 
 	"github.com/yumyum-pi/go-schoolScheduler/models"
 )
@@ -12,6 +13,7 @@ type minMax struct {
 }
 
 func (m *minMax) GetRandomNo() int {
+	rand.Seed(time.Now().UnixNano())
 	return rand.Intn(m.Max-m.Min) + m.Min
 }
 
@@ -28,7 +30,22 @@ var subjectTypeCode = [][4]byte{
 	[4]byte{0, 0, 0, 9}, // dance & music
 }
 
+/*
 // list of standerds
+var standerds = [][2]byte{
+	[2]byte{0, 1},
+	[2]byte{0, 2},
+	[2]byte{0, 3},
+	[2]byte{0, 4},
+	[2]byte{0, 5},
+	[2]byte{0, 6},
+	[2]byte{0, 7},
+	[2]byte{0, 8},
+	[2]byte{0, 9},
+	[2]byte{1, 0},
+	[2]byte{1, 1},
+	[2]byte{1, 2},
+*/
 var standerds = [][2]byte{
 	[2]byte{0, 5},
 	[2]byte{0, 6},
@@ -36,7 +53,7 @@ var standerds = [][2]byte{
 	[2]byte{0, 8},
 }
 
-var noOfSection = minMax{1, 4}
+var noOfSection = minMax{1, 5}
 var group = [2]byte{0, 1}
 var year = [4]byte{2, 0, 0, 20}
 
