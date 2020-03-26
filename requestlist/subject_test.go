@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/yumyum-pi/go-schoolScheduler/models"
+	"github.com/yumyum-pi/go-schoolScheduler/utils"
 )
 
 /*
@@ -88,15 +89,8 @@ var m []models.ClassID = make([]models.ClassID, 5)
 var s1 SubjectRL
 var s2 SubjectRL = list[:]
 
-func generateRandomInt(i int, factor int) int {
-	n := rand.Intn(i * factor)
-	n /= factor
-
-	return n
-}
-
 func TestSubject_Add_Empty(t *testing.T) {
-	n := generateRandomInt(9, 10)
+	n := utils.GenerateRandomInt(9, 10)
 	id := s2[n].SubjectID
 	s1.Add(&(s2)[n])
 	if s1[0].TotalReq != (s2)[n].Classes[0].Req {
@@ -111,7 +105,7 @@ func TestSubject_Add_Empty(t *testing.T) {
 }
 
 func TestSubject_Add_Full(t *testing.T) {
-	n := generateRandomInt(9, 10)
+	n := utils.GenerateRandomInt(9, 10)
 	// saving old data
 	classlength, totalRequest := len(s2[n].Classes), s2[n].TotalReq
 	s2.Add(&(s2[n]))
@@ -125,7 +119,7 @@ func TestSubject_Add_Full(t *testing.T) {
 }
 
 func TestSubject_Add_New(t *testing.T) {
-	n := generateRandomInt(9, 10)
+	n := utils.GenerateRandomInt(9, 10)
 	// Create a new subjectID
 	id := models.SubjectID{Standerd: [2]byte{8, 1}, Type: [4]byte{4, 4, 4, 4}}
 

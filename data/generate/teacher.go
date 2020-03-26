@@ -2,7 +2,6 @@ package generate
 
 import (
 	c "crypto/rand"
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -81,7 +80,7 @@ func generateTeacherList(trl *requestlist.TeacherRL) (teacherList models.Teacher
 		if len(teacherList) == 0 {
 			teacher := createTeacher(subjectID, req)   // Create a new Teacher
 			teacherList = append(teacherList, teacher) // Add the teacher to the teacherList
-			fmt.Printf("> !List:\tname\"%v\"\tCreated a new teacher when list is empty.\n", teacher.Name)
+			//fmt.Printf("> !List:\tname\"%v\"\tCreated a new teacher when list is empty.\n", teacher.Name)
 		} else {
 			var ifAssigned bool // to check if the subject is assigned to a teacher
 
