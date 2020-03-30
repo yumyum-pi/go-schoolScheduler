@@ -31,14 +31,13 @@ func Init() {
 	//printTeacher(&teacher)
 
 	ac := []models.ClassAssigned{} // empty slice of class assigned struct
-	cap := dW * (pPD - fPPD)       // max capacity of the teacher set to default
 	// loop through all teacher and reset to default data
-	for _, t := range teacher {
-		t.ClassesAssigned = ac
-		t.Capacity = cap
+	for i := range teacher {
+		teacher[i].ClassesAssigned = ac
+		teacher[i].Capacity = models.MaxCap
 	}
-
+	// fmt.Println(teacher[12].Capacity)
 	// write to files
 	utils.WriteFile(utils.ResourceFilePath("classes"), classes)
-	utils.WriteFile(utils.ResourceFilePath("teacher"), teacher)
+	utils.WriteFile(utils.ResourceFilePath("teachers"), teacher)
 }

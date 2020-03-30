@@ -6,6 +6,20 @@ type TeacherID struct {
 	JoinNo [4]byte `json:"jNo"`
 }
 
+// Bytes return combined bytes of the ID
+func (id *TeacherID) Bytes() [8]byte {
+	return [8]byte{
+		id.Year[0],
+		id.Year[1],
+		id.Year[2],
+		id.Year[3],
+		id.JoinNo[0],
+		id.JoinNo[1],
+		id.JoinNo[2],
+		id.JoinNo[3],
+	}
+}
+
 // ClassAssigned is a struct to store data of a
 // classed assigned to a teacher
 type ClassAssigned struct {
@@ -16,12 +30,11 @@ type ClassAssigned struct {
 
 // Teacher is a struct to store teacher data
 type Teacher struct {
-	Name             Name            `json:"name"`      // Name of the teacher
-	ID               TeacherID       `json:"id"`        // Unique identifier of the teacher
-	SubjectCT        []SubjectID     `json:"subCT"`     // Subjects and Standers that the teacher can teach
-	Capacity         int             `json:"cap"`       // Max no. of periods the teacher can take per week
-	FreePeriodPerDay int             `json:"fPeriodPD"` // No. of peroid free in a day
-	ClassesAssigned  []ClassAssigned `json:"cAsgnd"`    // Classes asssigned to the teacher with the no. of period per week
+	Name            Name            `json:"name"`   // Name of the teacher
+	ID              TeacherID       `json:"id"`     // Unique identifier of the teacher
+	SubjectCT       []SubjectID     `json:"subCT"`  // Subjects and Standers that the teacher can teach
+	Capacity        int             `json:"cap"`    // Max no. of periods the teacher can take per week
+	ClassesAssigned []ClassAssigned `json:"cAsgnd"` // Classes asssigned to the teacher with the no. of period per week
 }
 
 // AssignClass will assign class to the teacher struct
@@ -30,7 +43,6 @@ func (t *Teacher) AssignClass(class ClassID, subID SubjectID, req int) (diff int
 	// check if the teach has capacity to teach another class
 	if diff >= 0 {
 		// assign
-
 		cAssign := ClassAssigned{class, subID, req}
 		(*t).Capacity = diff
 		(*t).ClassesAssigned = append((*t).ClassesAssigned, cAssign)
@@ -100,6 +112,25 @@ func (ts *Teachers) FindBySubType(subID *SubjectID) (index []int) {
 	}
 
 	return // Element not found
+}
+
+// ClassAssigned returns the index of teach that has been assigned the given subject and class
+func (ts *Teachers) ClassAssigned(subID *SubjectID, classID *ClassID) (int, int) {
+	// loop through each teacher
+	for i, t := range *ts {
+		// check if the assigned class !empty
+		if len(t.ClassesAssigned) != 0 {
+			// loop though each classes assigned
+			for j, ca := range t.ClassesAssigned {
+				if subID == &ca.SubjectID && classID == &ca.ClassID {
+					return i, j
+				}
+			}
+		}
+
+	}
+
+	return -1, -1
 }
 
 //

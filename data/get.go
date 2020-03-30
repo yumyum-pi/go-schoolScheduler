@@ -18,6 +18,7 @@ func Get() (classes []models.Class, teachers []models.Teacher) {
 
 	// get class data
 	getClass(&classes)
+	getTeacher(&teachers)
 
 	// return the data
 	return
@@ -25,4 +26,8 @@ func Get() (classes []models.Class, teachers []models.Teacher) {
 
 func getClass(c *[]models.Class) {
 	utils.ReadFile(utils.ResourceFilePath("classes"), &c)
+}
+
+func getTeacher(t *[]models.Teacher) {
+	utils.ReadFile(utils.ResourceFilePath("teachers"), &t)
 }

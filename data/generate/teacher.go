@@ -10,8 +10,6 @@ import (
 )
 
 const fPPD = 2 // Total free period per day
-const pPD = 8  // Period per dat
-const dW = 6   // Days per week
 
 // Contain all character
 const charset = "abcdefghijklmnopqrstuvwxyz"
@@ -61,8 +59,7 @@ func createTeacher(subjectID models.SubjectID, req int) (t models.Teacher) {
 
 	t.ID = generateTeacherID()                  // generate random teacherID
 	t.Name = generateName()                     // generate random name
-	t.FreePeriodPerDay = 2                      // free period per day
-	t.Capacity = dW * (pPD - fPPD)              // capacity
+	t.Capacity = models.MaxCap                  // capacity
 	t.SubjectCT = []models.SubjectID{subjectID} // Add to subject could teach list
 	t.AssignClass(class, subjectID, req)        // Assign class
 

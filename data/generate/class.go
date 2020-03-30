@@ -116,6 +116,7 @@ func generateSection(i int) (classes []models.Class) {
 
 		class.ID = id                       // assign the classID
 		class.Subjects = generateSubject(i) // generate subject data
+		class.CalRemCap()                   // Calculate the free periods
 
 		classes = append(classes, class) // append the the class to classes
 	}
