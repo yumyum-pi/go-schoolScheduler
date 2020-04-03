@@ -57,11 +57,11 @@ func generateName() (name models.Name) {
 func createTeacher(subjectID models.SubjectID, req int) (t models.Teacher) {
 	var class models.ClassID // create blank classID
 
-	t.ID = generateTeacherID()                  // generate random teacherID
-	t.Name = generateName()                     // generate random name
-	t.Capacity = models.MaxCap                  // capacity
-	t.SubjectCT = []models.SubjectID{subjectID} // Add to subject could teach list
-	t.AssignClass(class, subjectID, req)        // Assign class
+	t.ID = generateTeacherID()                            // generate random teacherID
+	t.Name = generateName()                               // generate random name
+	t.Capacity = models.MaxCap - models.TeacherFreePeriod // capacity
+	t.SubjectCT = []models.SubjectID{subjectID}           // Add to subject could teach list
+	t.AssignClass(class, subjectID, req)                  // Assign class
 
 	return t
 }
