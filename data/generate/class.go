@@ -30,7 +30,6 @@ var subjectTypeCode = [][4]byte{
 	[4]byte{0, 0, 0, 9}, // dance & music
 }
 
-/*
 // list of standerds
 var standerds = [][2]byte{
 	[2]byte{0, 1},
@@ -45,13 +44,16 @@ var standerds = [][2]byte{
 	[2]byte{1, 0},
 	[2]byte{1, 1},
 	[2]byte{1, 2},
-*/
-var standerds = [][2]byte{
-	[2]byte{0, 5},
-	[2]byte{0, 6},
-	[2]byte{0, 7},
+}
+
+/*
+	var standerds = [][2]byte{
+		[2]byte{0, 5},
+		[2]byte{0, 6},
+		[2]byte{0, 7},
 	[2]byte{0, 8},
 }
+*/
 
 var noOfSection = minMax{1, 5}
 var group = [2]byte{0, 1}
@@ -111,12 +113,10 @@ func generateSection(i int) (classes []models.Class) {
 	for noOfSec := 0; noOfSec < n; noOfSec++ {
 		var class models.Class               // create a new class
 		sec := [2]byte{0, byte(noOfSec + 1)} // create section data
-		var id models.ClassID                // generate ClassID
-		id = id.Create(*standerd, sec, group, year)
 
-		class.ID = id                       // assign the classID
-		class.Subjects = generateSubject(i) // generate subject data
-		class.CalRemCap()                   // Calculate the free periods
+		class.ID.Create(year, *standerd, sec, group) // creating a new ClassID
+		class.Subjects = generateSubject(i)          // generate subject data
+		class.CalRemCap()                            // Calculate the free periods
 
 		classes = append(classes, class) // append the the class to classes
 	}
