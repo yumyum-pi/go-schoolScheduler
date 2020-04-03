@@ -70,7 +70,7 @@ func (srl *SubjectRL) Add(s *SubjectRLE) {
 }
 
 // Create the list form the given list class
-func (srl *SubjectRL) Create(classes *[]models.Class) {
+func (srl *SubjectRL) Create(classes *models.Classes) {
 	// loop through each classs
 	for _, class := range *classes {
 		// loop throught each subject
