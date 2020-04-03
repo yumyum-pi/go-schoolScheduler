@@ -2,21 +2,36 @@ package models
 
 // TeacherID is a unique identifier of the teacher
 type TeacherID struct {
-	Year   [4]byte `json:"yr"`
-	JoinNo [4]byte `json:"jNo"`
+	Year   [YearBS]byte   `json:"yr"`
+	JoinNo [JoinNoBS]byte `json:"jNo"`
 }
 
+// TeacherFreePeriod no of free period allowed in an weel
+const TeacherFreePeriod = 2 * NDays
+
 // Bytes return combined bytes of the ID
-func (id *TeacherID) Bytes() [8]byte {
-	return [8]byte{
-		id.Year[0],
-		id.Year[1],
-		id.Year[2],
-		id.Year[3],
-		id.JoinNo[0],
-		id.JoinNo[1],
-		id.JoinNo[2],
-		id.JoinNo[3],
+func (id *TeacherID) Bytes() (b [TeacherIDBS]byte) {
+	for i := 0; i < TeacherIDBS; i++ {
+		if i < YearBS {
+			b[i] = (*id).Year[i]
+		} else {
+			j := i - YearBS
+			b[i] = (*id).JoinNo[j]
+		}
+	}
+	return
+}
+
+// Init adds value to the TeacherID
+//TODO write test
+func (id *TeacherID) Init(b [TeacherIDBS]byte) {
+	for i := 0; i < TeacherIDBS; i++ {
+		if i < YearBS {
+			(*id).Year[i] = b[i]
+		} else {
+			j := i - YearBS
+			(*id).JoinNo[j] = b[i]
+		}
 	}
 }
 

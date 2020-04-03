@@ -1,43 +1,63 @@
 package models
 
-import "github.com/yumyum-pi/go-schoolScheduler/utils"
-
-// Class id has should have the following components
-// - class	: (1 - 12)	= requires 2 byte of data
-// - section: (1 - n)	= requires 2 byte of data
-// - group	: (1 - n)	= requires 2 byte of data
+import (
+	"github.com/yumyum-pi/go-schoolScheduler/utils"
+)
 
 // ClassID is struct to store class id
 type ClassID struct {
-	Standerd [2]byte `json:"stn"`
-	Section  [2]byte `json:"sec"`
-	Group    [2]byte `json:"grp"`
-	Year     [4]byte `json:"year"`
+	Year     [YearBS]byte     `json:"yr"`
+	Standerd [StanderdBS]byte `json:"stn"`
+	Section  [SectionBS]byte  `json:"sec"`
+	Group    [GroupBS]byte    `json:"grp"`
 }
 
 // Bytes return combined bytes of the ID
-func (i *ClassID) Bytes() [10]byte {
-	return [10]byte{
-		i.Year[0],
-		i.Year[1],
-		i.Year[2],
-		i.Year[3],
-		i.Standerd[0],
-		i.Standerd[1],
-		i.Section[0],
-		i.Section[1],
-		i.Group[0],
-		i.Group[1],
+func (id *ClassID) Bytes() (b [ClassIDBS]byte) {
+	ys := StanderdBS + YearBS
+	yss := SectionBS + StanderdBS + YearBS
+	for i := 0; i < ClassIDBS; i++ {
+		if i < YearBS {
+			b[i] = (*id).Year[i]
+		} else if i >= YearBS && i < ys {
+			j := i - YearBS
+			b[i] = (*id).Standerd[j]
+		} else if i >= StanderdBS && i < yss {
+			j := i - ys
+			b[i] = (*id).Section[j]
+		} else {
+			j := i - yss
+			b[i] = (*id).Group[j]
+		}
 	}
+	return
 }
 
 // Create return a new ClassID
-func (i ClassID) Create(st, sec, grp [2]byte, yr [4]byte) ClassID {
-	return ClassID{
-		Standerd: st,
-		Section:  sec,
-		Group:    grp,
-		Year:     yr,
+func (id *ClassID) Create(yr [YearBS]byte, st [StanderdBS]byte, sec [SectionBS]byte, grp [GroupBS]byte) {
+	(*id).Year = yr
+	(*id).Standerd = st
+	(*id).Section = sec
+	(*id).Group = grp
+}
+
+// Init return adds values to  ClassID
+func (id *ClassID) Init(cID [ClassIDBS]byte) {
+	ys := StanderdBS + YearBS
+	yss := SectionBS + StanderdBS + YearBS
+	for i := 0; i < ClassIDBS; i++ {
+		if i < YearBS {
+			(*id).Year[i] = cID[i]
+		} else if i >= YearBS && i < ys {
+			j := i - YearBS
+			(*id).Standerd[j] = cID[i]
+		} else if i >= StanderdBS && i < yss {
+			j := i - ys
+			(*id).Section[j] = cID[i]
+		} else {
+			j := i - yss
+			(*id).Group[j] = cID[i]
+		}
 	}
 }
 
@@ -49,18 +69,21 @@ type Class struct {
 	NFreePeriod int         `json:"nFreePeriod"` // Number of free period this class has
 }
 
-// Init initialize the class struct
-func (c *Class) Init(id ClassID) {
+// Create assigns given classID and defults
+// TODO Write Test
+func (c *Class) Create(id ClassID) {
 	(*c).ID = id              // assign ID to class
 	(*c).NFreePeriod = MaxCap // assign the default max cap to class
 }
 
 // AddSubject adds the subejct to the class
+// TODO Write Test
 func (c *Class) AddSubject(sub Subject) {
 	(*c).Subjects = append((*c).Subjects, sub) // add the new subject to the array
 }
 
 // AssignTeacher adds the subejct to the class
+// TODO Write Test
 func (c *Class) AssignTeacher(subID SubjectID, tID TeacherID) {
 	// find the subject
 	for i := range (*c).Subjects {
@@ -72,6 +95,7 @@ func (c *Class) AssignTeacher(subID SubjectID, tID TeacherID) {
 }
 
 // CalRemCap calculate and update the remaining capacity of the class
+// TODO Write Test
 func (c *Class) CalRemCap() {
 	(*c).NFreePeriod = MaxCap // assign the default max cap to class
 	for _, s := range (*c).Subjects {
@@ -79,6 +103,17 @@ func (c *Class) CalRemCap() {
 		if s.IsAssigned() {
 			(*c).NFreePeriod -= s.ReqClasses // reduce the no. of remaining capacity by the no. of period required by the subject
 		}
+	}
+}
+
+// CalCap calculate and update the remaining capacity of the class
+// TODO Write Test
+func (c *Class) CalCap() {
+	(*c).NFreePeriod = MaxCap // assign the default max cap to class
+	for _, s := range (*c).Subjects {
+		// check if the teacherID is not !empty
+		(*c).NFreePeriod -= s.ReqClasses // reduce the no. of remaining capacity by the no. of period required by the subject
+
 	}
 }
 
@@ -113,6 +148,7 @@ func (cs *Classes) AssignTeachers(t *Teachers) (emptySubs []SubjectID) {
 						checked = true // exit the loop
 					} else {
 						// generate a random number
+						//fmt.Println(tMatchLength)
 						i := utils.GenerateRandomInt(tMatchLength, 10)
 
 						// -- assign the teacher to the subject of the class

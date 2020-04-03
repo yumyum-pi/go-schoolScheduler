@@ -33,8 +33,8 @@ func testOUSubjectIDInit(n int) (e error) {
 		e = fmt.Errorf(`> Error: sID.Sranderd="%v",stn="%v" where n="%v"`, sID.Standerd, stn, n)
 	} else if sID.Type != typ {
 		e = fmt.Errorf(`> Error: sID.Type="%v",typ="%v" where n="%v"`, sID.Type, typ, n)
-	} else if sID.Byte() != byte6Unit[n] {
-		e = fmt.Errorf(`> Error: sID.Bytes="%v",byte6Unit="%v" where n="%v"`, sID.Byte(), byte6Unit[n], n)
+	} else if sID.Bytes() != byte6Unit[n] {
+		e = fmt.Errorf(`> Error: sID.Bytes="%v",byte6Unit="%v" where n="%v"`, sID.Bytes(), byte6Unit[n], n)
 	}
 
 	return

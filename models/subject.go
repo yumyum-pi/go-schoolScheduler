@@ -2,29 +2,34 @@ package models
 
 // SubjectID is a unique identifier for a subject
 type SubjectID struct {
-	Standerd [2]byte `json:"stnID"` // ID for the standerd of the subject
-	Type     [4]byte `json:"type"`  // type of subject. Example English, Hindi
+	Standerd [StanderdBS]byte `json:"stnID"` // ID for the standerd of the subject
+	Type     [TypeBS]byte     `json:"type"`  // type of subject. Example English, Hindi
+}
+
+// Bytes return the byte value from Standerd and Type values
+func (id *SubjectID) Bytes() (b [SubjectIDBS]byte) {
+	for i := 0; i < SubjectIDBS; i++ {
+		if i < StanderdBS {
+			b[i] = (*id).Standerd[i]
+		} else {
+			j := i - StanderdBS
+			b[i] = (*id).Type[j]
+		}
+	}
+	return
 }
 
 // Init adds value to the SubjectID
 //TODO write test
-func (id *SubjectID) Init(seq [6]byte) {
-	id.Standerd = [2]byte{
-		seq[0],
-		seq[1],
+func (id *SubjectID) Init(b [6]byte) {
+	for i := 0; i < SubjectIDBS; i++ {
+		if i < StanderdBS {
+			(*id).Standerd[i] = b[i]
+		} else {
+			j := i - StanderdBS
+			(*id).Type[j] = b[i]
+		}
 	}
-	id.Type = [4]byte{
-		seq[2],
-		seq[3],
-		seq[4],
-		seq[5],
-	}
-}
-
-// Byte func updates the byte value from Standerd and Type values
-//TODO write test
-func (id *SubjectID) Byte() [6]byte {
-	return [6]byte{id.Standerd[0], id.Standerd[1], id.Type[0], id.Type[1], id.Type[2], id.Type[3]}
 }
 
 // SubjectIDs is a slice to hold subject ids

@@ -2,46 +2,63 @@ package models
 
 import (
 	"fmt"
-	"math/rand"
 	"testing"
 
 	"github.com/yumyum-pi/go-schoolScheduler/utils"
 )
 
-type classIDTestUnit struct {
-	Stn [2]byte
-	Sec [2]byte
-	Grp [2]byte
-	Yr  [4]byte
+// classIDTU stores essingtail data for assigning a classID
+type classIDTU struct {
+	Yr  [YearBS]byte     // year
+	Stn [StanderdBS]byte // standerd
+	Sec [SectionBS]byte  // section
+	Grp [GroupBS]byte    // group
 }
 
-var classIDTestGrp []classIDTestUnit = []classIDTestUnit{
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
-	classIDTestUnit{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
+// classIDTestGrp is a slice of classIDTU for multiple unit test
+var tClassIDTUlist []classIDTU = []classIDTU{
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
 }
 
-var classIDs []ClassID = []ClassID{
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
-	ClassID{[2]byte{'0', '8'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}}, //
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '1'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}},
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '2'}, [4]byte{2, 0, 2, 0}},
-	ClassID{[2]byte{'0', '7'}, [2]byte{'0', '2'}, [2]byte{'0', '1'}, [4]byte{2, 0, 2, 0}}, //
+// tClassIDList is a slice of test classIDs
+var tClassIDList []ClassID = []ClassID{
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}}, // false
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}}, // false
 }
 
-var createTestResultBool []bool = []bool{
+// tClassIDBytes is a slice of test bytes of classIDs
+var tClassIDBytes [][10]byte = [][10]byte{
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 8, 0, 1, 0, 1},
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 8, 0, 1, 0, 2},
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 8, 0, 2, 0, 1},
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 8, 0, 2, 0, 2},
+	[ClassIDBS]byte{0, 8, 0, 2, 0, 5, 0, 1, 0, 1}, // false
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 7, 0, 1, 0, 1},
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 7, 0, 1, 0, 2},
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 7, 0, 2, 0, 1},
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 7, 0, 2, 0, 2},
+	[ClassIDBS]byte{0, 7, 0, 2, 0, 0, 2, 0, 2, 0}, // false
+}
+
+// tClassIDBytesResult is a slice of bool for the test results
+var tClassIDBytesResult []bool = []bool{
 	true,
 	true,
 	true,
@@ -54,105 +71,181 @@ var createTestResultBool []bool = []bool{
 	false,
 }
 
-var byteTestResult [][10]byte = [][10]byte{
-	[10]byte{2, 0, 2, 0, '0', '8', '0', '1', '0', '1'},
-	[10]byte{2, 0, 2, 0, '0', '8', '0', '1', '0', '2'},
-	[10]byte{2, 0, 2, 0, '0', '8', '0', '2', '0', '1'},
-	[10]byte{2, 0, 2, 0, '0', '8', '0', '2', '0', '2'},
-	[10]byte{'0', '8', '0', '2', '0', '5', '0', '1', '0', '1'}, //
-	[10]byte{2, 0, 2, 0, '0', '7', '0', '1', '0', '1'},
-	[10]byte{2, 0, 2, 0, '0', '7', '0', '1', '0', '2'},
-	[10]byte{2, 0, 2, 0, '0', '7', '0', '2', '0', '1'},
-	[10]byte{2, 0, 2, 0, '0', '7', '0', '2', '0', '2'},
-	[10]byte{'0', '7', '0', '2', '0', '0', '2', '0', '2', '0'}, //
-}
+// TestClass_EqualOperator test the proper function of equal operator on class function
+func TestClassID_EqualOperator(t *testing.T) {
+	// Get length of the tClassIDTUlist to generate random index for tClassIDTUlist
+	l := len(tClassIDTUlist) - 1 // subreact 1 to avoid out of bound index
 
-func TestEqualSign(t *testing.T) {
-	// Get length of the classIDTestGrp & subreact 1 from l to avoid
-	// generating random number which is out of bound of the array.
-	l := len(classIDTestGrp) - 1
-
-	n := rand.Intn(l) // generate a random no. between 0 and l
-	m := rand.Intn(l) // generate a random no. between 0 and l
+	// generate a random no. between 0 and l
+	n := utils.GenerateRandomInt(l, 10)
+	m := utils.GenerateRandomInt(l, 10)
 
 	// loop if n == m
 	for m == n {
-		m = rand.Intn(l)
+		m = utils.GenerateRandomInt(l, 10)
 	}
 
 	// check if the ids are same or not
-	if classIDs[n] == classIDs[m] {
-		t.Errorf(`> Error: n="%v", m="%v". The classes should not be equal`, n, m)
+	if tClassIDList[n] == tClassIDList[m] {
+		t.Errorf(`> Error: n=%v, m=%v. The classes should not be equal`, n, m)
 	}
 }
 
-func classIDTestUnitF(n int) (e error) {
-	var t bool
-	var testID ClassID
+func classIDTestCreate(n int) (e error) {
+	var cID ClassID
+
 	// Get the classID Unit for testing
-	var unit classIDTestUnit = classIDTestGrp[n]
-	// Create a new test classID
-	testID = testID.Create(unit.Stn, unit.Sec, unit.Grp, unit.Yr)
+	testUnit := tClassIDTUlist[n]
+
+	// Create a new classID using the test units
+	cID.Create(testUnit.Yr, testUnit.Stn, testUnit.Sec, testUnit.Grp)
 
 	// Compare the testID with the classIDUnit classID
-	t = testID == classIDs[n]
+	t := cID == tClassIDList[n]
 
 	// check the result to the list of results
-	if t != createTestResultBool[n] {
-		e = fmt.Errorf(`> Error: testID="%v", classID="%v". where n="%v" and createTestResultBool="%v"`, testID, classIDs[n], n, createTestResultBool[n])
+	if t != tClassIDBytesResult[n] {
+		return fmt.Errorf(`> Error: cID=%v, tClassID=%v. where n=%v and createTestResultBool=%v`, cID, tClassIDList[n], n, tClassIDBytesResult[n])
 	}
 	return e
 }
 
+// TestClassID_Create_one test the create methord of the classID struct
 func TestClassID_Create_One(t *testing.T) {
-	// Get length of the classIDTestGrp & subreact 1 from l to avoid
-	// generating random number which is out of bound of the array.
-	l := len(classIDTestGrp) - 1
-	n := rand.Intn(l) // generate a random no. between 0 and l
+	// Get length of the tClassIDTUlist to generate random index for tClassIDTUlist
+	l := len(tClassIDTUlist) - 1        // subreact 1 to avoid out of bound index
+	i := utils.GenerateRandomInt(l, 10) // generate a random no. between 0 and l
 
-	e := classIDTestUnitF(n)
+	e := classIDTestCreate(i)
 	if e != nil {
 		t.Error(e)
 	}
 }
 
+// TestClassID_Create_one test the create methord of the classID struct
 func TestClassID_Create_All(t *testing.T) {
-	// Get length of the classIDTestGrp
-	l := len(classIDTestGrp)
+	// Get length of the tClassIDTUlist
+	l := len(tClassIDTUlist)
 
+	// loop through the list
 	for i := 0; i < l; i++ {
-		e := classIDTestUnitF(i)
+		e := classIDTestCreate(i)
 		if e != nil {
 			t.Error(e)
 		}
 	}
 }
 
-func classIDByteF(n int) (e error) {
-	var t bool
-	// Get the classID Unit for testing
-	testID := classIDs[n]
-	b := testID.Bytes()
-	t = (b == byteTestResult[n])
-	// check the result to the list of results
-	if t != createTestResultBool[n] {
-		e = fmt.Errorf(`> Error: testID="%v", bytes="%v", byteTestResult="%v". where n="%v" and createTestResultBool="%v"`, testID, b, byteTestResult[n], n, createTestResultBool[n])
+// classIDTestBytes tests the byte methord of the classID struct
+func classIDTestBytes(n int) (e error) {
+	cID := tClassIDList[n] // the classID from the list
+	b := cID.Bytes()       // use the Byte methord
+
+	// compare b and the tClassIDBytesResult
+	t := (b == tClassIDBytes[n])
+
+	// check the result matches the expectioned result
+	if t != tClassIDBytesResult[n] {
+		return fmt.Errorf(`> Error: cID=%v, bytes=%v, tClassIDBytes=%v. where n=%v and tClassIDBytesResult=%v`, cID, b, tClassIDBytes[n], n, tClassIDBytesResult[n])
 	}
 	return e
 }
 
-func TestClassID_BytestOne(t *testing.T) {
-	// Get length of the classIDTestGrp & subreact 1 from l to avoid
-	// generating random number which is out of bound of the array.
-	l := len(classIDTestGrp) - 1
-	n := utils.GenerateRandomInt(l, 10) // generate a random no. between 0 and l
+// TestClassID_Bytes_One test's the byte methord of the classID struct and use one element
+func TestClassID_Bytes_One(t *testing.T) {
+	// Get length of the tClassIDTUlist to generate random index for tClassIDTUlist
+	l := len(tClassIDTUlist) - 1        // subreact 1 to avoid out of bound index
+	i := utils.GenerateRandomInt(l, 10) // generate a random no. between 0 and l
 
-	e := classIDByteF(n)
+	// test one situation
+	e := classIDTestBytes(i)
 	if e != nil {
 		t.Error(e)
 	}
 }
 
+// TestClassID_Bytes_One test's the byte methord of the classID struct and use all
+func TestClassID_Bytes_All(t *testing.T) {
+	// Get length of the tClassIDTUlist
+	l := len(tClassIDTUlist)
+
+	for i := 0; i < l; i++ {
+		e := classIDTestBytes(i)
+		if e != nil {
+			t.Error(e)
+		}
+	}
+}
+
+// classIDTestInit test the Init methord of ClassID struct
+func classIDTestInit(i int) (e error) {
+	var cID ClassID
+	// uss the Init methord to assign value to the id
+	cID.Init(tClassIDBytes[i])
+
+	// check if the classIDs match
+	t := (cID == tClassIDList[i])
+
+	// check if the result matchs the exprected result
+	if t != tClassIDBytesResult[i] {
+		return fmt.Errorf("> Error: cID=%v bytes=%v tCID=%v where i=%v", cID, tClassIDBytes[i], tClassIDList[i], i)
+	}
+	return
+}
+
+// TestClassID_Init_One test the Init methord of ClassID struct and uses one element
+func TestClassID_Init_One(t *testing.T) {
+	// Get length of the tClassIDTUlist to generate random index for tClassIDTUlist
+	l := len(tClassIDTUlist) - 1        // subreact 1 to avoid out of bound index
+	i := utils.GenerateRandomInt(l, 10) // generate a random no. between 0 and l
+
+	// test one situation
+	e := classIDTestInit(i)
+	if e != nil {
+		t.Error(e)
+	}
+}
+
+// TestClassID_Init_One test the Init methord of ClassID struct and uses one element
+func TestClassID_Init_All(t *testing.T) {
+	// Get length of the tClassIDTUlist
+	l := len(tClassIDTUlist)
+
+	for i := 0; i < l; i++ {
+		e := classIDTestInit(i)
+		if e != nil {
+			t.Error(e)
+		}
+	}
+}
+
+/*
+func TestClass_Create(t *testing.T) {
+	newClass := Class{}
+	// Get length of the tClassIDTUlist
+	l := len(tClassIDTUlist)
+	cID := tClassIDList[l]
+
+	tClass := Class{
+		ID:          cID,
+		StudentID:   []StudentID{},
+		Subjects:    []Subject{},
+		NFreePeriod: MaxCap,
+	}
+
+	newClass.Create(cID)
+	// store error
+	ss := ""
+	// check if they match
+	if newClass.ID != tClass.ID {
+		ss += fmt.Sprintf(" newClassID=%v tClassId=%v", newClass.ID, tClass.ID)
+	}
+	if newClass.Subjects != ([]Subject{}) {
+		ss += fmt.Sprintf(" newClassID=%v tClassId=%v", newClass.ID, tClass.ID)
+	}
+}
+*/
+/*
 var subjects = []Subject{
 	Subject{SubjectID{[2]byte{0, 5}, [4]byte{3, 2, 4, 0}}, 5, TeacherID{}},
 	Subject{SubjectID{[2]byte{0, 5}, [4]byte{0, 3, 2, 4}}, 6, TeacherID{}},
@@ -167,6 +260,7 @@ var teacherIDs = []TeacherID{
 	TeacherID{[4]byte{2, 0, 2, 2}, [4]byte{4, 0, 2, 2}},
 }
 
+
 func TestClass_AddSubject(t *testing.T) {
 	// create a class
 	var cls Class
@@ -179,7 +273,7 @@ func TestClass_AddSubject(t *testing.T) {
 	for i, s := range cls.Subjects {
 		// check subjects match
 		if s != subjects[i] {
-			t.Errorf("> Error: s=\"%v\", subjects=\"%v\" where i=\"%v\"\n", s, subjects[i], i)
+			t.Errorf("> Error: s=%v, subjects=%v where i=%v\n", s, subjects[i], i)
 		}
 	}
 }
@@ -199,16 +293,16 @@ func TestClass_AssignTeacher(t *testing.T) {
 
 	// check is the teacher is assigned
 	if cls.Subjects[i].TeacherID != teacherIDs[i] {
-		t.Errorf("> Error: cls.Subjects[i].TeacherID=\"%v\",cls.Subjects[i].ID=\"%v\" teacherIDs[i]=\"%v\" where i=\"%v\"\n", cls.Subjects[i].TeacherID, cls.Subjects[i].ID, teacherIDs[i], i)
+		t.Errorf("> Error: cls.Subjects[i].TeacherID=%v,cls.Subjects[i].ID=%v teacherIDs[i]=%v where i=%v\n", cls.Subjects[i].TeacherID, cls.Subjects[i].ID, teacherIDs[i], i)
 	}
 
 	// check if the assigned function works
 	if cls.Subjects[i].TeacherID == (TeacherID{}) {
-		t.Errorf("> Error: cls.Subjects[i].TeacherID=\"%v\", TeacherID{}=\"%v\" where i=\"%v\"\n", cls.Subjects[i].TeacherID, TeacherID{}, i)
+		t.Errorf("> Error: cls.Subjects[i].TeacherID=%v, TeacherID{}=%v where i=%v\n", cls.Subjects[i].TeacherID, TeacherID{}, i)
 	}
 	// check if the NfreePeriod reduces
 	if cls.NFreePeriod != (MaxCap - cls.Subjects[i].ReqClasses) {
-		t.Errorf("> Error: cls.NFreePeriod=\"%v\", (MaxCap - cls.Subjects[i].ReqClasses)=\"%v\" where i=\"%v\"\n", cls.NFreePeriod, (MaxCap - cls.Subjects[i].ReqClasses), i)
+		t.Errorf("> Error: cls.NFreePeriod=%v, (MaxCap - cls.Subjects[i].ReqClasses)=%v where i=%v\n", cls.NFreePeriod, (MaxCap - cls.Subjects[i].ReqClasses), i)
 	}
 }
 
@@ -228,6 +322,8 @@ func TestClass_CalRemCap(t *testing.T) {
 	cls.CalRemCap()
 	// check if the NfreePeriod reduces
 	if cls.NFreePeriod != (MaxCap - periodAssigned) {
-		t.Errorf("> Error: cls.NFreePeriod=\"%v\", periodAssigned=\"%v\" where i=\"%v\"\n", cls.NFreePeriod, periodAssigned, i)
+		t.Errorf("> Error: cls.NFreePeriod=%v, periodAssigned=%v where i=%v\n", cls.NFreePeriod, periodAssigned, i)
 	}
 }
+/*
+*/
