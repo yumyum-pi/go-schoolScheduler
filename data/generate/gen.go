@@ -5,7 +5,6 @@ import (
 
 	"github.com/yumyum-pi/go-schoolScheduler/models"
 	"github.com/yumyum-pi/go-schoolScheduler/requestlist"
-	"github.com/yumyum-pi/go-schoolScheduler/utils"
 )
 
 // printTeachers prints the teacher data one by one on the console
@@ -29,8 +28,7 @@ func printClasses(classes *models.Classes) {
 }
 
 // Init Data
-func Init() {
-	var classes models.Classes
+func Init() (classes models.Classes, teacher models.Teachers) {
 	classes = generateClasses()
 
 	// check class capacity and assign extra classes if requried
@@ -55,9 +53,9 @@ func Init() {
 	var srl requestlist.SubjectRL
 	srl.Create(&classes)
 
-	var trl requestlist.TeacherRL        // create Teacher Requrest List
-	trl.Create(&srl)                     // populate teacher request list
-	teacher := generateTeacherList(&trl) // generate teachers
+	var trl requestlist.TeacherRL       // create Teacher Requrest List
+	trl.Create(&srl)                    // populate teacher request list
+	teacher = generateTeacherList(&trl) // generate teachers
 
 	ac := []models.ClassAssigned{} // empty slice of class assigned struct
 	// loop through all teacher and reset to default data
@@ -65,8 +63,6 @@ func Init() {
 		teacher[i].ClassesAssigned = ac
 		teacher[i].Capacity = models.MaxCap
 	}
-
-	// write to files
-	utils.WriteFile(utils.ResourceFilePath("classes"), classes)
-	utils.WriteFile(utils.ResourceFilePath("teachers"), teacher)
+	fmt.Println("> Finished: Creating class and teacher data")
+	return
 }
