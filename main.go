@@ -4,11 +4,29 @@ import (
 	"fmt"
 
 	"github.com/yumyum-pi/go-schoolScheduler/data"
+	"github.com/yumyum-pi/go-schoolScheduler/data/generate"
 	"github.com/yumyum-pi/go-schoolScheduler/generator"
-
-	// "github.com/yumyum-pi/go-schoolScheduler/data/generate"
 	"github.com/yumyum-pi/go-schoolScheduler/models"
 )
+
+func printTeacherData(ts *models.Teachers) {
+	for _, t := range *ts {
+		//fmt.Printf("TeacherID=%v\t\tFree=%v, s=%v\n", t.ID.Bytes(), t.Capacity, t.SubjectCT)
+		fmt.Printf("Free=%v\t\tTeacherID=%v\n", t.Capacity, t.ID.Bytes())
+	}
+}
+
+func printClassData(cs *models.Classes) {
+	for _, c := range *cs {
+		c.CalCap()
+		ss := ""
+		for _, s := range c.Subjects {
+			ss += fmt.Sprintf("(sID%v r%v)", s.ID.Bytes(), s.ReqClasses)
+		}
+
+		fmt.Printf("cID%v fP%v %v\n", c.ID.Bytes(), c.NFreePeriod, ss)
+	}
+}
 
 var c models.Classes
 var t models.Teachers
@@ -23,13 +41,19 @@ func Init() {
 }
 
 func main() {
-	Init()
-	//generate.Init()
-	// Generate requrest list
-	// assign teacher to the classes
+	c, t = generate.Init()
+
+	//Init()
 	e := c.AssignTeachers(&t)
 	if len(e) != 0 {
 		fmt.Println("Error in assignTeacherAndClass()", e)
 	}
-	generator.Start(c, t)
+	//printClassData(&c)
+	//printTeacherData(&t)
+	//fmt.Println(len(t))
+	generator.Init(c, t)
+	/*
+		generator.Start(c, t)
+	*/
+
 }
