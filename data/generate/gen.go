@@ -61,7 +61,7 @@ func Init() (classes models.Classes, teacher models.Teachers) {
 	// loop through all teacher and reset to default data
 	for i := range teacher {
 		teacher[i].ClassesAssigned = ac
-		teacher[i].Capacity = models.MaxCap
+		teacher[i].Capacity = models.TeacherCap
 	}
 	fmt.Println("> Finished: Creating class and teacher data")
 	return
