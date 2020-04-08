@@ -7,7 +7,10 @@ type TeacherID struct {
 }
 
 // TeacherFreePeriod no of free period allowed in an weel
-const TeacherFreePeriod = 2 * NDays
+const TeacherFreePeriod = 5
+
+// TeacherCap calculate the max no of periods that a teacher has in a day
+const TeacherCap = MaxCap - TeacherFreePeriod
 
 // Bytes return combined bytes of the ID
 func (id *TeacherID) Bytes() (b [TeacherIDBS]byte) {
