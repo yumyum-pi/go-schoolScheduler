@@ -9,8 +9,6 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/requestlist"
 )
 
-const fPPD = 2 // Total free period per day
-
 // Contain all character
 const charset = "abcdefghijklmnopqrstuvwxyz"
 
@@ -57,11 +55,11 @@ func generateName() (name models.Name) {
 func createTeacher(subjectID models.SubjectID, req int) (t models.Teacher) {
 	var class models.ClassID // create blank classID
 
-	t.ID = generateTeacherID()                            // generate random teacherID
-	t.Name = generateName()                               // generate random name
-	t.Capacity = models.MaxCap - models.TeacherFreePeriod // capacity
-	t.SubjectCT = []models.SubjectID{subjectID}           // Add to subject could teach list
-	t.AssignClass(class, subjectID, req)                  // Assign class
+	t.ID = generateTeacherID()                  // generate random teacherID
+	t.Name = generateName()                     // generate random name
+	t.Capacity = models.TeacherCap              // capacity
+	t.SubjectCT = []models.SubjectID{subjectID} // Add to subject could teach list
+	t.AssignClass(class, subjectID, req)        // Assign class
 
 	return t
 }
@@ -75,8 +73,9 @@ func generateTeacherList(trl *requestlist.TeacherRL) (teacherList models.Teacher
 
 		// check if teacherList is empty
 		if len(teacherList) == 0 {
-			teacher := createTeacher(subjectID, req)   // Create a new Teacher
-			teacherList = append(teacherList, teacher) // Add the teacher to the teacherList
+			teacher := createTeacher(subjectID, req)                // Create a new Teacher
+			teacher.AssignClass((models.ClassID{}), subjectID, req) // assigning the subject to the teacher
+			teacherList = append(teacherList, teacher)              // Add the teacher to the teacherList
 			//fmt.Printf("> !List:\tname\"%v\"\tCreated a new teacher when list is empty.\n", teacher.Name)
 		} else {
 			var ifAssigned bool // to check if the subject is assigned to a teacher
@@ -88,8 +87,9 @@ func generateTeacherList(trl *requestlist.TeacherRL) (teacherList models.Teacher
 			// check if ttLen empty
 			if ttLen == 0 {
 				// The list is empty
-				teacher := createTeacher(subjectID, req)   // Create a new teacher
-				teacherList = append(teacherList, teacher) // Add the teacher to the teacherList
+				teacher := createTeacher(subjectID, req)                // Create a new teacher
+				teacher.AssignClass((models.ClassID{}), subjectID, req) // assigning the subject to the teacher
+				teacherList = append(teacherList, teacher)              // Add the teacher to the teacherList
 				ifAssigned = true
 				//fmt.Printf("> !Match:\tname\"%v\"\tCreated a new teacher when list is empty.\n", teacher.Name)
 			} else {
@@ -112,8 +112,9 @@ func generateTeacherList(trl *requestlist.TeacherRL) (teacherList models.Teacher
 			// check if subject assigned
 			if !ifAssigned {
 				// create a new teacher
-				teacher := createTeacher(subjectID, req)   // Create a new Teacher
-				teacherList = append(teacherList, teacher) // Add the teacher to the teacherList
+				teacher := createTeacher(subjectID, req)                // Create a new Teacher
+				teacher.AssignClass((models.ClassID{}), subjectID, req) // assigning the subject to the teacher
+				teacherList = append(teacherList, teacher)              // Add the teacher to the teacherList
 				//fmt.Printf("> !ifAssigned:\tname\"%v\"\tCreated a new teacher.\n", teacher.Name)
 			}
 
