@@ -41,19 +41,17 @@ func Init() {
 }
 
 func main() {
+	// generate classes and teachers
 	c, t = generate.Init()
 
-	//Init()
+	// assigned teacher to class
 	e := c.AssignTeachers(&t)
+	// print the error
 	if len(e) != 0 {
 		fmt.Println("Error in assignTeacherAndClass()", e)
 	}
-	//printClassData(&c)
-	//printTeacherData(&t)
-	//fmt.Println(len(t))
+	// start creating timetable
 	generator.Init(c, t)
-	/*
-		generator.Start(c, t)
-	*/
 
+	// get a timetable and print it
 }
