@@ -1,6 +1,6 @@
 package requestlist
 
-import "github.com/yumyum-pi/go-schoolScheduler/models"
+import "github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 
 // ClassRLE holds data that contain class id and no. of period required
 type ClassRLE struct {

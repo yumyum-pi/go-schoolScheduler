@@ -1,8 +1,8 @@
 package data
 
 import (
-	"github.com/yumyum-pi/go-schoolScheduler/models"
-	"github.com/yumyum-pi/go-schoolScheduler/utils"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 //var classes []models.Class

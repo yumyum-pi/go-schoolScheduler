@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/yumyum-pi/go-schoolScheduler/data"
-	"github.com/yumyum-pi/go-schoolScheduler/data/generate"
-	"github.com/yumyum-pi/go-schoolScheduler/generator"
-	"github.com/yumyum-pi/go-schoolScheduler/models"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/data"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/data/generate"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/generator"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 func printTeacherData(ts *models.Teachers) {

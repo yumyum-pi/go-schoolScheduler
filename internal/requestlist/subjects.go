@@ -1,7 +1,7 @@
 package requestlist
 
 import (
-	"github.com/yumyum-pi/go-schoolScheduler/models"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 // SubjectRLE is struct of requirement of a subject

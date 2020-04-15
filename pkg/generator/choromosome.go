@@ -3,13 +3,13 @@ package generator
 import (
 	"fmt"
 
-	"github.com/yumyum-pi/go-schoolScheduler/models"
-	"github.com/yumyum-pi/go-schoolScheduler/utils"
-	"github.com/yumyum-pi/go-schoolScheduler/utils/stats"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/utils/stats"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 // pIDToGeneID return the geneID from
-// class index and periodsID
+// class index and periodsIDxw
 // TODO write test
 func pIDToGeneID(classIndex, pID int) int {
 	return (classIndex*models.MaxCap + pID)

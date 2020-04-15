@@ -1,6 +1,6 @@
 package requestlist
 
-import "github.com/yumyum-pi/go-schoolScheduler/models"
+import "github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 
 // TeacherRLE is struct of requirement of a Teacher
 // This struct contains the subjectID,

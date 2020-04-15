@@ -3,7 +3,7 @@ package generator
 import (
 	"fmt"
 
-	"github.com/yumyum-pi/go-schoolScheduler/models"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 const nGeneration = 4

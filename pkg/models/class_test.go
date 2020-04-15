@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/yumyum-pi/go-schoolScheduler/utils"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
 )
 
 // classIDTU stores essingtail data for assigning a classID

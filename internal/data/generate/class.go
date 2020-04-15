@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/yumyum-pi/go-schoolScheduler/models"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 type minMax struct {

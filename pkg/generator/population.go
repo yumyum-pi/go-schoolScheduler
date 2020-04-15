@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/yumyum-pi/go-schoolScheduler/models"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 const populationSize = 32

@@ -3,8 +3,8 @@ package generate
 import (
 	"fmt"
 
-	"github.com/yumyum-pi/go-schoolScheduler/models"
-	"github.com/yumyum-pi/go-schoolScheduler/requestlist"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 // printTeachers prints the teacher data one by one on the console

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/yumyum-pi/go-schoolScheduler/utils"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
 )
 
 // ClassID is struct to store class id
