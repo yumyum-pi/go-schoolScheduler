@@ -6,7 +6,7 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/models"
 )
 
-const n = 32
+const nGeneration = 4
 
 func chrmsmByteMatch(c1, c2 []byte) bool {
 	// If one is nil, the other must also be nil.
@@ -27,39 +27,22 @@ func chrmsmByteMatch(c1, c2 []byte) bool {
 }
 
 // Init starts the process
-func Init(classes []models.Class, teachers models.Teachers) {
-	// make genes
-	chrmsm := make(Chromosome, (len(classes) * models.MaxCap))
-	var p [n * n]Chromosome = [n * n]Chromosome{}
+func Init(classes []models.Class, teachers models.Teachers) Chromosome {
 
-	// make an array of all the periods
-	chrmsm.InitS(&classes)
-	totalError := 0
+	var p Population
 
-	min := 1000
-	max := 0
-	///c := 0
-	chrmsmLength := len(chrmsm)
-	for i := 0; i < n; i++ {
-		p[i] = make(Chromosome, chrmsmLength)
-		p[i] = chrmsm.InitR()
-		p[i].ErrorHandleM1()
-		p[i].ErrorHandleM2()
+	p.Init(&classes)
+	p.Sort()
+	p.PrintChromo()
+	p.Print()
+	fmt.Println("Init population")
 
-		_, errList := p[i].ErrorCheckM2()
-		errNo := len(errList)
-		if errNo != 0 {
-			totalError += errNo
-			if errNo < min {
-				min = errNo
-			}
-
-			if errNo > max {
-				max = errNo
-			}
-		}
+	for generationIndex := 0; generationIndex < nGeneration; generationIndex++ {
+		fmt.Println("population generation:", generationIndex)
+		p.Next()
+		p.Print()
 	}
 
-	average := float64(totalError) / float64(n*chrmsmLength) * 100
-	fmt.Printf("average=%v, minError=%v, maxError=%v, n=%v chromesomeLength=%v\n", average, min, max, n, len(p[0]))
+	// choose the best chromosome
+	return p.P[0]
 }
