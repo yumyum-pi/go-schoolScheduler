@@ -1,4 +1,4 @@
-package generate
+package testdata
 
 import (
 	c "crypto/rand"
