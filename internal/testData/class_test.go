@@ -19,8 +19,8 @@ func testGenerateSubjects(s []models.Subject) (e error) {
 	}
 
 	// check no of free periods
-	if sec.NFreePeriod != 0 {
-		e = fmt.Errorf("> Error: Free periods=%v", sec.NFreePeriod)
+	if sec.Capacity != 0 {
+		e = fmt.Errorf("> Error: Free periods=%v", sec.Capacity)
 		return
 	}
 

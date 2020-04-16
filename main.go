@@ -22,7 +22,7 @@ func printClassData(cs *models.Classes) {
 			ss += fmt.Sprintf("(sID%v r%v)", s.ID.Bytes(), s.Req)
 		}
 
-		fmt.Printf("cID%v fP%v %v\n", c.ID.Bytes(), c.NFreePeriod, ss)
+		fmt.Printf("cID%v fP%v %v\n", c.ID.Bytes(), c.Capacity, ss)
 	}
 }
 

@@ -20,7 +20,7 @@ func printTeachers(ts *models.Teachers) {
 func printClasses(cs *models.Classes) {
 	for _, c := range *cs {
 		c.CalCap()
-		fmt.Println("No of free Periods=", c.NFreePeriod)
+		fmt.Println("No of free Periods=", c.Capacity)
 		for _, sub := range c.Subjects {
 			fmt.Printf("cID=%v\tsID=%v\tReq=%v\n", c.ID.Bytes(), sub.ID.Bytes(), sub.Req)
 		}
