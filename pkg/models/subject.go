@@ -87,9 +87,9 @@ func (ids *SubjectIDs) Types() SubType {
 
 // Subject is a struct to store subject data
 type Subject struct {
-	ID         SubjectID `json:"id"`         // unique identifier for a subject
-	ReqClasses int       `json:"reqClasses"` // required classes per week
-	TeacherID  TeacherID `json:"teacherID"`  // teacher Assigned
+	ID        SubjectID `json:"id"`         // unique identifier for a subject
+	TeacherID TeacherID `json:"teacherID"`  // teacher Assigned
+	Req       int       `json:"reqClasses"` // required classes per week
 }
 
 // IsAssigned return bool of weather the teacher is assigned or not

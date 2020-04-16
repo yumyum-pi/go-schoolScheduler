@@ -18,46 +18,37 @@ func (m *minMax) GetRandomNo() int {
 }
 
 // list of subject codes
-var subjectTypeCode = [][4]byte{
-	[4]byte{0, 0, 0, 1}, // english
-	[4]byte{0, 0, 0, 2}, // hindi
-	[4]byte{0, 0, 0, 3}, // maths
-	[4]byte{0, 0, 0, 4}, // science
-	[4]byte{0, 0, 0, 5}, // social science
-	[4]byte{0, 0, 0, 6}, // physical education
-	[4]byte{0, 0, 0, 7}, // art & craft
-	[4]byte{0, 0, 0, 8}, // computer science
-	[4]byte{0, 0, 0, 9}, // dance & music
+var subjectTypeCode = [][models.TypeBS]byte{
+	{0, 0, 0, 1}, // english
+	{0, 0, 0, 2}, // hindi
+	{0, 0, 0, 3}, // maths
+	{0, 0, 0, 4}, // science
+	{0, 0, 0, 5}, // social science
+	{0, 0, 0, 6}, // physical education
+	{0, 0, 0, 7}, // art & craft
+	{0, 0, 0, 8}, // computer science
+	{0, 0, 0, 9}, // dance & music
 }
 
 // list of standerds
-var standerds = [][2]byte{
-	[2]byte{0, 1},
-	[2]byte{0, 2},
-	[2]byte{0, 3},
-	[2]byte{0, 4},
-	[2]byte{0, 5},
-	[2]byte{0, 6},
-	[2]byte{0, 7},
-	[2]byte{0, 8},
-	[2]byte{0, 9},
-	[2]byte{1, 0},
-	[2]byte{1, 1},
-	[2]byte{1, 2},
+var standerds = [][models.StanderdBS]byte{
+	{0, 1},
+	{0, 2},
+	{0, 3},
+	{0, 4},
+	{0, 5},
+	{0, 6},
+	{0, 7},
+	{0, 8},
+	{0, 9},
+	{1, 0},
+	{1, 1},
+	{1, 2},
 }
-
-/*
-	var standerds = [][2]byte{
-		[2]byte{0, 5},
-		[2]byte{0, 6},
-		[2]byte{0, 7},
-	[2]byte{0, 8},
-}
-*/
 
 var noOfSection = minMax{1, 5}
-var group = [2]byte{0, 1}
-var year = [4]byte{2, 0, 0, 20}
+var group = [models.GroupBS]byte{0, 1}
+var year = [models.YearBS]byte{2, 0, 0, 20}
 
 // genereateSubject return an array of subjects
 func generateSubject(i int) (subjects []models.Subject) {
@@ -78,7 +69,7 @@ func generateSubject(i int) (subjects []models.Subject) {
 		}
 		// main 5 subject
 		if j < 5 {
-			subject.ReqClasses = 6
+			subject.Req = 6
 			subjects = append(subjects, subject)
 		} else {
 			// generate a random no. for assigning the remaining subjects
@@ -86,16 +77,16 @@ func generateSubject(i int) (subjects []models.Subject) {
 
 			// check of remaining-non-main-classes more then non-main-class
 			if remainingNonMainClasses-nonMainClass >= 0 {
-				subject.ReqClasses = nonMainClass
+				subject.Req = nonMainClass
 				remainingNonMainClasses -= nonMainClass
 				// check of remaining-non-main-classes more then non-main-class
 			} else if remainingNonMainClasses > 0 {
 				// assign all the remainig classes to the subject
-				subject.ReqClasses = remainingNonMainClasses
+				subject.Req = remainingNonMainClasses
 				remainingNonMainClasses = 0
 				// the no of non-main-classes in 0
 			} else {
-				subject.ReqClasses = 0
+				subject.Req = 0
 			}
 
 			subjects = append(subjects, subject)

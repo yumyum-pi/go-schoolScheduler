@@ -17,30 +17,30 @@ type classIDTU struct {
 
 // classIDTestGrp is a slice of classIDTU for multiple unit test
 var tClassIDTUlist []classIDTU = []classIDTU{
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
-	classIDTU{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
 }
 
 // tClassIDList is a slice of test classIDs
 var tClassIDList []ClassID = []ClassID{
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}}, // false
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
-	ClassID{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}}, // false
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 8}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}}, // false
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 1}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 2}},
+	{[YearBS]byte{2, 0, 2, 0}, [StanderdBS]byte{0, 7}, [SectionBS]byte{0, 2}, [GroupBS]byte{0, 1}}, // false
 }
 
 // tClassIDBytes is a slice of test bytes of classIDs

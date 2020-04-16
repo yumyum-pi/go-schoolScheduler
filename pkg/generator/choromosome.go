@@ -77,7 +77,7 @@ func (chrmsm *Chromosome) InitS(cs *[]models.Class) {
 		// loop thought each subject
 		for _, s := range c.Subjects {
 			// pID of the end of the same subject
-			n := pID + s.ReqClasses
+			n := pID + s.Req
 
 			// create a new period
 			p := models.Period{
@@ -240,7 +240,7 @@ func (chrmsm *Chromosome) ErrorCheckM3(c *[]models.Class) bool {
 		for _, sub := range (*c)[cIndex].Subjects {
 			// check if the no. of assigned periods of the subject matches
 			// the required no. of subeject periods
-			if subAssigned[sub.ID] != sub.ReqClasses {
+			if subAssigned[sub.ID] != sub.Req {
 				// the no. of assigned periods of a subejct is != required periods
 				return false
 			}

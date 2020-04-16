@@ -3,7 +3,7 @@ package generate
 import (
 	"fmt"
 
-	"github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
+	rl "github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
@@ -11,7 +11,7 @@ import (
 func printTeachers(ts *models.Teachers) {
 	for _, t := range *ts {
 		var subIDs models.SubjectIDs = t.SubjectCT
-		fmt.Printf("Name=%v %v %v\tID=%v\tNOS=%v\tCapicity=%v\tSubjects=%v\n", t.Name.First, t.Name.Middle, t.Name.Last, t.ID.Bytes(), len(t.SubjectCT), t.Capacity, subIDs.Types())
+		fmt.Printf("ID=%v\tNOS=%v\tCapicity=%v\tSubjects=%v\n", t.ID.Bytes(), len(t.SubjectCT), t.Capacity, subIDs.Types())
 	}
 	fmt.Printf("\nNo. of Teacher=%v\n", len(*ts))
 }
@@ -22,7 +22,7 @@ func printClasses(classes *models.Classes) {
 		class.CalCap()
 		fmt.Println("No of free Periods=", class.NFreePeriod)
 		for _, sub := range class.Subjects {
-			fmt.Printf("cID=%v\tsID=%v\tReq=%v\n", class.ID.Bytes(), sub.ID.Bytes(), sub.ReqClasses)
+			fmt.Printf("cID=%v\tsID=%v\tReq=%v\n", class.ID.Bytes(), sub.ID.Bytes(), sub.Req)
 		}
 	}
 }
@@ -45,15 +45,15 @@ func Init() (classes models.Classes, teacher models.Teachers) {
 			subIndex := i - (looper * subL)
 
 			// increase the no. of required classes
-			class.Subjects[subIndex].ReqClasses++
+			class.Subjects[subIndex].Req++
 		}
 	}
 
 	// create Subject Requrest List
-	var srl requestlist.SubjectRL
-	srl.Create(&classes)
+	srl := make(rl.Subject)
+	srl.Init(&classes)
 
-	var trl requestlist.TeacherRL       // create Teacher Requrest List
+	var trl rl.TeacherRL                // create Teacher Requrest List
 	trl.Create(&srl)                    // populate teacher request list
 	teacher = generateTeacherList(&trl) // generate teachers
 
