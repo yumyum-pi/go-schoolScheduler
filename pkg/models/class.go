@@ -33,14 +33,6 @@ func (id *ClassID) Bytes() (b [ClassIDBS]byte) {
 	return
 }
 
-// Create return a new ClassID
-func (id *ClassID) Create(yr [YearBS]byte, st [StanderdBS]byte, sec [SectionBS]byte, grp [GroupBS]byte) {
-	(*id).Year = yr
-	(*id).Standerd = st
-	(*id).Section = sec
-	(*id).Group = grp
-}
-
 // Init return adds values to  ClassID
 func (id *ClassID) Init(cID [ClassIDBS]byte) {
 	ys := StanderdBS + YearBS
@@ -70,8 +62,8 @@ type Class struct {
 
 // Create assigns given classID and defults
 // TODO Write Test
-func (c *Class) Create(id ClassID) {
-	(*c).ID = id              // assign ID to class
+func (c *Class) Create(id [ClassIDBS]byte) {
+	(*c).ID.Init(id)          // create class id from bytes
 	(*c).NFreePeriod = MaxCap // assign the default max cap to class
 }
 
@@ -112,7 +104,6 @@ func (c *Class) CalCap() {
 	for _, s := range (*c).Subjects {
 		// check if the teacherID is not !empty
 		(*c).NFreePeriod -= s.Req // reduce the no. of remaining capacity by the no. of period required by the subject
-
 	}
 }
 
