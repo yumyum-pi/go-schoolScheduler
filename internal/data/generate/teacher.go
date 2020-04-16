@@ -2,15 +2,10 @@ package generate
 
 import (
 	c "crypto/rand"
-	"math/rand"
-	"time"
 
 	"github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
-
-// Contain all character
-const charset = "abcdefghijklmnopqrstuvwxyz"
 
 // Generate random teacherID
 func generateTeacherID() (id models.TeacherID) {
@@ -21,26 +16,6 @@ func generateTeacherID() (id models.TeacherID) {
 
 	id.JoinNo[0], id.JoinNo[1], id.JoinNo[2], id.JoinNo[3] = key[0], key[1], key[2], key[3]
 	return
-}
-
-// Generate a random character form the charset
-func generateRandChar() byte {
-	rand.Seed(time.Now().UnixNano())
-	// a random no. between 0 and 25
-	i := rand.Intn(25)
-	return charset[i]
-}
-
-// Generate random string of length n
-func generateRandString(n int) string {
-	// create an arry of byte of length n
-	b := make([]byte, n)
-	// loop through b
-	for i := range b {
-		// generate the char for the byte
-		b[i] = generateRandChar()
-	}
-	return string(b) // convert the arry to string
 }
 
 // createTeacher return a new randomly generated teacher
@@ -55,7 +30,8 @@ func createTeacher(subjectID models.SubjectID, req int) (t models.Teacher) {
 	return t
 }
 
-// generateTeacher generate teacher
+// generateTeacher generate teacher from the given request list
+// TODO add test
 func generateTeacherList(trl *requestlist.TeacherRL) (teacherList models.Teachers) {
 
 	// Loop through all the Teacher Request List
