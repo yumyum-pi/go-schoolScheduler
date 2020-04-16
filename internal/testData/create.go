@@ -17,23 +17,23 @@ func printTeachers(ts *models.Teachers) {
 }
 
 // printClasses prints the class data one by one on the console
-func printClasses(classes *models.Classes) {
-	for _, class := range *classes {
-		class.CalCap()
-		fmt.Println("No of free Periods=", class.NFreePeriod)
-		for _, sub := range class.Subjects {
-			fmt.Printf("cID=%v\tsID=%v\tReq=%v\n", class.ID.Bytes(), sub.ID.Bytes(), sub.Req)
+func printClasses(cs *models.Classes) {
+	for _, c := range *cs {
+		c.CalCap()
+		fmt.Println("No of free Periods=", c.NFreePeriod)
+		for _, sub := range c.Subjects {
+			fmt.Printf("cID=%v\tsID=%v\tReq=%v\n", c.ID.Bytes(), sub.ID.Bytes(), sub.Req)
 		}
 	}
 }
 
-// Init Data
-func Init() (classes models.Classes, teacher models.Teachers) {
-	classes = generateClasses()
+// Create class and teacher data
+func Create(cs *models.Classes, ts *models.Teachers) {
+	*cs = generateClasses()
 
 	// check class capacity and assign extra classes if requried
 	// loop through all the classes
-	for _, class := range classes {
+	for _, class := range *cs {
 		class.CalCap()              // calcuate the capacity
 		n := class.NFreePeriod      // get the no. of free periods
 		subL := len(class.Subjects) // get no. of subject
@@ -51,18 +51,27 @@ func Init() (classes models.Classes, teacher models.Teachers) {
 
 	// create Subject Requrest List
 	srl := make(rl.Subject)
-	srl.Init(&classes)
+	srl.Init(cs)
 
-	var trl rl.TeacherRL                // create Teacher Requrest List
-	trl.Create(&srl)                    // populate teacher request list
-	teacher = generateTeacherList(&trl) // generate teachers
+	var trl rl.TeacherRL            // create Teacher Requrest List
+	trl.Create(&srl)                // populate teacher request list
+	*ts = generateTeacherList(&trl) // generate teachers
 
 	ac := []models.ClassAssigned{} // empty slice of class assigned struct
 	// loop through all teacher and reset to default data
-	for i := range teacher {
-		teacher[i].ClassesAssigned = ac
-		teacher[i].Capacity = models.TeacherCap
+	for i := range *ts {
+		(*ts)[i].ClassesAssigned = ac
+		(*ts)[i].Capacity = models.TeacherCap
 	}
+
+	// assigned teacher to class
+	e := (*cs).AssignTeachers(ts)
+	// print the error
+	if len(e) != 0 {
+		fmt.Println("Error in assignTeacherAndClass()", e)
+	}
+
 	fmt.Println("> Finished: Creating class and teacher data")
-	return
+	//printClasses(cs)
+	printTeachers(ts)
 }
