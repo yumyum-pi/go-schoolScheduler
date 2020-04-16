@@ -111,11 +111,10 @@ func generateSection(i int) (sections []models.Class) {
 }
 
 // generateClasses return array of class
-func generateClasses() (classes []models.Class) {
+func generateClasses(c *models.Classes) {
 	// loop for each standerd
 	for i := range StanL {
-		secs := generateSection(i)         // generate sections
-		classes = append(classes, secs...) // add sections to the classes grp
+		secs := generateSection(i)   // generate sections
+		(*c) = append((*c), secs...) // add sections to the classes grp
 	}
-	return
 }
