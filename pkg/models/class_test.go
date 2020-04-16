@@ -3,8 +3,6 @@ package models
 import (
 	"fmt"
 	"testing"
-
-	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
 )
 
 // classIDTU stores essingtail data for assigning a classID
@@ -71,71 +69,6 @@ var tClassIDBytesResult []bool = []bool{
 	false,
 }
 
-// TestClass_EqualOperator test the proper function of equal operator on class function
-func TestClassID_EqualOperator(t *testing.T) {
-	// Get length of the tClassIDTUlist to generate random index for tClassIDTUlist
-	l := len(tClassIDTUlist) - 1 // subreact 1 to avoid out of bound index
-
-	// generate a random no. between 0 and l
-	n := utils.GenerateRandomInt(l, 10)
-	m := utils.GenerateRandomInt(l, 10)
-
-	// loop if n == m
-	for m == n {
-		m = utils.GenerateRandomInt(l, 10)
-	}
-
-	// check if the ids are same or not
-	if tClassIDList[n] == tClassIDList[m] {
-		t.Errorf(`> Error: n=%v, m=%v. The classes should not be equal`, n, m)
-	}
-}
-
-func classIDTestCreate(n int) (e error) {
-	var cID ClassID
-
-	// Get the classID Unit for testing
-	testUnit := tClassIDTUlist[n]
-
-	// Create a new classID using the test units
-	cID.Create(testUnit.Yr, testUnit.Stn, testUnit.Sec, testUnit.Grp)
-
-	// Compare the testID with the classIDUnit classID
-	t := cID == tClassIDList[n]
-
-	// check the result to the list of results
-	if t != tClassIDBytesResult[n] {
-		return fmt.Errorf(`> Error: cID=%v, tClassID=%v. where n=%v and createTestResultBool=%v`, cID, tClassIDList[n], n, tClassIDBytesResult[n])
-	}
-	return e
-}
-
-// TestClassID_Create_one test the create methord of the classID struct
-func TestClassID_Create_One(t *testing.T) {
-	// Get length of the tClassIDTUlist to generate random index for tClassIDTUlist
-	l := len(tClassIDTUlist) - 1        // subreact 1 to avoid out of bound index
-	i := utils.GenerateRandomInt(l, 10) // generate a random no. between 0 and l
-
-	e := classIDTestCreate(i)
-	if e != nil {
-		t.Error(e)
-	}
-}
-
-// TestClassID_Create_one test the create methord of the classID struct
-func TestClassID_Create_All(t *testing.T) {
-	// Get length of the tClassIDTUlist
-	l := len(tClassIDTUlist)
-
-	// loop through the list
-	for i := 0; i < l; i++ {
-		e := classIDTestCreate(i)
-		if e != nil {
-			t.Error(e)
-		}
-	}
-}
-
 // classIDTestBytes tests the byte methord of the classID struct
 func classIDTestBytes(n int) (e error) {
 	cID := tClassIDList[n] // the classID from the list
@@ -149,19 +82,6 @@ func classIDTestBytes(n int) (e error) {
 		return fmt.Errorf(`> Error: cID=%v, bytes=%v, tClassIDBytes=%v. where n=%v and tClassIDBytesResult=%v`, cID, b, tClassIDBytes[n], n, tClassIDBytesResult[n])
 	}
 	return e
-}
-
-// TestClassID_Bytes_One test's the byte methord of the classID struct and use one element
-func TestClassID_Bytes_One(t *testing.T) {
-	// Get length of the tClassIDTUlist to generate random index for tClassIDTUlist
-	l := len(tClassIDTUlist) - 1        // subreact 1 to avoid out of bound index
-	i := utils.GenerateRandomInt(l, 10) // generate a random no. between 0 and l
-
-	// test one situation
-	e := classIDTestBytes(i)
-	if e != nil {
-		t.Error(e)
-	}
 }
 
 // TestClassID_Bytes_One test's the byte methord of the classID struct and use all
@@ -191,19 +111,6 @@ func classIDTestInit(i int) (e error) {
 		return fmt.Errorf("> Error: cID=%v bytes=%v tCID=%v where i=%v", cID, tClassIDBytes[i], tClassIDList[i], i)
 	}
 	return
-}
-
-// TestClassID_Init_One test the Init methord of ClassID struct and uses one element
-func TestClassID_Init_One(t *testing.T) {
-	// Get length of the tClassIDTUlist to generate random index for tClassIDTUlist
-	l := len(tClassIDTUlist) - 1        // subreact 1 to avoid out of bound index
-	i := utils.GenerateRandomInt(l, 10) // generate a random no. between 0 and l
-
-	// test one situation
-	e := classIDTestInit(i)
-	if e != nil {
-		t.Error(e)
-	}
 }
 
 // TestClassID_Init_One test the Init methord of ClassID struct and uses one element
