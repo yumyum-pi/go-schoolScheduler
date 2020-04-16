@@ -13,10 +13,10 @@ type TeacherRLE struct {
 }
 
 // Init assign the proper value of the struct
-func (t *TeacherRLE) Init(s *SubjectRLE, i int) {
-	(*t).SubjectID = (*s).SubjectID
-	(*t).ClassID = (*s).Classes[i].ID
-	(*t).Req = (*s).Classes[i].Req
+func (t *TeacherRLE) Init(sID [models.SubjectIDBS]byte, cID [models.ClassIDBS]byte, req int) {
+	(*t).SubjectID.Init(sID)
+	(*t).ClassID.Init(cID)
+	(*t).Req = req
 
 }
 
@@ -28,15 +28,15 @@ func (trl *TeacherRL) Add(t TeacherRLE) {
 	*trl = append(*trl, t)
 }
 
-// Create the list from the given SubjectRL
-func (trl *TeacherRL) Create(srl *SubjectRL) {
-	// loop srl
-	for _, s := range *srl {
+// Create the list from the given Subject
+func (trl *TeacherRL) Create(rls *Subject) {
+	// loop through subject request list
+	for sID, cs := range *rls {
 		// loop through each classes
-		for i := range s.Classes {
-			var t TeacherRLE
-			t.Init(&s, i)
-			trl.Add(t)
+		for cID, req := range cs {
+			var t TeacherRLE      // create a new teacher request list element
+			t.Init(sID, cID, req) // assign values to teacher request list element
+			trl.Add(t)            // add teacher request list element to teacher request list
 		}
 	}
 }
