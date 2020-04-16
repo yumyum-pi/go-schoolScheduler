@@ -63,10 +63,9 @@ func (id *ClassID) Init(cID [ClassIDBS]byte) {
 
 // Class in an struct to hold class data
 type Class struct {
-	ID          ClassID     `json:"id"`          // Unique identifier for a class
-	StudentID   []StudentID `json:"student"`     // List of students in this class
-	Subjects    []Subject   `json:"subjects"`    // List of subject to be studied in this class
-	NFreePeriod int         `json:"nFreePeriod"` // Number of free period this class has
+	ID          ClassID   `json:"id"`          // Unique identifier for a class
+	Subjects    []Subject `json:"subjects"`    // List of subject to be studied in this class
+	NFreePeriod int       `json:"nFreePeriod"` // Number of free period this class has
 }
 
 // Create assigns given classID and defults
@@ -89,7 +88,7 @@ func (c *Class) AssignTeacher(subID SubjectID, tID TeacherID) {
 	for i := range (*c).Subjects {
 		if (*c).Subjects[i].ID == subID {
 			(*c).Subjects[i].TeacherID = tID
-			(*c).NFreePeriod -= (*c).Subjects[i].ReqClasses // reduce the no. of remaining capacity by the no. of period required by the subject
+			(*c).NFreePeriod -= (*c).Subjects[i].Req // reduce the no. of remaining capacity by the no. of period required by the subject
 		}
 	}
 }
@@ -101,7 +100,7 @@ func (c *Class) CalRemCap() {
 	for _, s := range (*c).Subjects {
 		// check if the teacherID is not !empty
 		if s.IsAssigned() {
-			(*c).NFreePeriod -= s.ReqClasses // reduce the no. of remaining capacity by the no. of period required by the subject
+			(*c).NFreePeriod -= s.Req // reduce the no. of remaining capacity by the no. of period required by the subject
 		}
 	}
 }
@@ -112,7 +111,7 @@ func (c *Class) CalCap() {
 	(*c).NFreePeriod = MaxCap // assign the default max cap to class
 	for _, s := range (*c).Subjects {
 		// check if the teacherID is not !empty
-		(*c).NFreePeriod -= s.ReqClasses // reduce the no. of remaining capacity by the no. of period required by the subject
+		(*c).NFreePeriod -= s.Req // reduce the no. of remaining capacity by the no. of period required by the subject
 
 	}
 }
@@ -152,7 +151,7 @@ func (cs *Classes) AssignTeachers(t *Teachers) (emptySubs []SubjectID) {
 						i := utils.GenerateRandomInt(tMatchLength, 10)
 
 						// -- assign the teacher to the subject of the class
-						diff := (*t)[tMatchIndex[i]].AssignClass(cls.ID, s.ID, s.ReqClasses)
+						diff := (*t)[tMatchIndex[i]].AssignClass(cls.ID, s.ID, s.Req)
 						// -- check capacity
 						// check if diff is negative
 						// means that the requested period was greater than the capacity

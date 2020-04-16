@@ -43,20 +43,11 @@ func generateRandString(n int) string {
 	return string(b) // convert the arry to string
 }
 
-// Generate name
-func generateName() (name models.Name) {
-	name.First = generateRandString(4)
-	name.Middle = generateRandString(3)
-	name.Last = generateRandString(4)
-	return
-}
-
 // createTeacher return a new randomly generated teacher
 func createTeacher(subjectID models.SubjectID, req int) (t models.Teacher) {
 	var class models.ClassID // create blank classID
 
 	t.ID = generateTeacherID()                  // generate random teacherID
-	t.Name = generateName()                     // generate random name
 	t.Capacity = models.TeacherCap              // capacity
 	t.SubjectCT = []models.SubjectID{subjectID} // Add to subject could teach list
 	t.AssignClass(class, subjectID, req)        // Assign class

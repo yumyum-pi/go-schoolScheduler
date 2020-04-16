@@ -48,7 +48,6 @@ type ClassAssigned struct {
 
 // Teacher is a struct to store teacher data
 type Teacher struct {
-	Name            Name            `json:"name"`   // Name of the teacher
 	ID              TeacherID       `json:"id"`     // Unique identifier of the teacher
 	SubjectCT       []SubjectID     `json:"subCT"`  // Subjects and Standers that the teacher can teach
 	Capacity        int             `json:"cap"`    // Max no. of periods the teacher can take per week
