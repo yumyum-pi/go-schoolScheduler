@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/yumyum-pi/go-schoolScheduler/internal/data"
-	"github.com/yumyum-pi/go-schoolScheduler/internal/data/generate"
-	"github.com/yumyum-pi/go-schoolScheduler/pkg/generator"
+	td "github.com/yumyum-pi/go-schoolScheduler/internal/testData"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
@@ -31,27 +29,11 @@ func printClassData(cs *models.Classes) {
 var c models.Classes
 var t models.Teachers
 
-// Init initiate the process
-func Init() {
-	fmt.Println("> Initialization process: Started")
-	c, t = data.Get()
-
-	// fmt.Println(c)
-	fmt.Println("> Initialization process: Finished ")
-}
-
 func main() {
 	// generate classes and teachers
-	c, t = generate.Init()
-
-	// assigned teacher to class
-	e := c.AssignTeachers(&t)
-	// print the error
-	if len(e) != 0 {
-		fmt.Println("Error in assignTeacherAndClass()", e)
-	}
+	td.Create(&c, &t)
 	// start creating timetable
-	generator.Init(c, t)
+	//generator.Init(c, t)
 
 	// get a timetable and print it
 }
