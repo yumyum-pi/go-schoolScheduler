@@ -1,4 +1,4 @@
-package generate
+package testdata
 
 import (
 	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
@@ -38,20 +38,19 @@ var StanL = [][models.StanderdBS]byte{
 }
 
 var nSec = utils.RangeInt{Min: 1, Max: 5} // range for generating random no. of sections
-var grp = [models.GroupBS]byte{0, 1}      // fixed group bytes
-var yr = [models.YearBS]byte{2, 0, 0, 20} // fixed year bytes
+// template of classID with year and group info
+var temCID = [models.ClassIDBS]byte{2, 0, 2, 0, 0, 0, 0, 0, 0, 1}
 
 // this is to return non main class index
 var nonMainIndex = utils.RangeInt{Min: l2STCode, Max: lSTCode}
 
 // genereateSubject return an array of subjects. i is the index of StanL, to get the standers byte info.
-// TODO add test
 func generateSubject(i int) (subjects []models.Subject) {
 	rp := models.MaxCap // remain periods set to max capacity of the class
 
 	// ranage for different type of classes
 	nonMain := utils.RangeInt{Min: 4, Max: 6} // main class -eg: English, Maths, Science.
-	main := utils.RangeInt{Min: 7, Max: 10}   // non main class-eg: Physical Education
+	main := utils.RangeInt{Min: 7, Max: 10}   // non main class -eg: Physical Education
 
 	//loop for main subjects
 	for j := 0; j < lSTCode; j++ {
@@ -95,12 +94,17 @@ func generateSubject(i int) (subjects []models.Subject) {
 func generateSection(i int) (sections []models.Class) {
 	n := nSec.Random() // generate a random number of sections
 
+	// adding standerd bytes
+	temCID[models.YearBS] = StanL[i][0]
+	temCID[models.YearBS+1] = StanL[i][1]
+
 	// loop for each section
 	for noOfSec := 0; noOfSec < n; noOfSec++ {
 		var sec models.Class // create a section
+		// adding section bytes at the right position
+		temCID[models.YearBS+models.StanderdBS+1] = byte(noOfSec + 1)
 
-		secB := [2]byte{0, byte(noOfSec + 1)}  // create section byte
-		sec.ID.Create(yr, StanL[i], secB, grp) // creating a new ClassID
+		sec.ID.Init(temCID) // creating a new ClassID
 
 		sec.Subjects = generateSubject(i) // generate subject data
 		sec.CalRemCap()                   // calculate the free periods

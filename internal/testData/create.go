@@ -1,4 +1,4 @@
-package generate
+package testdata
 
 import (
 	"fmt"
@@ -29,35 +29,17 @@ func printClasses(cs *models.Classes) {
 
 // Create class and teacher data
 func Create(cs *models.Classes, ts *models.Teachers) {
-	*cs = generateClasses()
+	generateClasses(cs) // generate class and assign to the cs pointer
 
-	// check class capacity and assign extra classes if requried
-	// loop through all the classes
-	for _, class := range *cs {
-		class.CalCap()              // calcuate the capacity
-		n := class.NFreePeriod      // get the no. of free periods
-		subL := len(class.Subjects) // get no. of subject
-
-		// loop over the no. of free periods
-		for i := 0; i < n; i++ {
-			// loop the index no from 0 to subL
-			looper := (i / subL)
-			subIndex := i - (looper * subL)
-
-			// increase the no. of required classes
-			class.Subjects[subIndex].Req++
-		}
-	}
-
-	// create Subject Requrest List
-	srl := make(rl.Subject)
-	srl.Init(cs)
+	srl := make(rl.Subject) // new Subject Requrest List
+	srl.Init(cs)            // create the list using classes pointer
 
 	var trl rl.TeacherRL            // create Teacher Requrest List
 	trl.Create(&srl)                // populate teacher request list
 	*ts = generateTeacherList(&trl) // generate teachers
 
 	ac := []models.ClassAssigned{} // empty slice of class assigned struct
+
 	// loop through all teacher and reset to default data
 	for i := range *ts {
 		(*ts)[i].ClassesAssigned = ac
@@ -72,6 +54,6 @@ func Create(cs *models.Classes, ts *models.Teachers) {
 	}
 
 	fmt.Println("> Finished: Creating class and teacher data")
-	//printClasses(cs)
-	printTeachers(ts)
+	printClasses(cs)
+	// printTeachers(ts)
 }
