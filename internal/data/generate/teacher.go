@@ -3,7 +3,7 @@ package generate
 import (
 	c "crypto/rand"
 
-	"github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
+	rl "github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
@@ -32,7 +32,7 @@ func createTeacher(subjectID models.SubjectID, req int) (t models.Teacher) {
 
 // generateTeacher generate teacher from the given request list
 // TODO add test
-func generateTeacherList(trl *requestlist.TeacherRL) (teacherList models.Teachers) {
+func generateTeacherList(trl *rl.TeacherRL) (teacherList models.Teachers) {
 
 	// Loop through all the Teacher Request List
 	for _, t := range *trl {
