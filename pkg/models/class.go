@@ -60,13 +60,6 @@ type Class struct {
 	NFreePeriod int       `json:"nFreePeriod"` // Number of free period this class has
 }
 
-// Create assigns given classID and defults
-// TODO Write Test
-func (c *Class) Create(id [ClassIDBS]byte) {
-	(*c).ID.Init(id)          // create class id from bytes
-	(*c).NFreePeriod = MaxCap // assign the default max cap to class
-}
-
 // AddSubject adds the subejct to the class
 // TODO Write Test
 func (c *Class) AddSubject(sub Subject) {
