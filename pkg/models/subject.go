@@ -95,6 +95,6 @@ type Subject struct {
 // IsAssigned return bool of weather the teacher is assigned or not
 //TODO write test
 func (s *Subject) IsAssigned() bool {
-	// check is the teacher is assigned
-	return (*s).TeacherID != (TeacherID{})
+	// check is the teacherID and subjectID is assigned
+	return (*s).TeacherID != (TeacherID{}) && (*s).ID != (SubjectID{})
 }
