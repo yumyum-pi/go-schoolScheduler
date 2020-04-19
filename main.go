@@ -14,7 +14,7 @@ func printTeacherData(ts *models.Teachers) {
 	}
 }
 
-func printClassData(cs *models.Classes) {
+func printClassData(cs *[]models.Class) {
 	for _, c := range *cs {
 		c.CalCap()
 		ss := ""
@@ -26,7 +26,7 @@ func printClassData(cs *models.Classes) {
 	}
 }
 
-var c models.Classes
+var c []models.Class
 var t models.Teachers
 
 func main() {
