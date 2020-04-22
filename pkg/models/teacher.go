@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 const (
 	// TeacherFreePeriod no of free period allowed in an weel
 	TeacherFreePeriod = 5
@@ -90,6 +92,14 @@ func (t *Teacher) CanTeach(sID SubjectID) bool {
 	return false
 }
 
+// Print writes class values to the console
+func (t *Teacher) Print() {
+	fmt.Printf("tID=%v\tNOS=%v\tCapicity=%v\t subjectCT=%v\n", t.ID.Bytes(), len(t.SubjectCT), t.Capacity, t.SubjectCT)
+	for _, s := range (*t).AClassL {
+		fmt.Printf("> sID=%v\tcID=%v\treq=%v\n", s.SubjectID.Bytes(), s.ClassID.Bytes(), s.Assigned)
+	}
+}
+
 // AssignClass will assign class to the teacher struct. It returns the diffrence between the capacity
 // and the requirement. If the diff is < 0 then the teacher is not assigned. Paramerters :-
 //  cID - ClassID of the class to teach
@@ -169,4 +179,12 @@ func (ts *Teachers) FindBySubType(sID SubjectID) (index []int) {
 		}
 	}
 	return // Element not found
+}
+
+// Print writes class values to the console
+func (ts *Teachers) Print() {
+	for _, t := range *ts {
+		t.Print()
+	}
+	fmt.Printf("> No. of Teacher=%v\n", len(*ts))
 }
