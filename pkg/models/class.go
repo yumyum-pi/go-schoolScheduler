@@ -74,6 +74,14 @@ type Class struct {
 	Capacity int      `json:"nFreePeriod"` // No of free periods
 }
 
+// Print writes class values to the console
+func (c *Class) Print() {
+	fmt.Printf("> cID=%v\tcapacity=%v\n", (*c).ID.Bytes(), (*c).Capacity)
+	for _, s := range (*c).Subjects {
+		fmt.Printf("sID=%v\tReq=%v\ttID=%v\n", s.ID.Bytes(), s.Req, s.TeacherID.Bytes())
+	}
+}
+
 // Init assigns given classID and defults
 func (c *Class) Init(id [ClassIDBS]byte) {
 	(*c).ID.Init(id)       // create class id from bytes
