@@ -1,12 +1,6 @@
 package requestlist
 
-import (
-	"testing"
-
-	rl "github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
-	"github.com/yumyum-pi/go-schoolScheduler/test/values"
-)
-
+/*
 var tRls = rl.Subject{
 	values.SubjectIDs[0].Bytes(): rl.Class{
 		values.ClassIDs[0].Bytes(): 6,
@@ -237,3 +231,4 @@ func TestInit_Fail(t *testing.T) {
 		}
 	}
 }
+*/

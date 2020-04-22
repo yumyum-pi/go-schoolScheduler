@@ -21,32 +21,32 @@ var tClassIDL = []ClassID{
 	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{1, 0}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 9
 }
 
-// Classes is a slice of class for test
-var tClasses = Classes{
-	Class{ID: tClassIDL[0], Subjects: tSubjectL[:1], Capacity: 42}, // 0-9: 6 - 48
-	Class{ID: tClassIDL[1], Subjects: tSubjectL[:2], Capacity: 36}, // 0-4: 12 - 48
-	Class{ID: tClassIDL[2], Subjects: tSubjectL[:3], Capacity: 30}, // 0-5: 18 - 48
-	Class{ID: tClassIDL[3], Subjects: tSubjectL[:4], Capacity: 24}, // 0-4: 24 - 48
-	Class{ID: tClassIDL[4], Subjects: tSubjectL[:5], Capacity: 18}, // 0-3: 30 - 48
-	Class{ID: tClassIDL[5], Subjects: tSubjectL[:6], Capacity: 12}, // 0-6: 36 - 48
-	Class{ID: tClassIDL[6], Subjects: tSubjectL[:7], Capacity: 9},  // 0-5: 39 - 48
-	Class{ID: tClassIDL[7], Subjects: tSubjectL[:8], Capacity: 6},  // 0-2: 42 - 48
-	Class{ID: tClassIDL[8], Subjects: tSubjectL[:9], Capacity: 3},  // 0-3: 45 - 48
-	Class{ID: tClassIDL[9], Subjects: tSubjectL[:], Capacity: 0},   // 0-9: 48 - 48
-}
-
 // tClassIDBytes is a slice of test bytes of classIDs
-var tClassIDBytes [][10]byte = [][10]byte{
+var tClassIDBL [][10]byte = [][10]byte{
 	[ClassIDBS]byte{2, 0, 2, 0, 0, 1, 0, 1, 0, 1},
 	[ClassIDBS]byte{2, 0, 2, 0, 0, 2, 0, 1, 0, 1},
 	[ClassIDBS]byte{2, 0, 2, 0, 0, 3, 0, 1, 0, 1},
 	[ClassIDBS]byte{2, 0, 2, 0, 0, 4, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 5, 0, 1, 0, 1}, // false
+	[ClassIDBS]byte{2, 0, 2, 0, 0, 5, 0, 1, 0, 1},
 	[ClassIDBS]byte{2, 0, 2, 0, 0, 6, 0, 1, 0, 1},
 	[ClassIDBS]byte{2, 0, 2, 0, 0, 7, 0, 1, 0, 1},
 	[ClassIDBS]byte{2, 0, 2, 0, 0, 8, 0, 1, 0, 1},
 	[ClassIDBS]byte{2, 0, 2, 0, 0, 9, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 1, 0, 0, 1, 0, 1}, // false
+	[ClassIDBS]byte{2, 0, 2, 0, 1, 0, 0, 1, 0, 1},
+}
+
+// Classes is a slice of class for test
+var tClasses = []Class{
+	{ID: tClassIDL[0], Subjects: tSubjectL[:1], Capacity: 42}, // 0-9: 6 - 48
+	{ID: tClassIDL[1], Subjects: tSubjectL[:2], Capacity: 36}, // 0-4: 12 - 48
+	{ID: tClassIDL[2], Subjects: tSubjectL[:3], Capacity: 30}, // 0-5: 18 - 48
+	{ID: tClassIDL[3], Subjects: tSubjectL[:4], Capacity: 24}, // 0-4: 24 - 48
+	{ID: tClassIDL[4], Subjects: tSubjectL[:5], Capacity: 18}, // 0-3: 30 - 48
+	{ID: tClassIDL[5], Subjects: tSubjectL[:6], Capacity: 12}, // 0-6: 36 - 48
+	{ID: tClassIDL[6], Subjects: tSubjectL[:7], Capacity: 9},  // 0-5: 39 - 48
+	{ID: tClassIDL[7], Subjects: tSubjectL[:8], Capacity: 6},  // 0-2: 42 - 48
+	{ID: tClassIDL[8], Subjects: tSubjectL[:9], Capacity: 3},  // 0-3: 45 - 48
+	{ID: tClassIDL[9], Subjects: tSubjectL[:], Capacity: 0},   // 0-9: 48 - 48
 }
 
 // wrong index create wrong index from the current index
@@ -57,78 +57,81 @@ func wrongIndex(l, i int) (j int) {
 
 	// check of out of range index
 	if j >= l {
-		j = j - l
+		// loop the value to be begining
+		j = j - l // subract the lenght to loop over
 	}
 
 	return
 }
 
-// classIDTestBytes tests the byte method of the classID struct
-func classIDTestBytes(i int) (e error) {
-	j := wrongIndex(len(tClassIDBytes), i) // create wrong index
+func tClassIDBytes(i int) (e error) {
+	j := wrongIndex(len(tClassIDBL), i) // create an incorrect index
 
-	cID := tClassIDL[i] // the classID from the list
-	b := cID.Bytes()    // run the method to be tested
+	cID := tClassIDL[i] // get classID from the list
+	b := cID.Bytes()    // create byte
+
+	cBytes := tClassIDBL[i] // get correct bytes
+	iBytes := tClassIDBL[j] // get incorrect class bytes
 
 	// bytes match check
-	p := (b == tClassIDBytes[i]) // check with correct index
-	f := (b == tClassIDBytes[j]) // check with wrong index
+	p := (b == cBytes) // check with correct index
+	f := (b == iBytes) // check with incorrect index
 
-	// correct index should be true
+	// correct index should not be false
 	if !p {
-		e = fmt.Errorf(`> Error: cID=%v, bytes=%v, tClassIDBytes=%v. where n=%v and tClassIDBytesResult=%v`, cID, b, tClassIDBytes[i], i, true)
+		e = fmt.Errorf(`> Error: cID.Bytes=%v cBytes=%v, should match at=%v`, b, cBytes, i)
 	}
 
-	// wrong index should be false
+	// incorrect index should not be true
 	if f {
-		e = fmt.Errorf(`> Error: cID=%v, bytes=%v, tClassIDBytes=%v. where n=%v and tClassIDBytesResult=%v`, cID, b, tClassIDBytes[i], i, true)
+		e = fmt.Errorf(`> Error: cID.Bytes=%v iBytes=%v, should not match at=%v`, b, iBytes, i)
 	}
 	return
 }
 
-// TestClassID_Bytes_One test's the byte method of the classID struct and use all
-func TestClassID_Bytes_All(t *testing.T) {
-	l := len(tClassIDL)
+func TestClassID_Bytes(t *testing.T) {
+	l := len(tClassIDL) // get classID list length
 
 	for i := 0; i < l; i++ {
-		e := classIDTestBytes(i) // run the test function
+		e := tClassIDBytes(i) // run the test function
 		if e != nil {
 			t.Error(e)
 		}
 	}
 }
 
-// classIDTestInit test the Init method of ClassID struct
-func classIDTestInit(i int) (e error) {
-	j := wrongIndex(len(tClassIDBytes), i) // create wrong index
+func tClassIDInit(i int) (e error) {
+	j := wrongIndex(len(tClassIDBL), i) // create an incorrect index
 
-	var cID ClassID            // create a new classID
-	cID.Init(tClassIDBytes[i]) // assign value to the id
+	var cID ClassID         // create a new classID
+	cID.Init(tClassIDBL[i]) // assign value to the id
+
+	cCID := tClassIDL[i] // correct classID
+	iCID := tClassIDL[j] // incorrect classID
 
 	// check if the classIDs match
-	p := (cID == tClassIDL[i]) // this is the correct index
-	f := (cID == tClassIDL[j]) // this is the incorrect index
+	p := (cID == cCID) // this is the correct index
+	f := (cID == iCID) // this is the incorrect index
 
-	// p used the correct index, it should be true
+	// check correct index
+	// p should be true
 	if !p {
-		return fmt.Errorf("> Error: cID=%v bytes=%v tCID=%v where i=%v", cID, tClassIDBytes[i], tClassIDL[i], i)
+		e = fmt.Errorf(`> Error: cID=%v cCID=%v, should match at i=%v`, cID, cCID, i)
 	}
 
-	// f used the incorrect index, it should not be true
+	// check incorrect
+	// f should not match
 	if f {
-		return fmt.Errorf("> Error: cID=%v bytes=%v tCID=%v where i=%v", cID, tClassIDBytes[i], tClassIDL[i], i)
+		e = fmt.Errorf(`> Error: cID=%v iCID=%v, should not match at i=%v`, cID, iCID, i)
 	}
-
 	return
 }
 
-// TestClassID_Init_One test the Init method of ClassID struct and uses one element
-func TestClassID_Init_All(t *testing.T) {
-	// Get length of the tClassIDTUlist
-	l := len(tClassIDL)
+func TestClassID_Init(t *testing.T) {
+	l := len(tClassIDL) // get classID list length
 
 	for i := 0; i < l; i++ {
-		e := classIDTestInit(i)
+		e := tClassIDInit(i) // run the test function
 		if e != nil {
 			t.Error(e)
 		}
@@ -136,33 +139,44 @@ func TestClassID_Init_All(t *testing.T) {
 }
 
 func tClassInit(i int) (e error) {
-	var nc Class         // create a new class
-	tCID := tClassIDL[i] // create a classID
+	j := wrongIndex(len(tClassIDL), i)
 
-	// run the function to be tested
-	nc.Init(tCID.Bytes()) // initiate class  witht the cID bytes
+	// get ids
+	cCID := tClassIDL[i] // correct index
+	iCID := tClassIDL[j] // incorrect index
 
-	// new class id and test class id should match
-	if nc.ID != tCID {
-		e = fmt.Errorf("> Error: IDs don't match newClassID=%v tClassId=%v", nc.ID, tCID)
+	var c Class          // create a new class
+	c.Init(cCID.Bytes()) // initiate class with correct id
+
+	// check correct index
+	// class id should match
+	if c.ID != cCID {
+		return fmt.Errorf("> Error: cID=%v cCID=%v, should match at i=%v", c.ID, cCID, i)
 	}
 
-	// new class should not have subjects assigned
-	if len(nc.Subjects) != 0 {
-		e = fmt.Errorf("> Error: Subject is not 0, newClassID=%v tClassId=%v", nc.ID, nc.ID)
+	// class subjects list should be 0
+	if len(c.Subjects) != 0 {
+		e = fmt.Errorf("> Error: cID=%v c.Subjects=%v, subject list should be 0 at i=%v ", c.ID, c.Subjects, i)
 	}
 
-	if nc.Capacity != MaxCap {
-		e = fmt.Errorf("> Error: Subject is not 0, capacity=%v", nc.Capacity)
+	// class capacity should be full
+	if c.Capacity != MaxCap {
+		e = fmt.Errorf("> Error: cID=%v c.Capacity=%v, capacity should be %v at i=%v, ", c.ID, c.Capacity, MaxCap, i)
+	}
+
+	// check incorrect index
+	// class id should not match
+	if c.ID == iCID {
+		return fmt.Errorf("> Error: cID=%v iCID=%v, should not match j=%v at i=%v", c.ID, iCID, j, i)
 	}
 	return
 }
 
 func TestClass_Init(t *testing.T) {
-	l := len(tClassIDL)
+	l := len(tClassIDL) // get length of the classID list
 
 	for i := 0; i < l; i++ {
-		e := classIDTestInit(i)
+		e := tClassInit(i) // run the test function
 		if e != nil {
 			t.Error(e)
 		}
@@ -170,42 +184,81 @@ func TestClass_Init(t *testing.T) {
 }
 
 func TestClass_AddSubejct(t *testing.T) {
-	cID := tClassIDBytes[0]
+	cID := tClassIDBL[0]
 	// create a new class
 	var c Class
 	c.Init(cID)
 
 	// loop through all the subjects
 	for _, s := range tSubjectL {
-		c.AddSubject(s) // add subject to the class
+		err := c.AddSubject(s) // add subject to the class
+		if err != nil {
+			t.Error(err)
+		}
 	}
 
-	// check subject length
+	// length should be equal
 	if len(c.Subjects) != len(tSubjectL) {
-		t.Errorf("> Error: c.Subject length=%v values.Subject length=%v", len(c.Subjects), len(tSubjectL))
+		t.Errorf("> Error: c.Subject length is %v, length should be %v", len(c.Subjects), len(tSubjectL))
 	}
 
-	// check capacity
+	// capacity should be 0
 	if c.Capacity != 0 {
-		t.Errorf("> Error: c.Capacity is not 0. c.Capacity=%v", c.Capacity)
+		t.Errorf("> Error: c.Capacity=%v, should be 0", c.Capacity)
 	}
 
-	// try to add another subject
-	diff := c.AddSubject(tSubjectL[0])
-	// check if successful
-	if diff >= 0 {
-		t.Errorf("> Error: Added another subject when no capacity. c.Capacity=%v", c.Capacity)
+	// loop through all the subjects
+	for i, s := range tSubjectL {
+		// try to add another subject
+		err := c.AddSubject(s)
+		// check if successful
+		if err == nil {
+			t.Errorf(`> Error: added to class with no capacity`)
+			return
+		}
+
+		// added subject with existing id
+		j := wrongIndex(len(tSubjectL), i) // create wrong index of subject
+		iS := c.Subjects[j]                // get the incorrect subject
+		c.Subjects[i] = (Subject{})        // unassign a subject
+		c.Capacity = s.Req                 // add capacity
+		err = c.AddSubject(iS)             // assign subject that already exist
+		if err == nil {
+			t.Errorf(`> Error: added to class with the same id`)
+			return
+		}
+		//check for nil error
+		err = c.AddSubject((Subject{})) // assign a nil subject
+		if err == nil {
+			t.Errorf(`> Error: added a nil subject`)
+			return
+		}
+		// assign the correct subject
+		err = c.AddSubject(s) // assign subject that already exist
+		if err != nil {
+			t.Error(err)
+			t.Errorf(`> Error: unable to add subject to the class with adequate capacity`)
+			return
+		}
+
 	}
+
+	// capacity should be 0
+	if c.Capacity != 0 {
+		t.Errorf("> Error: c.Capacity=%v, should be 0", c.Capacity)
+	}
+
 }
 
 func TestClass_AssignTeacher(t *testing.T) {
 	// generate a random numbers
 	is := utils.GenerateRandomInt(len(tSubjectL), 10)   // for subject index
 	it := utils.GenerateRandomInt(len(tTeacherIDL), 10) // for teacher index
-	// create a teacherID
-	// assign the teacher to the class
-	var c Class
+
+	var c Class // create a teacherID
 	c.Init(tClassIDL[0].Bytes())
+
+	// assign all subjects
 	for _, s := range tSubjectL {
 		c.AddSubject(s)
 	}
@@ -250,9 +303,9 @@ func TestClass_AssignTeacher(t *testing.T) {
 func TestClass_CalRemCap(t *testing.T) {
 	// generate two random no
 	i := utils.GenerateRandomInt(len(tSubjectL), 10)
-	j := utils.GenerateRandomInt(len(tSubjectL), 10)
+	j := wrongIndex(len(tSubjectL), i) // get different index from i
 
-	// create a new class
+	// create a new class with subjects
 	var c Class
 	c.Init(tClassIDL[i].Bytes())                 // assign id and capacity
 	c.Subjects = make([]Subject, len(tSubjectL)) // make the subject slice
@@ -283,7 +336,7 @@ func TestClass_CalRemCap(t *testing.T) {
 func TestClass_CalCap(t *testing.T) {
 	// generate two random no
 	i := utils.GenerateRandomInt(len(tSubjectL), 10)
-	j := utils.GenerateRandomInt(len(tSubjectL), 10)
+	j := wrongIndex(len(tSubjectL), i) // get different index from i
 
 	// create a new class
 	var c Class
@@ -300,15 +353,17 @@ func TestClass_CalCap(t *testing.T) {
 
 	// make new no of change the subject requirement
 	changeReq := c.Subjects[j].Req / 2
-
+	uiS := c.Subjects[i]
+	ujSReq := c.Subjects[j].Req - changeReq
 	// make changes
 	c.Subjects[i].ID = (SubjectID{}) // unassign a subject
 	c.Subjects[j].Req = changeReq    // change the class requirement
-
+	//fmt.Println(i, j)
 	// store
-	rPeriods := (c.Subjects[i].Req + changeReq + c.Capacity)
-
+	rPeriods := (uiS.Req + c.Capacity + ujSReq)
+	//fmt.Println(uiS.Req, c.Capacity, ujSReq, changeReq)
 	c.CalCap()
+
 	// check no of unassigned periods
 	if c.Capacity != rPeriods {
 		t.Errorf("> Error: capacity=%v rPeriods=%v\n", c.Capacity, rPeriods)
