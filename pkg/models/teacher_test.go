@@ -7,71 +7,17 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
 )
 
-// TeacherIDs is a collection of teacherID
-var tTeacherIDL = []TeacherID{
-	{Year: [YearBS]byte{2, 0, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 1}},
-	{Year: [YearBS]byte{2, 1, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 2}},
-	{Year: [YearBS]byte{2, 2, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 3}},
-	{Year: [YearBS]byte{2, 3, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 4}},
-	{Year: [YearBS]byte{2, 4, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 5}},
-	{Year: [YearBS]byte{2, 5, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 6}},
-	{Year: [YearBS]byte{2, 6, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 7}},
-	{Year: [YearBS]byte{2, 7, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 8}},
-	{Year: [YearBS]byte{2, 8, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 9}},
-	{Year: [YearBS]byte{2, 9, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 0}},
-}
-
-// TeacherIDs is a collection of teacherID
-var tTeacherIDBL = [][TeacherIDBS]byte{
-	{2, 0, 2, 0, 0, 0, 0, 1},
-	{2, 1, 2, 0, 0, 0, 0, 2},
-	{2, 2, 2, 0, 0, 0, 0, 3},
-	{2, 3, 2, 0, 0, 0, 0, 4},
-	{2, 4, 2, 0, 0, 0, 0, 5},
-	{2, 5, 2, 0, 0, 0, 0, 6},
-	{2, 6, 2, 0, 0, 0, 0, 7},
-	{2, 7, 2, 0, 0, 0, 0, 8},
-	{2, 8, 2, 0, 0, 0, 0, 9},
-	{2, 9, 2, 0, 0, 0, 0, 0},
-}
-
-var tClassAssignedL = []ClassAssigned{
-	{tSubjectIDL[0], tClassIDL[0], 6}, // 6
-	{tSubjectIDL[1], tClassIDL[1], 6}, // 12
-	{tSubjectIDL[2], tClassIDL[2], 6}, // 18
-	{tSubjectIDL[3], tClassIDL[3], 6}, // 24
-	{tSubjectIDL[4], tClassIDL[4], 6}, // 30
-	{tSubjectIDL[5], tClassIDL[5], 6}, // 36
-	{tSubjectIDL[6], tClassIDL[6], 3}, // 39
-	{tSubjectIDL[7], tClassIDL[7], 3}, // 42
-	{tSubjectIDL[8], tClassIDL[8], 3}, // 45
-	{tSubjectIDL[9], tClassIDL[9], 3}, // 48
-}
-
-var tTeacherL = []Teacher{
-	{tTeacherIDL[0], tSubjectIDL[:1], tClassAssignedL[:1], 42}, //
-	{tTeacherIDL[1], tSubjectIDL[:2], tClassAssignedL[:2], 36},
-	{tTeacherIDL[2], tSubjectIDL[:3], tClassAssignedL[:3], 30},
-	{tTeacherIDL[3], tSubjectIDL[:4], tClassAssignedL[:4], 24},
-	{tTeacherIDL[4], tSubjectIDL[:5], tClassAssignedL[:5], 18},
-	{tTeacherIDL[5], tSubjectIDL[:6], tClassAssignedL[:6], 12},
-	{tTeacherIDL[6], tSubjectIDL[:7], tClassAssignedL[:7], 9},
-	{tTeacherIDL[7], tSubjectIDL[:8], tClassAssignedL[:8], 6},
-	{tTeacherIDL[8], tSubjectIDL[:9], tClassAssignedL[:9], 3},
-	{tTeacherIDL[9], tSubjectIDL[:], tClassAssignedL[:], 0},
-}
-
 // TeacherID
 
 func tTeacherIDBytes(i int) (e error) {
 	// create an incorrect id index
-	j := wrongIndex(len(tTeacherIDL), i)
+	j := wrongIndex(len(TTeacherIDL), i)
 
-	tID := tTeacherIDL[i] // get teacherID from the list
+	tID := TTeacherIDL[i] // get teacherID from the list
 	b := tID.Bytes()      // create bytes
 
-	cByte := tTeacherIDBL[i] // get the correct byte
-	iByte := tTeacherIDBL[j] // get the incorrect byte
+	cByte := TTeacherIDBL[i] // get the correct byte
+	iByte := TTeacherIDBL[j] // get the incorrect byte
 
 	// bytes match check
 	p := (b == cByte) // check with correct index
@@ -90,7 +36,7 @@ func tTeacherIDBytes(i int) (e error) {
 }
 
 func TestTeacherID_Bytes(t *testing.T) {
-	l := len(tTeacherIDL) // get teacherID list length
+	l := len(TTeacherIDL) // get teacherID list length
 
 	for i := 0; i < l; i++ {
 		e := tTeacherIDBytes(i) // run the test function
@@ -101,13 +47,13 @@ func TestTeacherID_Bytes(t *testing.T) {
 }
 
 func tTeacherIDInit(i int) (e error) {
-	j := wrongIndex(len(tTeacherIDL), i) // create an incorrect index
+	j := wrongIndex(len(TTeacherIDL), i) // create an incorrect index
 
 	var tID TeacherID         // create new teacherID
-	tID.Init(tTeacherIDBL[i]) // initiate the value
+	tID.Init(TTeacherIDBL[i]) // initiate the value
 
-	cTID := tTeacherIDL[i] // correct teacherID
-	iTID := tTeacherIDL[j] // incorrect teacherID
+	cTID := TTeacherIDL[i] // correct teacherID
+	iTID := TTeacherIDL[j] // incorrect teacherID
 
 	// check if the teacherIDs match
 	p := (tID == cTID) // check with correct index
@@ -128,7 +74,7 @@ func tTeacherIDInit(i int) (e error) {
 }
 
 func TestTeacherID_Init(t *testing.T) {
-	l := len(tTeacherIDL) // get teacherID list length
+	l := len(TTeacherIDL) // get teacherID list length
 
 	for i := 0; i < l; i++ {
 		e := tTeacherIDInit(i) // run the test function
@@ -140,20 +86,20 @@ func TestTeacherID_Init(t *testing.T) {
 
 // ClassAssigned
 
-func tClassAssigned(i int) (e error) {
-	j := wrongIndex(len(tTeacherIDL), i)    // create an incorrect index
+func TClassAssigned(i int) (e error) {
+	j := wrongIndex(len(TTeacherIDL), i)    // create an incorrect index
 	req := utils.GenerateRandomInt(100, 10) // create a random number
 
 	// get correct info
-	cSID := tSubjectIDL[i] // get correct subjectID
-	cCID := tClassIDL[i]   // get correct classID
+	cSID := TSubjectIDL[i] // get correct subjectID
+	cCID := TClassIDL[i]   // get correct classID
 
 	// get incorrect info
-	iSID := tSubjectIDL[j] // get incorrect subjectID
-	iCID := tClassIDL[j]   // get incorrect classID
+	iSID := TSubjectIDL[j] // get incorrect subjectID
+	iCID := TClassIDL[j]   // get incorrect classID
 	// create new classsAssigned struct
 	var ca ClassAssigned
-	ca.Init(tSubjectIDL[i].Bytes(), tClassIDL[i].Bytes(), req)
+	ca.Init(TSubjectIDL[i].Bytes(), TClassIDL[i].Bytes(), req)
 
 	// correct index
 	// classID should be equal
@@ -182,10 +128,10 @@ func tClassAssigned(i int) (e error) {
 }
 
 func TestClassAssigned_Init(t *testing.T) {
-	l := len(tTeacherIDL) // get teacherID list length
+	l := len(TTeacherIDL) // get teacherID list length
 
 	for i := 0; i < l; i++ {
-		e := tClassAssigned(i) // run the test function
+		e := TClassAssigned(i) // run the test function
 		if e != nil {
 			t.Error(e)
 		}
@@ -195,11 +141,11 @@ func TestClassAssigned_Init(t *testing.T) {
 // Teacher
 
 func tTeacherInit(i int) (e error) {
-	j := wrongIndex(len(tTeacherIDL), i) // create incorrect index
+	j := wrongIndex(len(TTeacherIDL), i) // create incorrect index
 
 	// get ids
-	cTID := tTeacherIDL[i] // correct index
-	iTID := tTeacherIDL[j] // incorrect index
+	cTID := TTeacherIDL[i] // correct index
+	iTID := TTeacherIDL[j] // incorrect index
 
 	var t Teacher        //create a new teacher
 	t.Init(cTID.Bytes()) // initiate teacher with correct id
@@ -239,7 +185,7 @@ func tTeacherInit(i int) (e error) {
 }
 
 func TestTeacher_Init(t *testing.T) {
-	l := len(tTeacherIDL) // get list's length
+	l := len(TTeacherIDL) // get list's length
 
 	for i := 0; i < l; i++ {
 		// run the test function
@@ -251,13 +197,13 @@ func TestTeacher_Init(t *testing.T) {
 
 func tTeacherCanTeach(i int) error {
 	// get ids
-	cSID := tSubjectIDL[i]                 // correct
+	cSID := TSubjectIDL[i]                 // correct
 	iSID := cSID                           // incorrect
 	iSID.Standerd = [StanderdBS]byte{9, 9} // modify to be incorrect
 
 	// test
-	p := tTeacherL[i].CanTeach(cSID) // correct id
-	f := tTeacherL[i].CanTeach(iSID) // incorrect id
+	p := TTeacherL[i].CanTeach(cSID) // correct id
+	f := TTeacherL[i].CanTeach(iSID) // incorrect id
 
 	// check correct id
 	// should return true
@@ -275,7 +221,7 @@ func tTeacherCanTeach(i int) error {
 }
 
 func TestTeacher_CanTeach(t *testing.T) {
-	l := len(tTeacherL) // get list length
+	l := len(TTeacherL) // get list length
 
 	for i := 0; i < l; i++ {
 		// run the test function
@@ -286,9 +232,9 @@ func TestTeacher_CanTeach(t *testing.T) {
 }
 
 func tTeacherAssignClass(i int) error {
-	t := tTeacherL[i]                    // get teacher
-	cID := tClassIDL[i]                  // get classID
-	sID := tSubjectIDL[i]                // get subjectID
+	t := TTeacherL[i]                    // get teacher
+	cID := TClassIDL[i]                  // get classID
+	sID := TSubjectIDL[i]                // get subjectID
 	tcc := t.Capacity                    // teacher current capacity
 	r := utils.GenerateRandomInt(10, 10) // periods required by the new subject
 
@@ -311,7 +257,7 @@ func tTeacherAssignClass(i int) error {
 }
 
 func TestTeacher_AssignClass(t *testing.T) {
-	l := len(tTeacherL) // get list length
+	l := len(TTeacherL) // get list length
 
 	for i := 0; i < l; i++ {
 		// run the test function
@@ -325,7 +271,7 @@ func TestTeacher_AssignClass(t *testing.T) {
 
 func tTeachersFindIndex(i int) (e error) {
 	// get ids
-	cTID := tTeacherIDL[i] // correct id
+	cTID := TTeacherIDL[i] // correct id
 	iTID := TeacherID{}
 
 	ts := Teachers{}
@@ -338,7 +284,7 @@ func tTeachersFindIndex(i int) (e error) {
 	}
 
 	// add teacher to the array
-	ts = tTeacherL
+	ts = TTeacherL
 
 	// find index
 	p := ts.FindIndex(cTID) // use correct id
@@ -365,7 +311,7 @@ func tTeachersFindIndex(i int) (e error) {
 }
 
 func TestTeachers_FindIndex(t *testing.T) {
-	l := len(tTeacherL) // get list's length
+	l := len(TTeacherL) // get list's length
 
 	for i := 0; i < l; i++ {
 		// run the test function
@@ -376,12 +322,12 @@ func TestTeachers_FindIndex(t *testing.T) {
 }
 
 func tTeachersFindBySub(i int) error {
-	l := len(tTeacherL) // get list's length
+	l := len(TTeacherL) // get list's length
 	// get subject id
-	sID := tSubjectIDL[i]
+	sID := TSubjectIDL[i]
 
 	// get the teacher index
-	var ts Teachers = tTeacherL
+	var ts Teachers = TTeacherL
 	tsR := ts.FindBySub(sID)
 
 	// check if the no. of teacher returend is correct or not
@@ -391,7 +337,7 @@ func tTeachersFindBySub(i int) error {
 
 	//loop through each teacher and check if can teacher
 	for _, index := range tsR {
-		if !tTeacherL[index].CanTeach(sID) {
+		if !TTeacherL[index].CanTeach(sID) {
 			return fmt.Errorf("> Error: teacher with given index does not teach the subject")
 		}
 	}
@@ -400,7 +346,7 @@ func tTeachersFindBySub(i int) error {
 }
 
 func TestTeachers_FindBySub(t *testing.T) {
-	l := len(tTeacherL) // get list's length
+	l := len(TTeacherL) // get list's length
 
 	for i := 0; i < l; i++ {
 		// run the test function
@@ -413,7 +359,7 @@ func TestTeachers_FindBySub(t *testing.T) {
 func tTeacherFindBySubType(i int) error {
 	//copy the teachers list
 	var ts Teachers
-	ts = append(ts[:0:0], tTeacherL...)
+	ts = append(ts[:0:0], TTeacherL...)
 
 	// get the last subjectID in the from the teacher
 	lSCT := len(ts[i].SubjectCT)
@@ -440,7 +386,7 @@ func tTeacherFindBySubType(i int) error {
 }
 
 func TestTeachers_FindBySubType(t *testing.T) {
-	l := len(tTeacherL) // get list's length
+	l := len(TTeacherL) // get list's length
 
 	for i := 0; i < l; i++ {
 		// run the test function

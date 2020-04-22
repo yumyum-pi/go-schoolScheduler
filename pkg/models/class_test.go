@@ -7,48 +7,6 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
 )
 
-// ClassIDs is a slice of ClassID for test
-var tClassIDL = []ClassID{
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 1}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 0
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 2}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 1
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 3}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 2
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 4}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 3
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 5}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 4
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 6}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 5
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 7}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 6
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 8}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 7
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 9}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 8
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{1, 0}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 9
-}
-
-// tClassIDBytes is a slice of test bytes of classIDs
-var tClassIDBL [][10]byte = [][10]byte{
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 1, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 2, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 3, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 4, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 5, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 6, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 7, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 8, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 0, 9, 0, 1, 0, 1},
-	[ClassIDBS]byte{2, 0, 2, 0, 1, 0, 0, 1, 0, 1},
-}
-
-// Classes is a slice of class for test
-var tClasses = []Class{
-	{ID: tClassIDL[0], Subjects: tSubjectL[:1], Capacity: 42}, // 0-9: 6 - 48
-	{ID: tClassIDL[1], Subjects: tSubjectL[:2], Capacity: 36}, // 0-4: 12 - 48
-	{ID: tClassIDL[2], Subjects: tSubjectL[:3], Capacity: 30}, // 0-5: 18 - 48
-	{ID: tClassIDL[3], Subjects: tSubjectL[:4], Capacity: 24}, // 0-4: 24 - 48
-	{ID: tClassIDL[4], Subjects: tSubjectL[:5], Capacity: 18}, // 0-3: 30 - 48
-	{ID: tClassIDL[5], Subjects: tSubjectL[:6], Capacity: 12}, // 0-6: 36 - 48
-	{ID: tClassIDL[6], Subjects: tSubjectL[:7], Capacity: 9},  // 0-5: 39 - 48
-	{ID: tClassIDL[7], Subjects: tSubjectL[:8], Capacity: 6},  // 0-2: 42 - 48
-	{ID: tClassIDL[8], Subjects: tSubjectL[:9], Capacity: 3},  // 0-3: 45 - 48
-	{ID: tClassIDL[9], Subjects: tSubjectL[:], Capacity: 0},   // 0-9: 48 - 48
-}
-
 // wrong index create wrong index from the current index
 // l = length of the array
 // i = current index
@@ -65,13 +23,13 @@ func wrongIndex(l, i int) (j int) {
 }
 
 func tClassIDBytes(i int) (e error) {
-	j := wrongIndex(len(tClassIDBL), i) // create an incorrect index
+	j := wrongIndex(len(TClassIDBL), i) // create an incorrect index
 
-	cID := tClassIDL[i] // get classID from the list
+	cID := TClassIDL[i] // get classID from the list
 	b := cID.Bytes()    // create byte
 
-	cBytes := tClassIDBL[i] // get correct bytes
-	iBytes := tClassIDBL[j] // get incorrect class bytes
+	cBytes := TClassIDBL[i] // get correct bytes
+	iBytes := TClassIDBL[j] // get incorrect class bytes
 
 	// bytes match check
 	p := (b == cBytes) // check with correct index
@@ -90,7 +48,7 @@ func tClassIDBytes(i int) (e error) {
 }
 
 func TestClassID_Bytes(t *testing.T) {
-	l := len(tClassIDL) // get classID list length
+	l := len(TClassIDL) // get classID list length
 
 	for i := 0; i < l; i++ {
 		e := tClassIDBytes(i) // run the test function
@@ -101,13 +59,13 @@ func TestClassID_Bytes(t *testing.T) {
 }
 
 func tClassIDInit(i int) (e error) {
-	j := wrongIndex(len(tClassIDBL), i) // create an incorrect index
+	j := wrongIndex(len(TClassIDBL), i) // create an incorrect index
 
 	var cID ClassID         // create a new classID
-	cID.Init(tClassIDBL[i]) // assign value to the id
+	cID.Init(TClassIDBL[i]) // assign value to the id
 
-	cCID := tClassIDL[i] // correct classID
-	iCID := tClassIDL[j] // incorrect classID
+	cCID := TClassIDL[i] // correct classID
+	iCID := TClassIDL[j] // incorrect classID
 
 	// check if the classIDs match
 	p := (cID == cCID) // this is the correct index
@@ -128,7 +86,7 @@ func tClassIDInit(i int) (e error) {
 }
 
 func TestClassID_Init(t *testing.T) {
-	l := len(tClassIDL) // get classID list length
+	l := len(TClassIDL) // get classID list length
 
 	for i := 0; i < l; i++ {
 		e := tClassIDInit(i) // run the test function
@@ -139,11 +97,11 @@ func TestClassID_Init(t *testing.T) {
 }
 
 func tClassInit(i int) (e error) {
-	j := wrongIndex(len(tClassIDL), i)
+	j := wrongIndex(len(TClassIDL), i)
 
 	// get ids
-	cCID := tClassIDL[i] // correct index
-	iCID := tClassIDL[j] // incorrect index
+	cCID := TClassIDL[i] // correct index
+	iCID := TClassIDL[j] // incorrect index
 
 	var c Class          // create a new class
 	c.Init(cCID.Bytes()) // initiate class with correct id
@@ -173,7 +131,7 @@ func tClassInit(i int) (e error) {
 }
 
 func TestClass_Init(t *testing.T) {
-	l := len(tClassIDL) // get length of the classID list
+	l := len(TClassIDL) // get length of the classID list
 
 	for i := 0; i < l; i++ {
 		e := tClassInit(i) // run the test function
@@ -184,13 +142,13 @@ func TestClass_Init(t *testing.T) {
 }
 
 func TestClass_AddSubejct(t *testing.T) {
-	cID := tClassIDBL[0]
+	cID := TClassIDBL[0]
 	// create a new class
 	var c Class
 	c.Init(cID)
 
 	// loop through all the subjects
-	for _, s := range tSubjectL {
+	for _, s := range TSubjectL {
 		err := c.AddSubject(s) // add subject to the class
 		if err != nil {
 			t.Error(err)
@@ -198,8 +156,8 @@ func TestClass_AddSubejct(t *testing.T) {
 	}
 
 	// length should be equal
-	if len(c.Subjects) != len(tSubjectL) {
-		t.Errorf("> Error: c.Subject length is %v, length should be %v", len(c.Subjects), len(tSubjectL))
+	if len(c.Subjects) != len(TSubjectL) {
+		t.Errorf("> Error: c.Subject length is %v, length should be %v", len(c.Subjects), len(TSubjectL))
 	}
 
 	// capacity should be 0
@@ -208,7 +166,7 @@ func TestClass_AddSubejct(t *testing.T) {
 	}
 
 	// loop through all the subjects
-	for i, s := range tSubjectL {
+	for i, s := range TSubjectL {
 		// try to add another subject
 		err := c.AddSubject(s)
 		// check if successful
@@ -218,7 +176,7 @@ func TestClass_AddSubejct(t *testing.T) {
 		}
 
 		// added subject with existing id
-		j := wrongIndex(len(tSubjectL), i) // create wrong index of subject
+		j := wrongIndex(len(TSubjectL), i) // create wrong index of subject
 		iS := c.Subjects[j]                // get the incorrect subject
 		c.Subjects[i] = (Subject{})        // unassign a subject
 		c.Capacity = s.Req                 // add capacity
@@ -252,20 +210,20 @@ func TestClass_AddSubejct(t *testing.T) {
 
 func TestClass_AssignTeacher(t *testing.T) {
 	// generate a random numbers
-	is := utils.GenerateRandomInt(len(tSubjectL), 10)   // for subject index
-	it := utils.GenerateRandomInt(len(tTeacherIDL), 10) // for teacher index
+	is := utils.GenerateRandomInt(len(TSubjectL), 10)   // for subject index
+	it := utils.GenerateRandomInt(len(TTeacherIDL), 10) // for teacher index
 
 	var c Class // create a teacherID
-	c.Init(tClassIDL[0].Bytes())
+	c.Init(TClassIDL[0].Bytes())
 
 	// assign all subjects
-	for _, s := range tSubjectL {
+	for _, s := range TSubjectL {
 		c.AddSubject(s)
 	}
 
 	// store id
 	sID := c.Subjects[is].ID
-	tID := tTeacherIDL[it]
+	tID := TTeacherIDL[it]
 
 	// assign a new teacher to a class with no capacity
 	// expect to get error
@@ -284,7 +242,7 @@ func TestClass_AssignTeacher(t *testing.T) {
 
 	// check is the teacher is assigned
 	if c.Subjects[is].TeacherID != tID {
-		t.Errorf("> Error: TeacherID=%v,SubjectsID=%v tTeacherIDL[i]=%v", c.Subjects[is].TeacherID, c.Subjects[is].ID, tTeacherIDL[it])
+		t.Errorf("> Error: TeacherID=%v,SubjectsID=%v TTeacherIDL[i]=%v", c.Subjects[is].TeacherID, c.Subjects[is].ID, TTeacherIDL[it])
 	}
 
 	// check for unknow subject id
@@ -302,14 +260,14 @@ func TestClass_AssignTeacher(t *testing.T) {
 
 func TestClass_CalRemCap(t *testing.T) {
 	// generate two random no
-	i := utils.GenerateRandomInt(len(tSubjectL), 10)
-	j := wrongIndex(len(tSubjectL), i) // get different index from i
+	i := utils.GenerateRandomInt(len(TSubjectL), 10)
+	j := wrongIndex(len(TSubjectL), i) // get different index from i
 
 	// create a new class with subjects
 	var c Class
-	c.Init(tClassIDL[i].Bytes())                 // assign id and capacity
-	c.Subjects = make([]Subject, len(tSubjectL)) // make the subject slice
-	copy(c.Subjects, tSubjectL)                  // copy the tSubjectL slice
+	c.Init(TClassIDL[i].Bytes())                 // assign id and capacity
+	c.Subjects = make([]Subject, len(TSubjectL)) // make the subject slice
+	copy(c.Subjects, TSubjectL)                  // copy the TSubjectL slice
 
 	up := c.CalRemCap() // calculate the no. of unassigned periods
 
@@ -335,14 +293,14 @@ func TestClass_CalRemCap(t *testing.T) {
 
 func TestClass_CalCap(t *testing.T) {
 	// generate two random no
-	i := utils.GenerateRandomInt(len(tSubjectL), 10)
-	j := wrongIndex(len(tSubjectL), i) // get different index from i
+	i := utils.GenerateRandomInt(len(TSubjectL), 10)
+	j := wrongIndex(len(TSubjectL), i) // get different index from i
 
 	// create a new class
 	var c Class
-	c.Init(tClassIDL[i].Bytes())                 // assign id and capacity
-	c.Subjects = make([]Subject, len(tSubjectL)) // make the subject slice
-	copy(c.Subjects, tSubjectL)                  // copy the tSubjectL slice
+	c.Init(TClassIDL[i].Bytes())                 // assign id and capacity
+	c.Subjects = make([]Subject, len(TSubjectL)) // make the subject slice
+	copy(c.Subjects, TSubjectL)                  // copy the TSubjectL slice
 
 	c.CalCap() // calculating the capacity
 
