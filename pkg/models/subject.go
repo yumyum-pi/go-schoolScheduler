@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 // SubjectID is a unique identifier for a subject
 type SubjectID struct {
 	Standerd [StanderdBS]byte `json:"stnID"` // ID for the standerd of the subject
@@ -45,6 +47,11 @@ type Subject struct {
 	Req       int       `json:"reqClasses"` // required classes per week
 }
 
+// Print writes class values to the console
+func (s *Subject) Print() {
+	fmt.Printf("sID=%v\tReq=%v\ttID=%v\n", s.ID.Bytes(), s.Req, s.TeacherID.Bytes())
+}
+
 // IsAssigned return bool of weather the teacher is assigned or not
 func (s *Subject) IsAssigned() bool {
 	// check is the teacherID and subjectID is assigned
@@ -66,4 +73,11 @@ func (sl *SubjectL) FindByID(id [SubjectIDBS]byte) int {
 		}
 	}
 	return index
+}
+
+// PrintSubjectL wirte the subjet list data to console
+func PrintSubjectL(ss []Subject) {
+	for _, s := range ss {
+		s.Print()
+	}
 }

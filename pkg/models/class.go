@@ -77,9 +77,7 @@ type Class struct {
 // Print writes class values to the console
 func (c *Class) Print() {
 	fmt.Printf("> cID=%v\tcapacity=%v\n", (*c).ID.Bytes(), (*c).Capacity)
-	for _, s := range (*c).Subjects {
-		fmt.Printf("sID=%v\tReq=%v\ttID=%v\n", s.ID.Bytes(), s.Req, s.TeacherID.Bytes())
-	}
+	PrintSubjectL((*c).Subjects)
 }
 
 // Init assigns given classID and defults
@@ -156,5 +154,12 @@ func (c *Class) CalCap() {
 		if s.ID != (SubjectID{}) {
 			(*c).Capacity -= s.Req // reduce the no. of remaining capacity by the no. of period required by the subject
 		}
+	}
+}
+
+// PrintClassL writes the class data one by one on the console
+func PrintClassL(cs []Class) {
+	for _, c := range cs {
+		c.Print()
 	}
 }
