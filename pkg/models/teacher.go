@@ -161,7 +161,7 @@ func (ts *Teachers) FindBySub(sID SubjectID) (index []int) {
 }
 
 // FindBySubType return a slice of teacherID with the given subjectID
-func (ts *Teachers) FindBySubType(sID SubjectID) (index []int) {
+func (ts *Teachers) FindBySubType(sIDT [TypeBS]byte) (index []int) {
 	// Check if the list is empty
 	if len(*ts) == 0 {
 		return // Element not found
@@ -172,7 +172,7 @@ func (ts *Teachers) FindBySubType(sID SubjectID) (index []int) {
 		// Loop through subejcts
 		for _, s := range t.SubjectCT {
 			// Check for a matching subjectID
-			if s.Type == sID.Type {
+			if s.Type == sIDT {
 				index = append(index, i) // Add the teacherID to the id slice
 				break                    // exit the loop
 			}

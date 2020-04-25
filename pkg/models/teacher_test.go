@@ -366,7 +366,7 @@ func tTeacherFindBySubType(i int) error {
 	sID := ts[i].SubjectCT[lSCT-1]
 
 	// test the function
-	indexs := ts.FindBySubType(sID)
+	indexs := ts.FindBySubType(sID.Type)
 
 	// check
 	//index length should be 3

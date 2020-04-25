@@ -28,14 +28,14 @@ var getCRL = func(j, l int) Class {
 
 // TSRL is test request list for subjects
 var TSRL = Subject{
-	models.TSubjectIDL[0].Bytes(): getCRL(0, 10),
-	models.TSubjectIDL[1].Bytes(): getCRL(1, 9),
-	models.TSubjectIDL[2].Bytes(): getCRL(2, 8),
-	models.TSubjectIDL[3].Bytes(): getCRL(3, 7),
-	models.TSubjectIDL[4].Bytes(): getCRL(4, 6),
-	models.TSubjectIDL[5].Bytes(): getCRL(5, 5),
-	models.TSubjectIDL[6].Bytes(): getCRL(6, 4),
-	models.TSubjectIDL[7].Bytes(): getCRL(7, 3),
-	models.TSubjectIDL[8].Bytes(): getCRL(8, 2),
-	models.TSubjectIDL[9].Bytes(): getCRL(9, 1),
+	models.TSubjectIDL[0].Type: getCRL(0, 10),
+	models.TSubjectIDL[1].Type: getCRL(1, 9),
+	models.TSubjectIDL[2].Type: getCRL(2, 8),
+	models.TSubjectIDL[3].Type: getCRL(3, 7),
+	models.TSubjectIDL[4].Type: getCRL(4, 6),
+	models.TSubjectIDL[5].Type: getCRL(5, 5),
+	models.TSubjectIDL[6].Type: getCRL(6, 4),
+	models.TSubjectIDL[7].Type: getCRL(7, 3),
+	models.TSubjectIDL[8].Type: getCRL(8, 2),
+	models.TSubjectIDL[9].Type: getCRL(9, 1),
 }

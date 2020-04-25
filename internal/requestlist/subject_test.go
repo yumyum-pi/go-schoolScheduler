@@ -11,9 +11,9 @@ func TestSubject_Init(t *testing.T) {
 	srl.Init(&models.TClassL) // run the func
 
 	// loop through all the subjects in the map
-	for sID, crl := range srl {
+	for sID, cCRL := range TSRL {
 		// check if subjectID is present
-		cCRL, ok := TSRL[sID]
+		crl, ok := srl[sID]
 		if !ok {
 			t.Errorf("> Error: sID=%v not found", sID)
 			break
