@@ -3,7 +3,7 @@ package models
 import "fmt"
 
 const (
-	// TeacherFreePeriod no of free period allowed in an weel
+	// TeacherFreePeriod no of free period allowed in an week
 	TeacherFreePeriod = 5
 
 	// TeacherCap calculate the max no of periods that a teacher has in a day
@@ -17,7 +17,7 @@ type TeacherID struct {
 }
 
 // Bytes return combined bytes of the ID
-func (id *TeacherID) Bytes() (b [TeacherIDBS]byte) {
+func (id *TeacherID) Bytes() (b TeacherIDB) {
 	// loop through byte length
 	for i := 0; i < TeacherIDBS; i++ {
 		if i < YearBS {
@@ -33,7 +33,7 @@ func (id *TeacherID) Bytes() (b [TeacherIDBS]byte) {
 }
 
 // Init adds value to the TeacherID
-func (id *TeacherID) Init(b [TeacherIDBS]byte) {
+func (id *TeacherID) Init(b TeacherIDB) {
 	// loop through byte length
 	for i := 0; i < TeacherIDBS; i++ {
 		if i < YearBS {
@@ -55,7 +55,7 @@ type ClassAssigned struct {
 }
 
 // Init assign the proper value of the struct
-func (ca *ClassAssigned) Init(sID [SubjectIDBS]byte, cID [ClassIDBS]byte, a int) {
+func (ca *ClassAssigned) Init(sID SubjectIDB, cID ClassIDB, a int) {
 	(*ca).SubjectID.Init(sID) // assign subjectID
 	(*ca).ClassID.Init(cID)   // assign classID
 	(*ca).Assigned = a        // no. of assigned periods
@@ -71,7 +71,7 @@ type Teacher struct {
 }
 
 // Init adds value to the teacher struct. ID and capacity
-func (t *Teacher) Init(tID [TeacherIDBS]byte) {
+func (t *Teacher) Init(tID TeacherIDB) {
 	(*t).ID.Init(tID)          // assign teacherID
 	(*t).Capacity = TeacherCap // set the capacity to Teacher cap
 }
@@ -94,16 +94,22 @@ func (t *Teacher) CanTeach(sID SubjectID) bool {
 
 // Print writes class values to the console
 func (t *Teacher) Print() {
-	fmt.Printf("tID=%v\tNOS=%v\tCapicity=%v\t subjectCT=%v\n", t.ID.Bytes(), len(t.SubjectCT), t.Capacity, t.SubjectCT)
+	fmt.Printf(
+		"tID=%v\tNOS=%v\tCapacity=%v\t subjectCT=%v\n",
+		t.ID.Bytes(),
+		len(t.SubjectCT),
+		t.Capacity,
+		t.SubjectCT,
+	)
 	for _, s := range (*t).AClassL {
 		fmt.Printf("> sID=%v\tcID=%v\treq=%v\n", s.SubjectID.Bytes(), s.ClassID.Bytes(), s.Assigned)
 	}
 }
 
-// AssignClass will assign class to the teacher struct. It returns the diffrence between the capacity
-// and the requirement. If the diff is < 0 then the teacher is not assigned. Paramerters :-
+// AssignClass will assign class to the teacher struct. It returns the difference between the capacity
+// and the requirement. If the diff is < 0 then the teacher is not assigned. Parameters :-
 //  cID - ClassID of the class to teach
-//  sID - StubjectID of the subject to teach
+//  sID - SubjectID of the subject to teach
 //  r - number to periods  required by the class
 func (t *Teacher) AssignClass(cID ClassID, sID SubjectID, r int) (diff int) {
 	// check if the teacher has the capacity to take the no. of periods required by the class
@@ -119,7 +125,7 @@ func (t *Teacher) AssignClass(cID ClassID, sID SubjectID, r int) (diff int) {
 	return diff
 }
 
-// Teachers is a slice of Teacher with the following methords:
+// Teachers is a slice of Teacher with the following methods:
 // -Add -FindIndex -FindBySubject
 type Teachers []Teacher
 
@@ -150,7 +156,7 @@ func (ts *Teachers) FindBySub(sID SubjectID) (index []int) {
 
 	// Loop through the slice and find the index
 	for i, t := range *ts {
-		// check if the techer can teacher this subject
+		// check if the teacher can teacher this subject
 		c := t.CanTeach(sID)
 		if c {
 			index = append(index, i) // Add the teacherID to the id slice
@@ -161,7 +167,7 @@ func (ts *Teachers) FindBySub(sID SubjectID) (index []int) {
 }
 
 // FindBySubType return a slice of teacherID with the given subjectID
-func (ts *Teachers) FindBySubType(sIDT [TypeBS]byte) (index []int) {
+func (ts *Teachers) FindBySubType(sIDT byte) (index []int) {
 	// Check if the list is empty
 	if len(*ts) == 0 {
 		return // Element not found
@@ -169,7 +175,7 @@ func (ts *Teachers) FindBySubType(sIDT [TypeBS]byte) (index []int) {
 
 	// Loop through the slice and find the index
 	for i, t := range *ts {
-		// Loop through subejcts
+		// Loop through subjects
 		for _, s := range t.SubjectCT {
 			// Check for a matching subjectID
 			if s.Type == sIDT {

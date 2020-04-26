@@ -14,7 +14,7 @@ func tSubjectIDBytes(i int) (e error) {
 	b := sID.Bytes()      // create byte
 
 	cByte := TSubjectIDBL[i] // get the correct byte
-	iByte := TSubjectIDBL[j] // get the incorret byte
+	iByte := TSubjectIDBL[j] // get the incorrect byte
 
 	// bytes match check
 	p := (b == cByte) // check with correct index
@@ -94,7 +94,7 @@ func tSubjectIsAssigned(i int) (e error) {
 	}
 
 	// #2 test -check false true - unassigned teacher
-	s.TeacherID = (TeacherID{}) // unassign a teacherID
+	s.TeacherID = (TeacherID{}) // un-assign a teacherID
 
 	// check false true
 	if s.IsAssigned() {
@@ -103,7 +103,7 @@ func tSubjectIsAssigned(i int) (e error) {
 
 	// #2 test -check false true - unassigned teacher
 	s.TeacherID = TTeacherIDL[i] // reassign the teacher ID
-	s.ID = (SubjectID{})         // unassign a subjectID
+	s.ID = (SubjectID{})         // un-assign a subjectID
 
 	// check false true
 	if s.IsAssigned() {
@@ -136,7 +136,7 @@ func TestSubjectL_FindByID(t *testing.T) {
 	for i := 0; i < l; i++ {
 		j := utils.GenerateRandomInt(len(TSubjectIDBL), 10) // generate a random index
 		cSID := TSubjectIDBL[j]                             // get the correct subjectID
-		iSID := [SubjectIDBS]byte{6, 6, 6, 6, 6, 6}         // generate uncorrect subjectID
+		iSID := SubjectIDB{6, 66}                           // generate incorrect subjectID
 
 		// find the index with ids
 		p := tSL.FindByID(cSID) // correct subjectID

@@ -7,7 +7,7 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
-type subDub map[[models.SubjectIDBS]byte]int
+type subDub map[models.SubjectIDB]int
 
 func tGenerateSubject(ss []models.Subject) error {
 	cap := 0 // calculate the capacity

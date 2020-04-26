@@ -120,7 +120,7 @@ func TestCDistributed(t *testing.T) {
 //	-correct subject id- standard, type
 //	-teacher capacity is correct
 //	-all classes are assigned
-func tAutoAssignM1(SIDT [models.TypeBS]byte, rlc *rl.Class, tL *models.Teachers) error {
+func tAutoAssignM1(SIDT byte, rlc *rl.Class, tL *models.Teachers) error {
 	crl := make(rl.Class) // store classID and req assigned to teacher
 
 	for i, T := range *tL {

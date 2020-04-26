@@ -7,7 +7,7 @@ import (
 )
 
 // Subject is an slice of subject request elements
-type Subject map[[models.TypeBS]byte]Class
+type Subject map[byte]Class
 
 // Init populate subject request list from the given classes
 func (rls *Subject) Init(cs *[]models.Class) {

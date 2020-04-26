@@ -17,12 +17,12 @@ type Period struct {
 }
 
 // Bytes return the byte array of period data
-func (p *Period) Bytes() (b [PeriodByteSize]byte) {
+func (p *Period) Bytes() (b PeriodB) {
 	cID := (*p).ClassID.Bytes()
 	sID := (*p).SubjectID.Bytes()
 	tID := (*p).TeacherID.Bytes()
 	cs := ClassIDBS + SubjectIDBS
-	for i := 0; i < PeriodByteSize; i++ {
+	for i := 0; i < PeriodBS; i++ {
 		if i < ClassIDBS {
 			b[i] = cID[i]
 		} else if i >= ClassIDBS && i < cs {
@@ -39,12 +39,12 @@ func (p *Period) Bytes() (b [PeriodByteSize]byte) {
 
 // Init return the byte array of period data
 // TODO write test
-func (p *Period) Init(b [PeriodByteSize]byte) {
-	var cID [ClassIDBS]byte
+func (p *Period) Init(b PeriodB) {
+	var cID ClassIDB
 	var sID [SubjectIDBS]byte
-	var tID [TeacherIDBS]byte
+	var tID TeacherIDB
 	cs := ClassIDBS + SubjectIDBS
-	for i := 0; i < PeriodByteSize; {
+	for i := 0; i < PeriodBS; {
 		if i < ClassIDBS {
 			copy(cID[:], b[:ClassIDBS])
 			(*p).ClassID.Init(cID)
@@ -56,7 +56,7 @@ func (p *Period) Init(b [PeriodByteSize]byte) {
 		} else {
 			copy(tID[:], b[cs:])
 			(*p).TeacherID.Init(tID)
-			i = PeriodByteSize
+			i = PeriodBS
 		}
 	}
 

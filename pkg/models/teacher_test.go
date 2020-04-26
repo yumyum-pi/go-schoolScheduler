@@ -197,9 +197,9 @@ func TestTeacher_Init(t *testing.T) {
 
 func tTeacherCanTeach(i int) error {
 	// get ids
-	cSID := TSubjectIDL[i]                 // correct
-	iSID := cSID                           // incorrect
-	iSID.Standard = [StandardBS]byte{9, 9} // modify to be incorrect
+	cSID := TSubjectIDL[i] // correct
+	iSID := cSID           // incorrect
+	iSID.Standard = 99     // modify to be incorrect
 
 	// test
 	p := TTeacherL[i].CanTeach(cSID) // correct id

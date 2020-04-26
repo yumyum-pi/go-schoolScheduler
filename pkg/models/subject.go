@@ -4,40 +4,21 @@ import "fmt"
 
 // SubjectID is a unique identifier for a subject
 type SubjectID struct {
-	Standard [StandardBS]byte `json:"stnID"` // ID for the standard of the subject
-	Type     [TypeBS]byte     `json:"type"`  // type of subject. Example English, Hindi
+	Standard byte `json:"stnID"` // ID for the standard of the subject
+	Type     byte `json:"type"`  // type of subject. Example English, Hindi
 }
 
 // Bytes return the byte value from Standard and Type values
-func (id *SubjectID) Bytes() (b [SubjectIDBS]byte) {
-	// loop through each byte
-	for i := 0; i < SubjectIDBS; i++ {
-		if i < StandardBS {
-			// add standard info to the struct
-			b[i] = (*id).Standard[i] // assign the bytes
-
-		} else {
-			// add type info to the struct
-			j := i - StandardBS  // calculate the offest index of standard
-			b[i] = (*id).Type[j] // assign the bytes
-		}
-	}
+func (id *SubjectID) Bytes() (b SubjectIDB) {
+	b[0] = (*id).Standard
+	b[1] = (*id).Type
 	return
 }
 
 // Init adds value to the SubjectID
-func (id *SubjectID) Init(b [SubjectIDBS]byte) {
-	// loop through each byte
-	for i := 0; i < SubjectIDBS; i++ {
-		if i < StandardBS {
-			// add standard info to the byte
-			(*id).Standard[i] = b[i] // assign the bytes
-		} else {
-			// add type info to the byte
-			j := i - StandardBS  // calculate the offest index of standard
-			(*id).Type[j] = b[i] // assign the bytes
-		}
-	}
+func (id *SubjectID) Init(b SubjectIDB) {
+	(*id).Standard = b[0]
+	(*id).Type = b[1]
 }
 
 // Subject is a struct to store subject data
@@ -63,7 +44,7 @@ func (s *Subject) IsAssigned() bool {
 type SubjectL []Subject
 
 // FindByID return's the index of the given id. It return's -1 if no id is found.
-func (sl *SubjectL) FindByID(id [SubjectIDBS]byte) int {
+func (sl *SubjectL) FindByID(id SubjectIDB) int {
 	index := -1
 	// loop through all the subjects in the list
 	for i, s := range *sl {

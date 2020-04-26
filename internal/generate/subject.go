@@ -6,35 +6,35 @@ import (
 )
 
 // STCodeL is a slice subject codes
-var STCodeL = [][models.TypeBS]byte{
-	{0, 0, 0, 1}, // english
-	{0, 0, 0, 2}, // hindi
-	{0, 0, 0, 3}, // maths
-	{0, 0, 0, 4}, // science
-	{0, 0, 0, 5}, // social science
-	{0, 0, 0, 6}, // physical education
-	{0, 0, 0, 7}, // art & craft
-	{0, 0, 0, 8}, // computer science
-	{0, 0, 0, 9}, // dance & music
+var STCodeL = []byte{
+	1, // english
+	2, // hindi
+	3, // maths
+	4, // science
+	5, // social science
+	6, // physical education
+	7, // art & craft
+	8, // computer science
+	9, // dance & music
 }
 
 var lSTCode = len(STCodeL)       // slice length of subject type code
 var l2STCode = (lSTCode / 2) + 1 // half of slice length of subject type code
 
 // StanL is a list of standards
-var StanL = [][models.StandardBS]byte{
-	{0, 1},
-	{0, 2},
-	{0, 3},
-	{0, 4},
-	{0, 5},
-	{0, 6},
-	{0, 7},
-	{0, 8},
-	{0, 9},
-	{1, 0},
-	{1, 1},
-	{1, 2},
+var StanL = []byte{
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+	7,
+	8,
+	9,
+	10,
+	11,
+	12,
 }
 
 // genereateSubject return an array of subjects. i is the index of standard list(StanL) - to get the standers byte info.

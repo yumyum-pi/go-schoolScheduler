@@ -4,30 +4,30 @@ package models
 
 // TClassIDL is a slice of ClassID for test
 var TClassIDL = []ClassID{
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 1}, Section: [2]byte{0, 1}, Group: [2]byte{0, 0}}, // 0
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 2}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 1
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 3}, Section: [2]byte{0, 1}, Group: [2]byte{0, 2}}, // 2
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 4}, Section: [2]byte{0, 1}, Group: [2]byte{0, 3}}, // 3
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 5}, Section: [2]byte{0, 1}, Group: [2]byte{0, 4}}, // 4
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 6}, Section: [2]byte{0, 1}, Group: [2]byte{0, 5}}, // 5
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 7}, Section: [2]byte{0, 1}, Group: [2]byte{0, 6}}, // 6
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 8}, Section: [2]byte{0, 1}, Group: [2]byte{0, 7}}, // 7
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 9}, Section: [2]byte{0, 1}, Group: [2]byte{0, 8}}, // 8
-	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{1, 0}, Section: [2]byte{0, 1}, Group: [2]byte{0, 9}}, // 9
+	{Year: [YearBS]byte{7, 228}, Standard: 1, Section: 1, Group: 0},  // 0
+	{Year: [YearBS]byte{7, 228}, Standard: 2, Section: 1, Group: 1},  // 1
+	{Year: [YearBS]byte{7, 228}, Standard: 3, Section: 1, Group: 2},  // 2
+	{Year: [YearBS]byte{7, 228}, Standard: 4, Section: 1, Group: 3},  // 3
+	{Year: [YearBS]byte{7, 228}, Standard: 5, Section: 1, Group: 4},  // 4
+	{Year: [YearBS]byte{7, 228}, Standard: 6, Section: 1, Group: 5},  // 5
+	{Year: [YearBS]byte{7, 228}, Standard: 7, Section: 1, Group: 6},  // 6
+	{Year: [YearBS]byte{7, 228}, Standard: 8, Section: 1, Group: 7},  // 7
+	{Year: [YearBS]byte{7, 228}, Standard: 9, Section: 1, Group: 8},  // 8
+	{Year: [YearBS]byte{7, 228}, Standard: 10, Section: 1, Group: 9}, // 9
 }
 
 // TClassIDBL is a slice of test bytes of classIDs
-var TClassIDBL = [][ClassIDBS]byte{
-	{2, 0, 2, 0, 0, 1, 0, 1, 0, 0}, // 0
-	{2, 0, 2, 0, 0, 2, 0, 1, 0, 1}, // 1
-	{2, 0, 2, 0, 0, 3, 0, 1, 0, 2}, // 2
-	{2, 0, 2, 0, 0, 4, 0, 1, 0, 3}, // 3
-	{2, 0, 2, 0, 0, 5, 0, 1, 0, 4}, // 4
-	{2, 0, 2, 0, 0, 6, 0, 1, 0, 5}, // 5
-	{2, 0, 2, 0, 0, 7, 0, 1, 0, 6}, // 6
-	{2, 0, 2, 0, 0, 8, 0, 1, 0, 7}, // 7
-	{2, 0, 2, 0, 0, 9, 0, 1, 0, 8}, // 8
-	{2, 0, 2, 0, 1, 0, 0, 1, 0, 9}, // 9
+var TClassIDBL = []ClassIDB{
+	{7, 228, 1, 1, 0},  // 0
+	{7, 228, 2, 1, 1},  // 1
+	{7, 228, 3, 1, 2},  // 2
+	{7, 228, 4, 1, 3},  // 3
+	{7, 228, 5, 1, 4},  // 4
+	{7, 228, 6, 1, 5},  // 5
+	{7, 228, 7, 1, 6},  // 6
+	{7, 228, 8, 1, 7},  // 7
+	{7, 228, 9, 1, 8},  // 8
+	{7, 228, 10, 1, 9}, // 9
 }
 
 // TClassL is a slice of class for test
@@ -48,30 +48,30 @@ var TClassL = []Class{
 
 // TSubjectIDL is the slice of SubjectID for test
 var TSubjectIDL = []SubjectID{
-	{Standard: [2]byte{1, 0}, Type: [4]byte{1, 1, 3, 0}}, // 0
-	{Standard: [2]byte{2, 9}, Type: [4]byte{3, 2, 2, 1}}, // 1
-	{Standard: [2]byte{3, 8}, Type: [4]byte{5, 4, 3, 2}}, // 2
-	{Standard: [2]byte{4, 7}, Type: [4]byte{4, 6, 5, 3}}, // 3
-	{Standard: [2]byte{5, 6}, Type: [4]byte{5, 5, 6, 4}}, // 4
-	{Standard: [2]byte{6, 5}, Type: [4]byte{0, 6, 6, 5}}, // 5
-	{Standard: [2]byte{7, 4}, Type: [4]byte{8, 0, 7, 6}}, // 6
-	{Standard: [2]byte{8, 3}, Type: [4]byte{8, 9, 3, 7}}, // 7
-	{Standard: [2]byte{9, 2}, Type: [4]byte{8, 9, 2, 8}}, // 8
-	{Standard: [2]byte{0, 1}, Type: [4]byte{8, 9, 1, 9}}, // 9
+	{Standard: 1, Type: 0}, // 0
+	{Standard: 2, Type: 1}, // 1
+	{Standard: 3, Type: 2}, // 2
+	{Standard: 4, Type: 3}, // 3
+	{Standard: 5, Type: 4}, // 4
+	{Standard: 6, Type: 5}, // 5
+	{Standard: 7, Type: 6}, // 6
+	{Standard: 8, Type: 7}, // 7
+	{Standard: 9, Type: 8}, // 8
+	{Standard: 0, Type: 9}, // 9
 }
 
 // TSubjectIDBL list of subjectID bytes slice
-var TSubjectIDBL = [][SubjectIDBS]byte{
-	{1, 0, 1, 1, 3, 0}, // 0
-	{2, 9, 3, 2, 2, 1}, // 1
-	{3, 8, 5, 4, 3, 2}, // 2
-	{4, 7, 4, 6, 5, 3}, // 3
-	{5, 6, 5, 5, 6, 4}, // 4
-	{6, 5, 0, 6, 6, 5}, // 5
-	{7, 4, 8, 0, 7, 6}, // 6
-	{8, 3, 8, 9, 3, 7}, // 7
-	{9, 2, 8, 9, 2, 8}, // 8
-	{0, 1, 8, 9, 1, 9}, // 9
+var TSubjectIDBL = []SubjectIDB{
+	{1, 0}, // 0
+	{2, 1}, // 1
+	{3, 2}, // 2
+	{4, 3}, // 3
+	{5, 4}, // 4
+	{6, 5}, // 5
+	{7, 6}, // 6
+	{8, 7}, // 7
+	{9, 8}, // 8
+	{0, 9}, // 9
 }
 
 // TSubjectL is a slice of Subject for test
@@ -92,30 +92,30 @@ var TSubjectL = []Subject{
 
 // TTeacherIDL is a collection of teacherID
 var TTeacherIDL = []TeacherID{
-	{Year: [YearBS]byte{2, 0, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 0}}, // 0
-	{Year: [YearBS]byte{2, 1, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 1}}, // 1
-	{Year: [YearBS]byte{2, 2, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 2}}, // 2
-	{Year: [YearBS]byte{2, 3, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 3}}, // 3
-	{Year: [YearBS]byte{2, 4, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 4}}, // 4
-	{Year: [YearBS]byte{2, 5, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 5}}, // 5
-	{Year: [YearBS]byte{2, 6, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 6}}, // 6
-	{Year: [YearBS]byte{2, 7, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 7}}, // 7
-	{Year: [YearBS]byte{2, 8, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 8}}, // 8
-	{Year: [YearBS]byte{2, 9, 2, 0}, JoinNo: [JoinNoBS]byte{0, 0, 0, 9}}, // 9
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{0}}, // 0
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{1}}, // 1
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{2}}, // 2
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{3}}, // 3
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{4}}, // 4
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{5}}, // 5
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{6}}, // 6
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{7}}, // 7
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{8}}, // 8
+	{Year: [YearBS]byte{7, 228}, JoinNo: [JoinNoBS]byte{9}}, // 9
 }
 
 // TTeacherIDBL is a collection of teacherID
-var TTeacherIDBL = [][TeacherIDBS]byte{
-	{2, 0, 2, 0, 0, 0, 0, 0}, // 0
-	{2, 1, 2, 0, 0, 0, 0, 1}, // 1
-	{2, 2, 2, 0, 0, 0, 0, 2}, // 2
-	{2, 3, 2, 0, 0, 0, 0, 3}, // 3
-	{2, 4, 2, 0, 0, 0, 0, 4}, // 4
-	{2, 5, 2, 0, 0, 0, 0, 5}, // 5
-	{2, 6, 2, 0, 0, 0, 0, 6}, // 6
-	{2, 7, 2, 0, 0, 0, 0, 7}, // 7
-	{2, 8, 2, 0, 0, 0, 0, 8}, // 8
-	{2, 9, 2, 0, 0, 0, 0, 9}, // 9
+var TTeacherIDBL = []TeacherIDB{
+	{7, 228, 0}, // 0
+	{7, 228, 1}, // 1
+	{7, 228, 2}, // 2
+	{7, 228, 3}, // 3
+	{7, 228, 4}, // 4
+	{7, 228, 5}, // 5
+	{7, 228, 6}, // 6
+	{7, 228, 7}, // 7
+	{7, 228, 8}, // 8
+	{7, 228, 9}, // 9
 }
 
 // TClassAssignedL is a list of assigned classes for teachers

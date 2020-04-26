@@ -4,14 +4,18 @@ import (
 	c "crypto/rand"
 
 	rl "github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
+	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 // Generate random teacherID
 func gTeacherID() (tID models.TeacherID) {
-	tID.Year = [models.YearBS]byte{2, 0, 2, 0} // fixed data
+	yr := make(utils.B256, 2)
+	yr.Encode(2020)
+	copy(tID.Year[:], yr) // setting year
+	//	tID.Year = [models.YearBS]byte{2, 0, 2, 0} // fixed data
 	// create a new join id
-	join := make([]byte, 4)
+	join := make([]byte, 2)
 	c.Read(join) // assign new values
 
 	// copy join data
@@ -145,7 +149,7 @@ func aaRedistributed(diff, max int, ts *models.Teachers) error {
 }
 
 // autoAssignM1 assigned the given subjects to the given teachers
-func autoAssignM1(SIDT [models.TypeBS]byte, cc *rl.Class, ts *models.Teachers) {
+func autoAssignM1(SIDT byte, cc *rl.Class, ts *models.Teachers) {
 	var nCID models.ClassID
 	var nSID models.SubjectID
 	nSID.Type = SIDT

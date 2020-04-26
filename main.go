@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	td "github.com/yumyum-pi/go-schoolScheduler/internal/testData"
+	g "github.com/yumyum-pi/go-schoolScheduler/internal/generate"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
@@ -31,7 +31,7 @@ var t models.Teachers
 
 func main() {
 	// generate classes and teachers
-	td.Create(&c, &t)
+	g.Create(&c, &t)
 	// start creating timetable
 	//generator.Init(c, t)
 
