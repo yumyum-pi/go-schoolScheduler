@@ -4,7 +4,7 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
-// TClassRL is test requrest list for classes
+// TClassRL is test require list for classes
 var TClassRL = Class{
 	models.TClassIDL[0].Bytes(): 9,
 	models.TClassIDL[1].Bytes(): 10,
