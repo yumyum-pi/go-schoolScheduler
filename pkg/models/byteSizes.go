@@ -1,7 +1,7 @@
 package models
 
-// StanderdBS is the byte size of Standerd
-const StanderdBS = 2
+// StandardBS is the byte size of Standard
+const StandardBS = 2
 
 // SectionBS is the byte size of Section
 const SectionBS = 2
@@ -19,10 +19,10 @@ const TypeBS = 4
 const JoinNoBS = 4
 
 // ClassIDBS is the byte size of ClassID
-const ClassIDBS = StanderdBS + SectionBS + GroupBS + YearBS
+const ClassIDBS = StandardBS + SectionBS + GroupBS + YearBS
 
 // SubjectIDBS is the byte size of  SubjectID
-const SubjectIDBS = StanderdBS + TypeBS
+const SubjectIDBS = StandardBS + TypeBS
 
 // TeacherIDBS is the byte size if TeacherID
 const TeacherIDBS = YearBS + JoinNoBS

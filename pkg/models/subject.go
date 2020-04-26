@@ -4,21 +4,21 @@ import "fmt"
 
 // SubjectID is a unique identifier for a subject
 type SubjectID struct {
-	Standerd [StanderdBS]byte `json:"stnID"` // ID for the standerd of the subject
+	Standard [StandardBS]byte `json:"stnID"` // ID for the standard of the subject
 	Type     [TypeBS]byte     `json:"type"`  // type of subject. Example English, Hindi
 }
 
-// Bytes return the byte value from Standerd and Type values
+// Bytes return the byte value from Standard and Type values
 func (id *SubjectID) Bytes() (b [SubjectIDBS]byte) {
 	// loop through each byte
 	for i := 0; i < SubjectIDBS; i++ {
-		if i < StanderdBS {
-			// add standerd info to the struct
-			b[i] = (*id).Standerd[i] // assign the bytes
+		if i < StandardBS {
+			// add standard info to the struct
+			b[i] = (*id).Standard[i] // assign the bytes
 
 		} else {
 			// add type info to the struct
-			j := i - StanderdBS  // calculate the offest index of standerd
+			j := i - StandardBS  // calculate the offest index of standard
 			b[i] = (*id).Type[j] // assign the bytes
 		}
 	}
@@ -29,12 +29,12 @@ func (id *SubjectID) Bytes() (b [SubjectIDBS]byte) {
 func (id *SubjectID) Init(b [SubjectIDBS]byte) {
 	// loop through each byte
 	for i := 0; i < SubjectIDBS; i++ {
-		if i < StanderdBS {
-			// add standerd info to the byte
-			(*id).Standerd[i] = b[i] // assign the bytes
+		if i < StandardBS {
+			// add standard info to the byte
+			(*id).Standard[i] = b[i] // assign the bytes
 		} else {
 			// add type info to the byte
-			j := i - StanderdBS  // calculate the offest index of standerd
+			j := i - StandardBS  // calculate the offest index of standard
 			(*id).Type[j] = b[i] // assign the bytes
 		}
 	}
@@ -58,7 +58,7 @@ func (s *Subject) IsAssigned() bool {
 	return (*s).TeacherID != (TeacherID{}) && (*s).ID != (SubjectID{})
 }
 
-// SubjectL is an arry of Subject. It has the following methods:
+// SubjectL is an array of Subject. It has the following methods:
 // - FindByID
 type SubjectL []Subject
 
@@ -75,7 +75,7 @@ func (sl *SubjectL) FindByID(id [SubjectIDBS]byte) int {
 	return index
 }
 
-// PrintSubjectL wirte the subjet list data to console
+// PrintSubjectL write the subjet list data to console
 func PrintSubjectL(ss []Subject) {
 	for _, s := range ss {
 		s.Print()

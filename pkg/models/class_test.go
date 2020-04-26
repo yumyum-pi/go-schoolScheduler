@@ -16,7 +16,7 @@ func wrongIndex(l, i int) (j int) {
 	// check of out of range index
 	if j >= l {
 		// loop the value to be begining
-		j = j - l // subract the lenght to loop over
+		j = j - l // subtract the length to loop over
 	}
 
 	return
@@ -141,7 +141,7 @@ func TestClass_Init(t *testing.T) {
 	}
 }
 
-func TestClass_AddSubejct(t *testing.T) {
+func TestClass_AddSubject(t *testing.T) {
 	cID := TClassIDBL[0]
 	// create a new class
 	var c Class
@@ -178,7 +178,7 @@ func TestClass_AddSubejct(t *testing.T) {
 		// added subject with existing id
 		j := wrongIndex(len(TSubjectL), i) // create wrong index of subject
 		iS := c.Subjects[j]                // get the incorrect subject
-		c.Subjects[i] = (Subject{})        // unassign a subject
+		c.Subjects[i] = (Subject{})        // un assign a subject
 		c.Capacity = s.Req                 // add capacity
 		err = c.AddSubject(iS)             // assign subject that already exist
 		if err == nil {
@@ -229,9 +229,9 @@ func TestClass_AssignTeacher(t *testing.T) {
 	// expect to get error
 	if e := c.AssignTeacher(sID, tID); e == nil {
 		// not got on error
-		t.Errorf("> Error: assigend a new teacher to a class with no capacity")
+		t.Errorf("> Error: assigned a new teacher to a class with no capacity")
 	}
-	// unassign the teacher at the subject index
+	// un assign the teacher at the subject index
 	c.Subjects[is].TeacherID = TeacherID{}
 
 	// assign a new teacher to a class with capacity
@@ -245,7 +245,7 @@ func TestClass_AssignTeacher(t *testing.T) {
 		t.Errorf("> Error: TeacherID=%v,SubjectsID=%v TTeacherIDL[i]=%v", c.Subjects[is].TeacherID, c.Subjects[is].ID, TTeacherIDL[it])
 	}
 
-	// check for unknow subject id
+	// check for unknown subject id
 	// Remove the element at index "is" from class.Subjects.
 	c.Subjects[is] = c.Subjects[len(c.Subjects)-1] // Copy last element to index "is".
 	c.Subjects = c.Subjects[:len(c.Subjects)-1]    // Truncate slice.
@@ -254,7 +254,7 @@ func TestClass_AssignTeacher(t *testing.T) {
 	// expect to get error
 	if e := c.AssignTeacher(sID, tID); e == nil {
 		// not got on error
-		t.Errorf("> Error: assigend a new teacher to a subject that does not exist")
+		t.Errorf("> Error: assigned a new teacher to a subject that does not exist")
 	}
 }
 
@@ -276,7 +276,7 @@ func TestClass_CalRemCap(t *testing.T) {
 		t.Errorf("> Error: unassigned periods=%v", up)
 	}
 
-	// unassign a subjects
+	// un assign a subjects
 	c.Subjects[i].TeacherID = TeacherID{} // empty teacherID
 	c.Subjects[j].ID = SubjectID{}        // empty subjectID
 
@@ -314,7 +314,7 @@ func TestClass_CalCap(t *testing.T) {
 	uiS := c.Subjects[i]
 	ujSReq := c.Subjects[j].Req - changeReq
 	// make changes
-	c.Subjects[i].ID = (SubjectID{}) // unassign a subject
+	c.Subjects[i].ID = (SubjectID{}) // un assign a subject
 	c.Subjects[j].Req = changeReq    // change the class requirement
 	//fmt.Println(i, j)
 	// store

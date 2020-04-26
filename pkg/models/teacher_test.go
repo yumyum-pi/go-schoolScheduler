@@ -97,7 +97,7 @@ func TClassAssigned(i int) (e error) {
 	// get incorrect info
 	iSID := TSubjectIDL[j] // get incorrect subjectID
 	iCID := TClassIDL[j]   // get incorrect classID
-	// create new classsAssigned struct
+	// create new classAssigned struct
 	var ca ClassAssigned
 	ca.Init(TSubjectIDL[i].Bytes(), TClassIDL[i].Bytes(), req)
 
@@ -150,7 +150,7 @@ func tTeacherInit(i int) (e error) {
 	var t Teacher        //create a new teacher
 	t.Init(cTID.Bytes()) // initiate teacher with correct id
 
-	// check correcr index
+	// check correct index
 	// teacher id should match
 	if t.ID != cTID {
 		return fmt.Errorf(`> Error: tID=%v  cTID=%v, should match at i=%v`, t.ID, cTID, i)
@@ -199,7 +199,7 @@ func tTeacherCanTeach(i int) error {
 	// get ids
 	cSID := TSubjectIDL[i]                 // correct
 	iSID := cSID                           // incorrect
-	iSID.Standerd = [StanderdBS]byte{9, 9} // modify to be incorrect
+	iSID.Standard = [StandardBS]byte{9, 9} // modify to be incorrect
 
 	// test
 	p := TTeacherL[i].CanTeach(cSID) // correct id
@@ -211,7 +211,7 @@ func tTeacherCanTeach(i int) error {
 		return fmt.Errorf("> Error: p should return true at i=%v", i)
 	}
 
-	// check incorrecr id
+	// check incorrect id
 	// should return false
 	if f {
 		return fmt.Errorf("> Error: f should return false i=%v", i)
@@ -242,13 +242,13 @@ func tTeacherAssignClass(i int) error {
 	diff := t.AssignClass(cID, sID, r)
 
 	// if the subject and class can not be assigned to the teacher but are assigned
-	// thow error
+	// through error
 	if r > tcc && diff >= 0 {
 		return fmt.Errorf("> Error: class and subject should not be assigned at i:=%v", i)
 	}
 
 	// if the subject and class can be assigned to the teacher but are not assigned
-	// thow error
+	// through error
 	if r < tcc && diff < 0 {
 		return fmt.Errorf("> Error: class and subject should be assigned at i:=%v", i)
 	}
@@ -330,7 +330,7 @@ func tTeachersFindBySub(i int) error {
 	var ts Teachers = TTeacherL
 	tsR := ts.FindBySub(sID)
 
-	// check if the no. of teacher returend is correct or not
+	// check if the no. of teacher returned is correct or not
 	if len(tsR)+i != l {
 		return fmt.Errorf("> Error: no. of teacher=%v, expecting=%v at i=%v", len(tsR), l-i, i)
 	}
@@ -366,18 +366,18 @@ func tTeacherFindBySubType(i int) error {
 	sID := ts[i].SubjectCT[lSCT-1]
 
 	// test the function
-	indexs := ts.FindBySubType(sID.Type)
+	indexes := ts.FindBySubType(sID.Type)
 
 	// check
 	//index length should be 3
 	r := len(ts) - i
-	if len(indexs) != r {
-		return fmt.Errorf("> Error: sID.Type=%v no of indexs returned=%v, exprected=%v at i=%v", sID.Type, len(indexs), r, i)
+	if len(indexes) != r {
+		return fmt.Errorf("> Error: sID.Type=%v no of indexes returned=%v, exprected=%v at i=%v", sID.Type, len(indexes), r, i)
 	}
 
-	// loop through the returned indexs
-	// check if they can teach the subejct
-	for _, index := range indexs {
+	// loop through the returned indexes
+	// check if they can teach the subject
+	for _, index := range indexes {
 		if !ts[index].CanTeach(sID) {
 			return fmt.Errorf("> Teacher: %v", ts[index])
 		}

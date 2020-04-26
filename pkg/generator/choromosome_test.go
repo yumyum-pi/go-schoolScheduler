@@ -9,16 +9,16 @@ import (
 )
 
 var chrmsm = Chromosome{
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 1}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 2}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 3}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 4}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 5}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 6}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 7}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 8}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 9}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StanderdBS]byte{0, 0}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 1}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 2}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 3}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 4}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 5}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 6}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 7}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 8}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 9}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
+	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 0}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
 }
 
 func TestSwapGene(t *testing.T) {

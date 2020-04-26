@@ -4,16 +4,16 @@ package models
 
 // TClassIDL is a slice of ClassID for test
 var TClassIDL = []ClassID{
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 1}, Section: [2]byte{0, 1}, Group: [2]byte{0, 0}}, // 0
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 2}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 1
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 3}, Section: [2]byte{0, 1}, Group: [2]byte{0, 2}}, // 2
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 4}, Section: [2]byte{0, 1}, Group: [2]byte{0, 3}}, // 3
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 5}, Section: [2]byte{0, 1}, Group: [2]byte{0, 4}}, // 4
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 6}, Section: [2]byte{0, 1}, Group: [2]byte{0, 5}}, // 5
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 7}, Section: [2]byte{0, 1}, Group: [2]byte{0, 6}}, // 6
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 8}, Section: [2]byte{0, 1}, Group: [2]byte{0, 7}}, // 7
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{0, 9}, Section: [2]byte{0, 1}, Group: [2]byte{0, 8}}, // 8
-	{Year: [4]byte{2, 0, 2, 0}, Standerd: [2]byte{1, 0}, Section: [2]byte{0, 1}, Group: [2]byte{0, 9}}, // 9
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 1}, Section: [2]byte{0, 1}, Group: [2]byte{0, 0}}, // 0
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 2}, Section: [2]byte{0, 1}, Group: [2]byte{0, 1}}, // 1
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 3}, Section: [2]byte{0, 1}, Group: [2]byte{0, 2}}, // 2
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 4}, Section: [2]byte{0, 1}, Group: [2]byte{0, 3}}, // 3
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 5}, Section: [2]byte{0, 1}, Group: [2]byte{0, 4}}, // 4
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 6}, Section: [2]byte{0, 1}, Group: [2]byte{0, 5}}, // 5
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 7}, Section: [2]byte{0, 1}, Group: [2]byte{0, 6}}, // 6
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 8}, Section: [2]byte{0, 1}, Group: [2]byte{0, 7}}, // 7
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{0, 9}, Section: [2]byte{0, 1}, Group: [2]byte{0, 8}}, // 8
+	{Year: [4]byte{2, 0, 2, 0}, Standard: [2]byte{1, 0}, Section: [2]byte{0, 1}, Group: [2]byte{0, 9}}, // 9
 }
 
 // TClassIDBL is a slice of test bytes of classIDs
@@ -44,20 +44,20 @@ var TClassL = []Class{
 	{ID: TClassIDL[9], Subjects: TSubjectL[:], Capacity: 0},   // 0-9: 48 - 48
 }
 
-//Subejct
+//Subject
 
 // TSubjectIDL is the slice of SubjectID for test
 var TSubjectIDL = []SubjectID{
-	{Standerd: [2]byte{1, 0}, Type: [4]byte{1, 1, 3, 0}}, // 0
-	{Standerd: [2]byte{2, 9}, Type: [4]byte{3, 2, 2, 1}}, // 1
-	{Standerd: [2]byte{3, 8}, Type: [4]byte{5, 4, 3, 2}}, // 2
-	{Standerd: [2]byte{4, 7}, Type: [4]byte{4, 6, 5, 3}}, // 3
-	{Standerd: [2]byte{5, 6}, Type: [4]byte{5, 5, 6, 4}}, // 4
-	{Standerd: [2]byte{6, 5}, Type: [4]byte{0, 6, 6, 5}}, // 5
-	{Standerd: [2]byte{7, 4}, Type: [4]byte{8, 0, 7, 6}}, // 6
-	{Standerd: [2]byte{8, 3}, Type: [4]byte{8, 9, 3, 7}}, // 7
-	{Standerd: [2]byte{9, 2}, Type: [4]byte{8, 9, 2, 8}}, // 8
-	{Standerd: [2]byte{0, 1}, Type: [4]byte{8, 9, 1, 9}}, // 9
+	{Standard: [2]byte{1, 0}, Type: [4]byte{1, 1, 3, 0}}, // 0
+	{Standard: [2]byte{2, 9}, Type: [4]byte{3, 2, 2, 1}}, // 1
+	{Standard: [2]byte{3, 8}, Type: [4]byte{5, 4, 3, 2}}, // 2
+	{Standard: [2]byte{4, 7}, Type: [4]byte{4, 6, 5, 3}}, // 3
+	{Standard: [2]byte{5, 6}, Type: [4]byte{5, 5, 6, 4}}, // 4
+	{Standard: [2]byte{6, 5}, Type: [4]byte{0, 6, 6, 5}}, // 5
+	{Standard: [2]byte{7, 4}, Type: [4]byte{8, 0, 7, 6}}, // 6
+	{Standard: [2]byte{8, 3}, Type: [4]byte{8, 9, 3, 7}}, // 7
+	{Standard: [2]byte{9, 2}, Type: [4]byte{8, 9, 2, 8}}, // 8
+	{Standard: [2]byte{0, 1}, Type: [4]byte{8, 9, 1, 9}}, // 9
 }
 
 // TSubjectIDBL list of subjectID bytes slice
