@@ -16,10 +16,10 @@ const YearBS = 2
 const TypeBS = 1
 
 // JoinNoBS is the byte size of joining no
-const JoinNoBS = 2
+const JoinNoBS = 1
 
 // ClassIDBS is the byte size of ClassID
-const ClassIDBS = StandardBS + SectionBS + GroupBS + YearBS
+const ClassIDBS = StandardBS + SectionBS + YearBS
 
 // ClassIDB is a byte array for teacherID
 type ClassIDB [ClassIDBS]byte

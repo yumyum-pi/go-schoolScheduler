@@ -8,16 +8,12 @@ import (
 var nSec = utils.RangeInt{Min: 1, Max: 5} // range for generating random no. of sections
 
 // template of classID with year and group info
-var temCID models.ClassIDB
+var temCID models.ClassID
 
 func initialization() {
 	yr := make(utils.B256, 2)
 	yr.Encode(2020)
-	var cID models.ClassID
-	cID.Group = 1
-	copy(cID.Year[:], yr)
-
-	temCID = cID.Bytes()
+	copy(temCID.Year[:], yr)
 }
 
 // generateSection return generate section if the given standard index i
@@ -25,15 +21,15 @@ func generateSection(i int) (sections []models.Class) {
 	n := nSec.Random() // generate a random number of sections
 
 	// adding standard bytes
-	temCID[models.YearBS] = StanL[i]
+	temCID.Standard = StanL[i]
 
 	// loop for each section
 	for noOfSec := 0; noOfSec < n; noOfSec++ {
 		var sec models.Class // create a section
 		// adding section bytes at the right position
-		temCID[models.YearBS+models.StandardBS+1] = byte(noOfSec + 1)
+		temCID.Section = byte(noOfSec + 1)
 
-		sec.ID.Init(temCID) // creating a new ClassID
+		sec.ID.Init(temCID.Bytes()) // creating a new ClassID
 
 		sec.Subjects = generateSubject(i) // generate subject data
 		sec.CalRemCap()                   // calculate the free periods

@@ -12,39 +12,23 @@ const (
 
 // TeacherID is a unique identifier of the teacher
 type TeacherID struct {
-	Year   [YearBS]byte   `json:"yr"`  // Year at which the teacher joined
-	JoinNo [JoinNoBS]byte `json:"jNo"` // the joining no.
+	Year   [YearBS]byte `json:"yr"`  // Year at which the teacher joined
+	JoinNo byte         `json:"jNo"` // the joining no.
 }
 
 // Bytes return combined bytes of the ID
 func (id *TeacherID) Bytes() (b TeacherIDB) {
-	// loop through byte length
-	for i := 0; i < TeacherIDBS; i++ {
-		if i < YearBS {
-			// add year info to the struct
-			b[i] = (*id).Year[i] // assign the bytes
-		} else {
-			// add join no info to the struct
-			j := i - YearBS        // calculate the offest index of join no
-			b[i] = (*id).JoinNo[j] // assign the bytes
-		}
-	}
+	b[0] = (*id).Year[0]
+	b[1] = (*id).Year[1]
+	b[2] = (*id).JoinNo
 	return
 }
 
 // Init adds value to the TeacherID
 func (id *TeacherID) Init(b TeacherIDB) {
-	// loop through byte length
-	for i := 0; i < TeacherIDBS; i++ {
-		if i < YearBS {
-			// add year into to the byte
-			(*id).Year[i] = b[i] // assign byte
-		} else {
-			// add join no to the byte
-			j := i - YearBS        // calculate the offest index of join no
-			(*id).JoinNo[j] = b[i] // assign byte
-		}
-	}
+	(*id).Year[0] = b[0]
+	(*id).Year[1] = b[1]
+	(*id).JoinNo = b[2]
 }
 
 // ClassAssigned is a struct to store data of classed assigned to a teacher

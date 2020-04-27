@@ -1,25 +1,20 @@
 package generate
 
 import (
-	c "crypto/rand"
-
 	rl "github.com/yumyum-pi/go-schoolScheduler/internal/requestlist"
 	"github.com/yumyum-pi/go-schoolScheduler/internal/utils"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
+
+var joinNo int = 0
 
 // Generate random teacherID
 func gTeacherID() (tID models.TeacherID) {
 	yr := make(utils.B256, 2)
 	yr.Encode(2020)
 	copy(tID.Year[:], yr) // setting year
-	//	tID.Year = [models.YearBS]byte{2, 0, 2, 0} // fixed data
-	// create a new join id
-	join := make([]byte, 2)
-	c.Read(join) // assign new values
-
-	// copy join data
-	copy(tID.JoinNo[:], join[:])
+	joinNo++
+	tID.JoinNo = byte(joinNo)
 	return
 }
 

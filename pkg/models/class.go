@@ -9,7 +9,6 @@ type ClassID struct {
 	Year     [YearBS]byte `json:"yr"`
 	Standard byte         `json:"stn"`
 	Section  byte         `json:"sec"`
-	Group    byte         `json:"grp"`
 }
 
 // Bytes return combined bytes of the ID
@@ -18,7 +17,6 @@ func (id *ClassID) Bytes() (b ClassIDB) {
 	b[1] = (*id).Year[1]
 	b[2] = (*id).Standard
 	b[3] = (*id).Section
-	b[4] = (*id).Group
 	return
 }
 
@@ -28,7 +26,6 @@ func (id *ClassID) Init(b ClassIDB) {
 	(*id).Year[1] = b[1]
 	(*id).Standard = b[2]
 	(*id).Section = b[3]
-	(*id).Group = b[4]
 }
 
 // Class in an struct to hold class data
