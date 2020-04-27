@@ -48,30 +48,30 @@ var TClassL = []Class{
 
 // TSubjectIDL is the slice of SubjectID for test
 var TSubjectIDL = []SubjectID{
-	{Standard: 1, Type: 0}, // 0
-	{Standard: 2, Type: 1}, // 1
-	{Standard: 3, Type: 2}, // 2
-	{Standard: 4, Type: 3}, // 3
-	{Standard: 5, Type: 4}, // 4
-	{Standard: 6, Type: 5}, // 5
-	{Standard: 7, Type: 6}, // 6
-	{Standard: 8, Type: 7}, // 7
-	{Standard: 9, Type: 8}, // 8
-	{Standard: 0, Type: 9}, // 9
+	{Standard: 1, Type: 0},  // 0
+	{Standard: 2, Type: 1},  // 1
+	{Standard: 3, Type: 2},  // 2
+	{Standard: 4, Type: 3},  // 3
+	{Standard: 5, Type: 4},  // 4
+	{Standard: 6, Type: 5},  // 5
+	{Standard: 7, Type: 6},  // 6
+	{Standard: 8, Type: 7},  // 7
+	{Standard: 9, Type: 8},  // 8
+	{Standard: 10, Type: 9}, // 9
 }
 
 // TSubjectIDBL list of subjectID bytes slice
 var TSubjectIDBL = []SubjectIDB{
-	{1, 0}, // 0
-	{2, 1}, // 1
-	{3, 2}, // 2
-	{4, 3}, // 3
-	{5, 4}, // 4
-	{6, 5}, // 5
-	{7, 6}, // 6
-	{8, 7}, // 7
-	{9, 8}, // 8
-	{0, 9}, // 9
+	{1, 0},  // 0
+	{2, 1},  // 1
+	{3, 2},  // 2
+	{4, 3},  // 3
+	{5, 4},  // 4
+	{6, 5},  // 5
+	{7, 6},  // 6
+	{8, 7},  // 7
+	{9, 8},  // 8
+	{10, 9}, // 9
 }
 
 // TSubjectL is a slice of Subject for test
