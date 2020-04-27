@@ -37,7 +37,8 @@ const TeacherIDBS = YearBS + JoinNoBS
 type TeacherIDB [TeacherIDBS]byte
 
 // PeriodBS is byte size of period
-const PeriodBS = ClassIDBS + SubjectIDBS + TeacherIDBS
+// subjectID has a repearting field(standard) which is subtracted
+const PeriodBS = ClassIDBS + (SubjectIDBS - 1) + TeacherIDBS
 
 // PeriodB is a byte array from period
 type PeriodB [PeriodBS]byte

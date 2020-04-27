@@ -22,7 +22,7 @@ func wrongIndex(l, i int) (j int) {
 	return
 }
 
-func tClassIDBytes(i int) (e error) {
+func tClassIDBytes(i int) error {
 	j := wrongIndex(len(TClassIDBL), i) // create an incorrect index
 
 	cID := TClassIDL[i] // get classID from the list
@@ -37,14 +37,24 @@ func tClassIDBytes(i int) (e error) {
 
 	// correct index should not be false
 	if !p {
-		e = fmt.Errorf(`> Error: cID.Bytes=%v cBytes=%v, should match at=%v`, b, cBytes, i)
+		return fmt.Errorf(
+			"> Error: cID.Bytes=%v cBytes=%v, should match at=%v",
+			b,
+			cBytes,
+			i,
+		)
 	}
 
 	// incorrect index should not be true
 	if f {
-		e = fmt.Errorf(`> Error: cID.Bytes=%v iBytes=%v, should not match at=%v`, b, iBytes, i)
+		return fmt.Errorf(
+			"> Error: cID.Bytes=%v iBytes=%v, should not match at=%v",
+			b,
+			iBytes,
+			i,
+		)
 	}
-	return
+	return nil
 }
 
 func TestClassID_Bytes(t *testing.T) {
@@ -58,7 +68,7 @@ func TestClassID_Bytes(t *testing.T) {
 	}
 }
 
-func tClassIDInit(i int) (e error) {
+func tClassIDInit(i int) error {
 	j := wrongIndex(len(TClassIDBL), i) // create an incorrect index
 
 	var cID ClassID         // create a new classID
@@ -74,15 +84,25 @@ func tClassIDInit(i int) (e error) {
 	// check correct index
 	// p should be true
 	if !p {
-		e = fmt.Errorf(`> Error: cID=%v cCID=%v, should match at i=%v`, cID, cCID, i)
+		return fmt.Errorf(
+			"> Error: cID=%v cCID=%v, should match at i=%v",
+			cID,
+			cCID,
+			i,
+		)
 	}
 
 	// check incorrect
 	// f should not match
 	if f {
-		e = fmt.Errorf(`> Error: cID=%v iCID=%v, should not match at i=%v`, cID, iCID, i)
+		return fmt.Errorf(
+			"> Error: cID=%v iCID=%v, should not match at i=%v",
+			cID,
+			iCID,
+			i,
+		)
 	}
-	return
+	return nil
 }
 
 func TestClassID_Init(t *testing.T) {
@@ -96,7 +116,7 @@ func TestClassID_Init(t *testing.T) {
 	}
 }
 
-func tClassInit(i int) (e error) {
+func tClassInit(i int) error {
 	j := wrongIndex(len(TClassIDL), i)
 
 	// get ids
@@ -109,25 +129,47 @@ func tClassInit(i int) (e error) {
 	// check correct index
 	// class id should match
 	if c.ID != cCID {
-		return fmt.Errorf("> Error: cID=%v cCID=%v, should match at i=%v", c.ID, cCID, i)
+		return fmt.Errorf(
+			"> Error: cID=%v cCID=%v, should match at i=%v",
+			c.ID,
+			cCID,
+			i,
+		)
 	}
 
 	// class subjects list should be 0
 	if len(c.Subjects) != 0 {
-		e = fmt.Errorf("> Error: cID=%v c.Subjects=%v, subject list should be 0 at i=%v ", c.ID, c.Subjects, i)
+		return fmt.Errorf(
+			"> Error: cID=%v c.Subjects=%v, subject list should be 0 at i=%v",
+			c.ID,
+			c.Subjects,
+			i,
+		)
 	}
 
 	// class capacity should be full
 	if c.Capacity != MaxCap {
-		e = fmt.Errorf("> Error: cID=%v c.Capacity=%v, capacity should be %v at i=%v, ", c.ID, c.Capacity, MaxCap, i)
+		return fmt.Errorf(
+			"> Error: cID=%v c.Capacity=%v, capacity should be %v at i=%v",
+			c.ID,
+			c.Capacity,
+			MaxCap,
+			i,
+		)
 	}
 
 	// check incorrect index
 	// class id should not match
 	if c.ID == iCID {
-		return fmt.Errorf("> Error: cID=%v iCID=%v, should not match j=%v at i=%v", c.ID, iCID, j, i)
+		return fmt.Errorf(
+			"> Error: cID=%v iCID=%v, should not match j=%v at i=%v",
+			c.ID,
+			iCID,
+			j,
+			i,
+		)
 	}
-	return
+	return nil
 }
 
 func TestClass_Init(t *testing.T) {
@@ -157,7 +199,11 @@ func TestClass_AddSubject(t *testing.T) {
 
 	// length should be equal
 	if len(c.Subjects) != len(TSubjectL) {
-		t.Errorf("> Error: c.Subject length is %v, length should be %v", len(c.Subjects), len(TSubjectL))
+		t.Errorf(
+			"> Error: c.Subject length is %v, length should be %v",
+			len(c.Subjects),
+			len(TSubjectL),
+		)
 	}
 
 	// capacity should be 0
@@ -242,7 +288,12 @@ func TestClass_AssignTeacher(t *testing.T) {
 
 	// check is the teacher is assigned
 	if c.Subjects[is].TeacherID != tID {
-		t.Errorf("> Error: TeacherID=%v,SubjectsID=%v TTeacherIDL[i]=%v", c.Subjects[is].TeacherID, c.Subjects[is].ID, TTeacherIDL[it])
+		t.Errorf(
+			"> Error: TeacherID=%v,SubjectsID=%v TTeacherIDL[i]=%v",
+			c.Subjects[is].TeacherID,
+			c.Subjects[is].ID,
+			TTeacherIDL[it],
+		)
 	}
 
 	// check for unknown subject id
@@ -316,10 +367,10 @@ func TestClass_CalCap(t *testing.T) {
 	// make changes
 	c.Subjects[i].ID = (SubjectID{}) // un assign a subject
 	c.Subjects[j].Req = changeReq    // change the class requirement
-	//fmt.Println(i, j)
+
 	// store
 	rPeriods := (uiS.Req + c.Capacity + ujSReq)
-	//fmt.Println(uiS.Req, c.Capacity, ujSReq, changeReq)
+
 	c.CalCap()
 
 	// check no of unassigned periods
