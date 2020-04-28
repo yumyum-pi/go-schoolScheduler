@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/generator"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/utils"
 	"google.golang.org/protobuf/proto"
@@ -46,10 +47,8 @@ var genCMD = &cobra.Command{
 		} else {
 			tt = Read(args[0])
 		}
-
-		for _, t := range (*tt).Period {
-			fmt.Println(t)
-		}
+		// start the generating process
+		generator.Start(tt)
 	},
 }
 
