@@ -1,0 +1,10 @@
+syntax = "proto3";
+package models;
+
+option go_package = "./pkg/models";
+
+message TimeTable {
+    int32 nDays = 1; // no of day in a week
+    int32 nPeriods = 2; // no of periods in a week
+    repeated bytes period = 3; // period package
+}
