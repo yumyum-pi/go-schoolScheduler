@@ -1,3 +1,4 @@
 #ignore all the generated json file
 resource/*
 .vscode/settings.json
+test/inputs/*
