@@ -2,16 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/file"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/generator"
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
-	"github.com/yumyum-pi/go-schoolScheduler/pkg/utils"
-	"google.golang.org/protobuf/proto"
 )
 
 var input, output string
@@ -43,9 +39,9 @@ var genCMD = &cobra.Command{
 		var tt *models.TimeTable
 		// if directory select random file
 		if info.IsDir() {
-			tt = ReadRand(args[0])
+			tt = file.ReadRand(args[0])
 		} else {
-			tt = Read(args[0])
+			tt = file.Read(args[0])
 		}
 		// start the generating process
 		generator.Start(tt)
@@ -54,40 +50,4 @@ var genCMD = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(genCMD)
-}
-
-// Read file from thr disk
-func Read(fileName string) *models.TimeTable {
-	fmt.Println(fileName)
-	in, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		log.Fatalln("Error reading file:", err)
-	}
-	tt := &models.TimeTable{}
-	if err := proto.Unmarshal(in, tt); err != nil {
-		log.Fatalln("Failed to parse address book:", err)
-	}
-	return tt
-}
-
-// ReadRand reads a random file from the directory
-func ReadRand(dir string) *models.TimeTable {
-	files, err := ioutil.ReadDir(dir)
-	var filePath []string
-	if err == nil {
-		// loop through all the file
-		for _, file := range files {
-			if !file.IsDir() && filepath.Ext(file.Name()) == ".tt" {
-				p := filepath.Join(dir, file.Name())
-				filePath = append(filePath, p)
-			}
-		}
-	}
-	fl := len(filePath)
-	// get random file
-	if fl == 0 {
-		return nil
-	}
-	i := utils.GenerateRandomInt(fl, 10)
-	return Read(filePath[i])
 }
