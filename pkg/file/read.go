@@ -37,6 +37,8 @@ func ReadRand(dir string) *models.TimeTable {
 				filePath = append(filePath, p)
 			}
 		}
+	} else {
+		log.Fatalln(err)
 	}
 	fl := len(filePath)
 	// get random file
