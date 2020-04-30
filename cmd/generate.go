@@ -43,8 +43,14 @@ var genCMD = &cobra.Command{
 		} else {
 			tt = file.Read(args[0])
 		}
+
+		s0, geneSize, err := (*tt).Decode()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 		// start the generating process
-		generator.Start(tt)
+		generator.Start(s0, geneSize)
 	},
 }
 
