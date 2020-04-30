@@ -7,12 +7,7 @@ import (
 const nGeneration = 4
 
 // Start begin the generating process
-func Start(tt *models.TimeTable) (*models.TimeTable, error) {
-	s0, geneSize, err := (*tt).Decode()
-	if err != nil {
-		return nil, err
-	}
-
+func Start(s0 *[]byte, geneSize int) (*models.TimeTable, error) {
 	var p Population
 	p.Init(s0, geneSize)
 
