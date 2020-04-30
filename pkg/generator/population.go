@@ -52,6 +52,7 @@ func (p *Population) Init(ns0 *[]byte, gSize int) {
 func newChromo(ns0 *[]byte, gSize int) *chromosome {
 	// make a new chromosome
 	var chromo chromosome
+	chromo.GeneSize = gSize
 	nL := len(*ns0) // length of nucleotides
 
 	chromo.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
