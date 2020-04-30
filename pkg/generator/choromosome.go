@@ -25,53 +25,66 @@ func (c *chromosome) SwapNucleotide(n1, n2 int) {
 	(*c).Nucleotides[n1], (*c).Nucleotides[n2] = (*c).Nucleotides[n2], (*c).Nucleotides[n1]
 }
 
+// illegalMutation checks for unwanted mutation cause by badly written code.
+// The function take two nucleotide sequences(points of byte slice) - ns1 && ns2
+// and compared ns2 with ns1 and throws error if :
+//  - ns1 and ns2 had the same types of nucleotides
+//  - quantities of nucleotides are equal
 func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
-	ns1l := len(*ns1)   // length of (*ns1)
-	ns2l := len((*ns2)) // length of newChromosome
+	// store length
+	ns1l := len(*ns1)
+	ns2l := len((*ns2))
 
-	// check the length of nucleotides
+	// check the lengths
 	if ns1l != ns2l {
-		return fmt.Errorf("ns1l and (*ns2) don't have equal length")
+		return fmt.Errorf("ns1 and ns2 don't have equal length")
 	}
-	ns1GeneMap := make(map[byte]int, gSize)
-	ns2GeneMap := make(map[byte]int, gSize)
-	index := 0  // index of the nucleotide sequence
-	var n byte  // a single nucleotide
-	q := 0      // quantity of a type of nucleotide
-	ok := false // if nucleotide is presen in the map
-	for i := 0; i < ns1l; i += gSize {
-		// check each gene
-		// each gene should have the same quantity of nucleotides of different types
-		// when when compared to (*ns1)'s gene
-		for j := 0; j < gSize; j++ {
-			// calculate the quantity of each
-			// type of nucleotide in ns1
-			index = i + j
-			n = (*ns1)[index]
-			q, ok = ns1GeneMap[n]
-			if !ok {
-				q = 0
-			}
-			q++
-			ns1GeneMap[n] = q
 
-			// calculate the quantity of each
-			// type of nucleotide in new chromosome
-			n = (*ns2)[index]
-			q, ok = ns2GeneMap[n]
+	// variables to store values to avoid reassigning
+	// maps to store quantity of each nucleotides type present in a genes
+	// of the respective sequence
+	geneMap1 := make(map[byte]int, gSize)
+	geneMap2 := make(map[byte]int, gSize)
+
+	index := 0  // index of a nucleotide in the sequence
+	var n byte  // a single nucleotide
+	q := 0      // quantity of a nucleotide type
+	ok := false // if nucleotide exists in the map
+
+	// iterate over each gene to check all the nucleotides
+	for i := 0; i < ns1l; i += gSize {
+		// assign all the nucleotides type and their quantity in the gene to
+		// the respective maps
+		for j := 0; j < gSize; j++ {
+			index = i + j // calculate the index
+
+			// nucleotide type in ns1
+			n = (*ns1)[index]   // get the nucleotide at the index
+			q, ok = geneMap1[n] // check if nucleotide exist in the map
 			if !ok {
-				q = 0
+				q = 0 // assign initial value
 			}
-			q++
-			ns2GeneMap[n] = q
+			q++             // increase the quantity of the nucleotide type
+			geneMap1[n] = q // reassign to the map
+
+			// nucleotide type in ns2
+			n = (*ns2)[index]   // get the nucleotide at the index
+			q, ok = geneMap2[n] // check if nucleotide exist in the map
+			if !ok {
+				q = 0 // assign initial value
+			}
+			q++             // increase the quantity of the nucleotide type
+			geneMap2[n] = q // reassign to the map
 		}
 
-		for n, q1 := range ns1GeneMap {
-			q, ok = ns2GeneMap[n]
+		// evalute the maps of the current gene
+		for n, q1 := range geneMap1 {
+			// check if nucleotide type exist in geneMap2
+			q, ok = geneMap2[n]
 			if !ok {
 				return fmt.Errorf("n=%v is not present in the new chromosome", n)
 			}
-
+			// check if nucleotide type in geneMap2 has the same quantity
 			if q != q1 {
 				return fmt.Errorf("n=%v quantity is not valid in the new chromosome", n)
 			}
