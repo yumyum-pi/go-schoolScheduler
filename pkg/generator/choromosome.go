@@ -7,22 +7,22 @@ var empty = []byte{}
 // Chromosome is the collection of TimeTable of the whole school.
 // arrange in an slice of period.
 type chromosome struct {
-	GeneSize    int    // size of a gene sequence - class
-	Nucleotides []byte // sequence of nucleotide - period
-	Name        string // name of genes
-	ErrIDs      []int  // slice of conflicting nucleotides - periods
-	Fitness     int    // fitness of the chromosome
+	GeneSize int    // size of a gene sequence - class
+	Sequence []byte // sequence of nucleotide - period
+	Name     string // name of genes
+	ErrIDs   []int  // slice of conflicting nucleotides - periods
+	Fitness  int    // fitness of the chromosome
 
 }
 
-// Length return the length of genes
+// Length return the length of sequence
 func (c *chromosome) Length() int {
-	return len((*c).Nucleotides)
+	return len((*c).Sequence)
 }
 
-// SwapNucleotide change the positions of nucleotide in the dna sequence
+// SwapNucleotide change the positions of nucleotide in the sequence
 func (c *chromosome) SwapNucleotide(n1, n2 int) {
-	(*c).Nucleotides[n1], (*c).Nucleotides[n2] = (*c).Nucleotides[n2], (*c).Nucleotides[n1]
+	(*c).Sequence[n1], (*c).Sequence[n2] = (*c).Sequence[n2], (*c).Sequence[n1]
 }
 
 // illegalMutation checks for unwanted mutation cause by badly written code.

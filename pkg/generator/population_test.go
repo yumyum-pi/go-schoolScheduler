@@ -21,7 +21,7 @@ func TestPopulation_newChromo(t *testing.T) {
 	// create new chromosome
 	nc := newChromo(&ns0, gSize)
 
-	if e := illegalMutation(&ns0, &(nc.Nucleotides), gSize); e != nil {
+	if e := illegalMutation(&ns0, &(nc.Sequence), gSize); e != nil {
 		t.Error(e)
 	}
 }

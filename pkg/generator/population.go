@@ -40,7 +40,7 @@ func (p *Population) Init(ns0 *[]byte, gSize int) {
 		for nIndex := 0; nIndex < nL; nIndex += gSize {
 			fmt.Printf("[")
 			for gIndex := 0; gIndex < gSize; gIndex++ {
-				b := (*p).P[i].Nucleotides[nIndex+gIndex]
+				b := (*p).P[i].Sequence[nIndex+gIndex]
 				fmt.Printf("%v ", b)
 			}
 			fmt.Printf("]\n")
@@ -54,7 +54,7 @@ func newChromo(ns0 *[]byte, gSize int) *chromosome {
 	var chromo chromosome
 	nL := len(*ns0) // length of nucleotides
 
-	chromo.Nucleotides = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	chromo.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
 
 	// loop though the nucleotides
 	for nIndex := 0; nIndex < nL; nIndex += gSize {

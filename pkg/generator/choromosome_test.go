@@ -22,7 +22,7 @@ func TestChromosome_illegalMutation(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		nc = newChromo(&ns0, gSize) // create new chromosome
 
-		if e := illegalMutation(&ns0, &(nc.Nucleotides), gSize); e != nil {
+		if e := illegalMutation(&ns0, &(nc.Sequence), gSize); e != nil {
 			t.Error(e)
 		}
 
@@ -32,11 +32,11 @@ func TestChromosome_illegalMutation(t *testing.T) {
 		n := byte(rand.Intn(255))   // create random byte
 
 		// check the value of the n in the new sequence
-		if n != nc.Nucleotides[n] {
-			fmt.Println(nc.Nucleotides[n])
-			nc.Nucleotides[n] = n
+		if n != nc.Sequence[n] {
+			fmt.Println(nc.Sequence[n])
+			nc.Sequence[n] = n
 		}
-		if e := illegalMutation(&ns0, &(nc.Nucleotides), gSize); e == nil {
+		if e := illegalMutation(&ns0, &(nc.Sequence), gSize); e == nil {
 			t.Errorf("was exprecting an error but not found")
 		}
 	}
