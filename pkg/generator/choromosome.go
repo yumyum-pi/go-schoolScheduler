@@ -7,9 +7,9 @@ var empty = []byte{}
 // Chromosome is the collection of TimeTable of the whole school.
 // arrange in an slice of period.
 type chromosome struct {
+	GenCode  string // code of the generation
 	GeneSize int    // size of a gene sequence - class
 	Sequence []byte // sequence of nucleotide - period
-	Name     string // name of genes
 	ErrIDs   []int  // slice of conflicting nucleotides - periods
 	Fitness  int    // fitness of the chromosome
 
@@ -99,8 +99,37 @@ func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
 	return nil
 }
 
+// Print writes out to stout
+func (c *chromosome) Print() {
+	fmt.Printf(
+		"genCode=%v\tgeneSize=%v\tnErr%v\tFitness=%v\n",
+		(*c).GenCode,
+		(*c).GeneSize,
+		len((*c).ErrIDs),
+		(*c).Fitness,
+	)
+
+	PrintSequence(&(*c).Sequence, (*c).GeneSize)
+}
+
 func deleteEml(s *[]byte, i int) {
 	l := len(*s) - 1
 	(*s)[i] = (*s)[l] // Copy last element to index i.
 	(*s) = (*s)[:l]
+}
+
+// PrintSequence writes to the stout
+func PrintSequence(s0 *[]byte, gSize int) {
+	l := len(*s0)
+
+	index := 0 // index of a nucleotide in the sequence
+
+	for i := 0; i < l; i += gSize {
+		fmt.Printf("[ ")
+		for j := 0; j < gSize; j++ {
+			index = i + j // calculate the index
+			fmt.Printf("%v ", (*s0)[index])
+		}
+		fmt.Printf("]\n")
+	}
 }
