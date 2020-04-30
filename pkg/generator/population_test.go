@@ -16,12 +16,12 @@ func TestPopulation_newChromo(t *testing.T) {
 	pkgs := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize := pkgs.Decode()
+	ns0, gSize, _ := pkgs.Decode()
 
 	// create new chromosome
-	nc := newChromo(&ns0, gSize)
+	nc := newChromo(ns0, gSize)
 
-	if e := illegalMutation(&ns0, &(nc.Sequence), gSize); e != nil {
+	if e := illegalMutation(ns0, &(nc.Sequence), gSize); e != nil {
 		t.Error(e)
 	}
 }

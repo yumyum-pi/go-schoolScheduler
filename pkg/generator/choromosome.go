@@ -53,8 +53,8 @@ func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
 
 	// iterate over each gene to check all the nucleotides
 	for i := 0; i < ns1l; i += gSize {
-		// assign all the nucleotides type and their quantity in the gene to
-		// the respective maps
+		// assign all the nucleotides type and their quantity in the
+		// gene to the respective maps
 		for j := 0; j < gSize; j++ {
 			index = i + j // calculate the index
 
@@ -64,7 +64,7 @@ func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
 			if !ok {
 				q = 0 // assign initial value
 			}
-			q++             // increase the quantity of the nucleotide type
+			q++             // increase quantity of the nucleotide type
 			geneMap1[n] = q // reassign to the map
 
 			// nucleotide type in ns2
@@ -73,7 +73,7 @@ func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
 			if !ok {
 				q = 0 // assign initial value
 			}
-			q++             // increase the quantity of the nucleotide type
+			q++             // increase quantity of the nucleotide type
 			geneMap2[n] = q // reassign to the map
 		}
 
@@ -82,11 +82,17 @@ func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
 			// check if nucleotide type exist in geneMap2
 			q, ok = geneMap2[n]
 			if !ok {
-				return fmt.Errorf("n=%v is not present in the new chromosome", n)
+				return fmt.Errorf(
+					"n=%v is not present in the new chromosome",
+					n,
+				)
 			}
 			// check if nucleotide type in geneMap2 has the same quantity
 			if q != q1 {
-				return fmt.Errorf("n=%v quantity is not valid in the new chromosome", n)
+				return fmt.Errorf(
+					"n=%v quantity is not valid in the new chromosome",
+					n,
+				)
 			}
 		}
 	}
