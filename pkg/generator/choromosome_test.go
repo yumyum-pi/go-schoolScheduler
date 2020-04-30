@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"fmt"
 	"math/rand"
 	"testing"
 	"time"
@@ -19,7 +18,7 @@ func TestChromosome_illegalMutation(t *testing.T) {
 
 	var nc *chromosome // store new chromosome value
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 256; i++ {
 		nc = newChromo(&ns0, gSize) // create new chromosome
 
 		if e := illegalMutation(&ns0, &(nc.Sequence), gSize); e != nil {
@@ -31,11 +30,10 @@ func TestChromosome_illegalMutation(t *testing.T) {
 		nc = newChromo(&ns0, gSize) // create new chromosome
 		n := byte(rand.Intn(255))   // create random byte
 
-		// check the value of the n in the new sequence
-		if n != nc.Sequence[n] {
-			fmt.Println(nc.Sequence[n])
-			nc.Sequence[n] = n
+		for n == nc.Sequence[n] {
+			n = byte(rand.Intn(255)) // create random byte
 		}
+		nc.Sequence[n] = n
 		if e := illegalMutation(&ns0, &(nc.Sequence), gSize); e == nil {
 			t.Errorf("was exprecting an error but not found")
 		}
