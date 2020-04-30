@@ -1,39 +1,43 @@
 package generator
 
-/*
 import (
+	"fmt"
+	"math/rand"
 	"testing"
+	"time"
 
-	"github.com/yumyum-pi/go-schoolScheduler/models"
-	"github.com/yumyum-pi/go-schoolScheduler/utils"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/file"
 )
 
-var chrmsm = Chromosome{
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 1}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 2}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 3}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 4}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 5}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 6}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 7}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 8}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 9}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-	models.Period{models.ClassID{[models.YearBS]byte{2, 0, 2, 0}, [models.StandardBS]byte{0, 0}, [models.SectionBS]byte{0, 1}, [models.GroupBS]byte{0, 1}}, models.SubjectID{}, models.TeacherID{}},
-}
+func TestChromosome_illegalMutation(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	// get information from the file
+	pkgs := file.ReadRand(inputDir)
 
-func TestSwapGene(t *testing.T) {
-	// generate two random geneID
-	geneID1 := utils.GenerateRandomInt(len(chrmsm), 10)
-	geneID2 := utils.GenerateRandomInt(len(chrmsm), 10)
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize := pkgs.Decode()
 
-	p1 := chrmsm[geneID1]
-	p2 := chrmsm[geneID2]
+	var nc *chromosome // store new chromosome value
 
-	chrmsm.SwapGene(geneID1, geneID2)
+	for i := 0; i < 100; i++ {
+		nc = newChromo(&ns0, gSize) // create new chromosome
 
-	if chrmsm[geneID1] != p2 && chrmsm[geneID2] != p1 {
-		t.Errorf("chrmsm[g1]=%v, chrmsm[g2]=%v, p1=%v, p2=%v", chrmsm[geneID1], chrmsm[geneID2], p1, p2)
+		if e := illegalMutation(&ns0, &(nc.Nucleotides), gSize); e != nil {
+			t.Error(e)
+		}
+
+		// make illegal mutation
+		// type of nucleotide not found
+		nc = newChromo(&ns0, gSize) // create new chromosome
+		n := byte(rand.Intn(255))   // create random byte
+
+		// check the value of the n in the new sequence
+		if n != nc.Nucleotides[n] {
+			fmt.Println(nc.Nucleotides[n])
+			nc.Nucleotides[n] = n
+		}
+		if e := illegalMutation(&ns0, &(nc.Nucleotides), gSize); e == nil {
+			t.Errorf("was exprecting an error but not found")
+		}
 	}
-
 }
-*/
