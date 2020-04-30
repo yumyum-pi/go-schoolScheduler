@@ -8,30 +8,47 @@ import (
 
 const nGeneration = 4
 
-func chrmsmByteMatch(c1, c2 []byte) bool {
-	// If one is nil, the other must also be nil.
-	if (c1 == nil) != (c2 == nil) {
-		return false
+var tpCount map[byte]int = make(map[byte]int) // total period counter of a teacher
+
+// Start begin the generating process
+func Start(tt *models.TimeTable) (*models.TimeTable, error) {
+	b, max := (*tt).Decode()
+	bl := len(b)
+	var tID byte // teacher ID
+	var tp int   // total periods of a teacher
+	var ok bool  // if the teacher is persent in the map
+	for i := 0; i < bl; i += max {
+		for j := 0; j < max; j++ {
+			tID = b[(i + j)]
+
+			tp, ok = tpCount[tID]
+			if !ok {
+				tp = 0
+			}
+			tp++
+			tpCount[tID] = tp
+		}
+
 	}
 
-	if len(c1) != len(c2) {
-		return false
-	}
-
-	for i := range c1 {
-		if c1[i] != c2[i] {
-			return false
+	for _, tp := range tpCount {
+		if tp >= max {
+			return nil, fmt.Errorf("> Error: Data received is invalid")
 		}
 	}
-	return true
+	var p Population
+	p.Init(&b, max)
+
+	return nil, nil
 }
 
+/*
 // Init starts the process
-func Init(classes []models.Class, teachers models.Teachers) Chromosome {
+func Init(tt *models.TimeTable) Chromosome {
 
 	var p Population
 
-	p.Init(&classes)
+	p.Init(&tt)
 	p.Sort()
 	p.PrintChromo()
 	p.Print()
@@ -46,3 +63,4 @@ func Init(classes []models.Class, teachers models.Teachers) Chromosome {
 	// choose the best chromosome
 	return p.P[0]
 }
+*/
