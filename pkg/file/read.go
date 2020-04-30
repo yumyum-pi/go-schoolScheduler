@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"path/filepath"
 
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
-	"github.com/yumyum-pi/go-schoolScheduler/pkg/utils"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -45,6 +45,6 @@ func ReadRand(dir string) *models.TimeTable {
 	if fl == 0 {
 		return nil
 	}
-	i := utils.GenerateRandomInt(fl, 10)
+	i := rand.Intn(fl)
 	return Read(filePath[i])
 }
