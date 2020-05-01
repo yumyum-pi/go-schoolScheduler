@@ -137,6 +137,71 @@ func (c *chromosome) CheckEM1() {
 	return
 }
 
+// CheckEM2 (Check Error Method 1) checks for matching nucleotides in each
+// gene position and updates the list of ErrIndexL
+func (c *chromosome) CheckEM2() {
+	var err []int // list of error index
+	l := (*c).Length()
+	nGene := l / (*c).GeneSize
+
+	// new sequence to edit
+	s := append([]byte{}, (*c).Sequence...)
+
+	sIndex0, sIndex1 := 0, 0   // store index for matching nucleotide
+	n0, n1 := byte(0), byte(0) // storing nucleotide of each index
+	found := false             // match found
+
+	// loop through each gene
+	for gIndex0 := 0; gIndex0 < nGene; gIndex0++ {
+		// loop through each nucleotide in gene
+		for j := 0; j < (*c).GeneSize; j++ {
+			// assigning index 0 value
+			sIndex0 = gIndex0*(*c).GeneSize + j
+			n0 = s[sIndex0]
+
+			// skip if last gene or if n0 is 0
+			if gIndex0 == nGene-1 || n0 == 0 {
+				continue
+			}
+
+			found = false
+
+			// loop through the next generations and find the match
+			// in the same pID
+			for gIndex1 := gIndex0 + 1; gIndex1 < nGene; gIndex1++ {
+				// assigning index 1
+				sIndex1 = gIndex1*(*c).GeneSize + j
+				n1 = s[sIndex1]
+
+				// matching nucleotides
+				if n0 == n1 {
+					// match is found
+					found = true
+					// reassign the nucleotide at index1 to 0
+					// to skip in next iterations
+					s[sIndex1] = 0
+
+					// add the index to the error list
+					err = append(err, sIndex1)
+				}
+
+			}
+			// check if match is found
+			if found {
+				// reassign the nucleotide at index1 to 0
+				// to skip in next iterations
+				s[sIndex0] = 0
+
+				// add the index to error list
+				err = append(err, sIndex0)
+			}
+		}
+	}
+	// update the chromosome error list
+	(*c).ErrIndexL = err
+	return
+}
+
 // Print writes out to stout
 func (c *chromosome) Print() {
 	fmt.Printf(
