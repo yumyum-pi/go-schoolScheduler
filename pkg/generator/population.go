@@ -1,11 +1,10 @@
 package generator
 
 import (
-	"fmt"
 	"math/rand"
 )
 
-const pSize = 2          //32         // population size
+const pSize = 1          //32         // population size
 const p2Size = pSize / 2 // half of population size
 const p4Size = pSize / 4 // quater of population size
 
@@ -21,30 +20,12 @@ type Population struct {
 
 // Init create the initail population
 func (p *Population) Init(ns0 *[]byte, gSize int) {
-	nL := len(*ns0) // length of nucleotides
+	//nL := len(*ns0) // length of nucleotides
 	(*p).ns0 = ns0
 	// make a new chromosome var
-	fmt.Println("ns0")
-	for nIndex := 0; nIndex < nL; nIndex += gSize {
-		fmt.Printf("[")
-		for gIndex := 0; gIndex < gSize; gIndex++ {
-			b := (*(*p).ns0)[nIndex+gIndex]
-			fmt.Printf("%v ", b)
-		}
-		fmt.Printf("]\n")
-	}
+
 	for i := 0; i < pSize; i++ {
 		(*p).P[i] = *newChromo(ns0, gSize)
-
-		fmt.Println("chm", i)
-		for nIndex := 0; nIndex < nL; nIndex += gSize {
-			fmt.Printf("[")
-			for gIndex := 0; gIndex < gSize; gIndex++ {
-				b := (*p).P[i].Sequence[nIndex+gIndex]
-				fmt.Printf("%v ", b)
-			}
-			fmt.Printf("]\n")
-		}
 	}
 }
 
