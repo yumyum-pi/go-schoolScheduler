@@ -7,11 +7,11 @@ var empty = []byte{}
 // Chromosome is the collection of TimeTable of the whole school.
 // arrange in an slice of period.
 type chromosome struct {
-	GenCode  string // code of the generation
-	GeneSize int    // size of a gene sequence - class
-	Sequence []byte // sequence of nucleotide - period
-	ErrIDs   []int  // slice of conflicting nucleotides - periods
-	Fitness  int    // fitness of the chromosome
+	GenCode   string // code of the generation
+	GeneSize  int    // size of a gene sequence - class
+	Sequence  []byte // sequence of nucleotide - period
+	ErrIndexL []int  // slice of conflicting nucleotides index - periods
+	Fitness   int    // fitness of the chromosome
 
 }
 
@@ -99,13 +99,51 @@ func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
 	return nil
 }
 
+// MatchN check nucleotides at the given position in each gene
+// and returns the index of the matching nucleotide . If no match is
+// found then -1 is returned
+func (c *chromosome) MatchN(sIndex int) (sIndex2 int) {
+	l := (*c).Length()
+	n := (*c).Sequence[sIndex]
+	// calculate gene index
+	gIndex := sIndex % (*c).GeneSize
+
+	for i := 0; i < l; i += (*c).GeneSize {
+		sIndex2 = i + gIndex
+		if (*c).Sequence[sIndex2] == n && sIndex != sIndex2 {
+			return
+		}
+	}
+	return -1
+}
+
+// CheckEM1 (Check Error Method 1) checks for matching nucleotides in each
+// gene position and updates the list of ErrIndexL
+func (c *chromosome) CheckEM1() {
+	var err []int
+	l := (*c).Length()
+
+	// loop through each element
+	for sIndex := 0; sIndex < l; sIndex++ {
+		// check conflit
+		if n := (*c).MatchN(sIndex); n != -1 {
+			// the sIndex to the error list
+			err = append(err, sIndex)
+		}
+
+	}
+	// update the chromosome error list
+	(*c).ErrIndexL = err
+	return
+}
+
 // Print writes out to stout
 func (c *chromosome) Print() {
 	fmt.Printf(
 		"genCode=%v\tgeneSize=%v\tnErr%v\tFitness=%v\n",
 		(*c).GenCode,
 		(*c).GeneSize,
-		len((*c).ErrIDs),
+		len((*c).ErrIndexL),
 		(*c).Fitness,
 	)
 
@@ -125,10 +163,10 @@ func PrintSequence(s0 *[]byte, gSize int) {
 	index := 0 // index of a nucleotide in the sequence
 
 	for i := 0; i < l; i += gSize {
-		fmt.Printf("[ ")
+		fmt.Printf("%3v[ ", i/gSize)
 		for j := 0; j < gSize; j++ {
 			index = i + j // calculate the index
-			fmt.Printf("%v ", (*s0)[index])
+			fmt.Printf("%3v ", (*s0)[index])
 		}
 		fmt.Printf("]\n")
 	}
