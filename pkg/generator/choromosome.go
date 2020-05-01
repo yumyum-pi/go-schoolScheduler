@@ -226,16 +226,16 @@ func (c *chromosome) PrintError() {
 		for j := 0; j < (*c).GeneSize; j++ {
 			index = i + j
 			if nextIndex >= el {
-				fmt.Printf("---- ")
+				fmt.Printf("-- ")
 				continue
 			}
 			n := (*c).ErrIndexL[nextIndex]
 			if index == n {
 				nextIndex++
-				fmt.Printf("%4v ", n) //(*c).Sequence[n])
+				fmt.Printf("%2v ", (*c).Sequence[n])
 				continue
 			}
-			fmt.Printf("---- ")
+			fmt.Printf("-- ")
 		}
 		fmt.Printf("]\n")
 
