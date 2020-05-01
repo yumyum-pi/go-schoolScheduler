@@ -120,7 +120,7 @@ func (c *chromosome) MatchN(sIndex int) (sIndex2 int) {
 // CheckEM1 (Check Error Method 1) checks for matching nucleotides in each
 // gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM1() {
-	var err []int
+	var err []int // list of error index
 	l := (*c).Length()
 
 	// loop through each element
@@ -140,7 +140,7 @@ func (c *chromosome) CheckEM1() {
 // Print writes out to stout
 func (c *chromosome) Print() {
 	fmt.Printf(
-		"genCode=%v\tgeneSize=%v\tnErr%v\tFitness=%v\n",
+		"genCode=%v\tgeneSize=%v\tnErr=%v\tFitness=%v\n",
 		(*c).GenCode,
 		(*c).GeneSize,
 		len((*c).ErrIndexL),
@@ -148,6 +148,33 @@ func (c *chromosome) Print() {
 	)
 
 	PrintSequence(&(*c).Sequence, (*c).GeneSize)
+}
+
+func (c *chromosome) PrintError() {
+	l := (*c).Length()
+	index := 0 // index of a nucleotide in the sequence
+
+	nextIndex := 0
+	el := len((*c).ErrIndexL)
+	for i := 0; i < l; i += (*c).GeneSize {
+		fmt.Printf("%2v[ ", i/(*c).GeneSize)
+		for j := 0; j < (*c).GeneSize; j++ {
+			index = i + j
+			if nextIndex >= el {
+				fmt.Printf("---- ")
+				continue
+			}
+			n := (*c).ErrIndexL[nextIndex]
+			if index == n {
+				nextIndex++
+				fmt.Printf("%4v ", n) //(*c).Sequence[n])
+				continue
+			}
+			fmt.Printf("---- ")
+		}
+		fmt.Printf("]\n")
+
+	}
 }
 
 func deleteEml(s *[]byte, i int) {
