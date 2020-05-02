@@ -21,77 +21,81 @@ func (c *chromosome) Length() int {
 }
 
 // SwapNucleotide change the positions of nucleotide in the sequence
-func (c *chromosome) SwapNucleotide(n1, n2 int) {
-	(*c).Sequence[n1], (*c).Sequence[n2] = (*c).Sequence[n2], (*c).Sequence[n1]
+func (c *chromosome) SwapNucleotide(n0, n1 int) {
+	(*c).Sequence[n0], (*c).Sequence[n1] = (*c).Sequence[n1], (*c).Sequence[n0]
 }
 
 // illegalMutation checks for unwanted mutation cause by badly written code.
-// The function take two nucleotide sequences(points of byte slice) - ns1 && ns2
-// and compared ns2 with ns1 and throws error if :
-//  - ns1 and ns2 don't had the same nucleotide types
+// The function take two nucleotide sequences(points of byte slice) - s1 && ns2
+// and compared ns2 with s1 and throws error if :
+//  - s1 and ns2 don't had the same nucleotide types
 //  - quantities of nucleotide types not are equal
-func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
+func illegalMutation(s0, s1 *[]byte, gSize int) error {
 	// store length
-	ns1l := len(*ns1)
-	ns2l := len((*ns2))
+	s0l := len(*s0)
+	s1l := len((*s1))
 
 	// check the lengths
-	if ns1l != ns2l {
-		return fmt.Errorf("ns1 and ns2 don't have equal length")
+	if s0l != s1l {
+		return fmt.Errorf("s1 and ns2 don't have equal length")
 	}
 
 	// variables to store values to avoid reassigning
 	// maps to store quantity of each nucleotides type present in a
 	// genes of the respective sequence
+	geneMap0 := make(map[byte]int, gSize)
 	geneMap1 := make(map[byte]int, gSize)
-	geneMap2 := make(map[byte]int, gSize)
 
-	index := 0  // index of a nucleotide in the sequence
-	var n byte  // a single nucleotide
-	q := 0      // quantity of a nucleotide type
-	ok := false // if nucleotide exists in the map
+	index := 0        // index of a nucleotide in the sequence
+	var n0, n1 byte   // a single nucleotide
+	var q0, q1 int    // quantity of a nucleotide type
+	var ok0, ok1 bool // if nucleotide exists in the map
 
 	// iterate over each gene to check all the nucleotides
-	for i := 0; i < ns1l; i += gSize {
+	for i := 0; i < s0l; i += gSize {
 		// assign all the nucleotides type and their quantity in the
 		// gene to the respective maps
 		for j := 0; j < gSize; j++ {
 			index = i + j // calculate the index
 
-			// nucleotide type in ns1
-			n = (*ns1)[index]   // get the nucleotide at the index
-			q, ok = geneMap1[n] // check if nucleotide exist in the map
-			if !ok {
-				q = 0 // assign initial value
+			// nucleotide type in s0
+			n0 = (*s0)[index]      // get the nucleotide at the index
+			q0, ok0 = geneMap0[n0] // check if nucleotide exist in the map
+			if !ok0 {
+				q0 = 0 // assign initial value
 			}
-			q++             // increase quantity of the nucleotide type
-			geneMap1[n] = q // reassign to the map
+			q0++              // increase quantity of the nucleotide type
+			geneMap0[n0] = q0 // reassign to the map
 
-			// nucleotide type in ns2
-			n = (*ns2)[index]   // get the nucleotide at the index
-			q, ok = geneMap2[n] // check if nucleotide exist in the map
-			if !ok {
-				q = 0 // assign initial value
+			// nucleotide type in s1
+			n1 = (*s1)[index]      // get the nucleotide at the index
+			q1, ok1 = geneMap1[n1] // check if nucleotide exist in the map
+			if !ok1 {
+				q1 = 0 // assign initial value
 			}
-			q++             // increase quantity of the nucleotide type
-			geneMap2[n] = q // reassign to the map
+			q1++              // increase quantity of the nucleotide type
+			geneMap1[n1] = q1 // reassign to the map
 		}
 
 		// evalute the maps of the current gene
-		for n, q1 := range geneMap1 {
+		for n0, q0 = range geneMap0 {
 			// check if nucleotide type exist in geneMap2
-			q, ok = geneMap2[n]
-			if !ok {
+			q1, ok1 = geneMap1[n0]
+			if !ok1 {
 				return fmt.Errorf(
 					"n=%v is not present in the new chromosome",
-					n,
+					n0,
 				)
 			}
 			// check if nucleotide type in geneMap2 has the same quantity
-			if q != q1 {
+			if q0 != q1 {
 				return fmt.Errorf(
-					"n=%v quantity is not valid in the new chromosome",
-					n,
+					"n=%v quantity is not valid in the new chromosome."+
+						"Was expecting q1=%v but got q2=%v at gene=%v",
+					n0,
+					q0,
+					q1,
+					i/gSize,
 				)
 			}
 		}
@@ -147,9 +151,9 @@ func (c *chromosome) CheckEM2() {
 	// new sequence to edit
 	s := append([]byte{}, (*c).Sequence...)
 
-	sIndex0, sIndex1 := 0, 0   // store index for matching nucleotide
-	n0, n1 := byte(0), byte(0) // storing nucleotide of each index
-	found := false             // match found
+	var sIndex0, sIndex1 int // store index for matching nucleotide
+	var n0, n1 byte          // storing nucleotide of each index
+	found := false           // match found
 
 	// loop through each gene
 	for gIndex0 := 0; gIndex0 < nGene; gIndex0++ {
@@ -208,6 +212,96 @@ func (c *chromosome) CheckEM2() {
 	return
 }
 
+// HandleEM1(Handle Error Method 1) tried to correct the overlapping
+// nucleotides by interchaning the position of the nucleotides which
+// are in the same genes and don't overlap anymore
+func (c *chromosome) HandleEM1() {
+	//var n0, n1 byte
+	var g0, g1 int
+	var b0, b1 bool
+	// loop through each error index
+	for eIndex0, sIndex0 := range (*c).ErrIndexL {
+		g0 = sIndex0 / (*c).GeneSize
+		if sIndex0 == -1 {
+			continue
+		}
+		//n0 = (*c).Sequence[sIndex0]
+		for eIndex1, sIndex1 := range (*c).ErrIndexL {
+			// skip if this nucleotide is resolved
+			if sIndex1 == -1 || sIndex1 == sIndex0 {
+				continue
+			}
+
+			g1 = sIndex1 / (*c).GeneSize
+			// check if in the same gene
+			// since all error index are order
+			// break the loop if not gene0 is smaller than gene1
+			if g0 != g1 {
+				continue
+			}
+
+			// check if swap is use full
+			b0, b1 = (*c).CheckSafeSwap(sIndex0, sIndex1)
+
+			// if n at sIndex0 has not conflits at position of sIndex1
+			// swap them
+			if b0 {
+				// the swap makes sIndex0's n error free
+				// make the swap
+				c.SwapNucleotide(sIndex0, sIndex1)
+				// since sIndex0 n is error free which is now sIndex1
+				// change the Error index List index to -1
+				(*c).ErrIndexL[eIndex1] = -1
+				if b1 {
+					(*c).ErrIndexL[eIndex0] = -1
+				}
+			}
+		}
+	}
+
+	e := make([]int, 0, 0)
+	for _, sIndex := range (*c).ErrIndexL {
+		if sIndex != -1 {
+			e = append(e, sIndex)
+		}
+	}
+	(*c).ErrIndexL = e
+
+}
+
+// CheckSafeSwap takes two variable in the same gene and checks if swaping
+// their postion will resolve problem and return bool
+func (c *chromosome) CheckSafeSwap(sIndex0, sIndex1 int) (b0 bool, b1 bool) {
+	l := (*c).Length()
+	n0 := (*c).Sequence[sIndex0]
+	n1 := (*c).Sequence[sIndex1]
+
+	p0 := sIndex0 % (*c).GeneSize
+	p1 := sIndex1 % (*c).GeneSize
+	// loop through each gene
+	for gIndex := 0; gIndex < l; gIndex += (*c).GeneSize {
+		if b0 && b1 {
+			return
+		}
+		// if b1 has not issues
+		// check conflict at p1 of n0
+		if !b0 {
+			if n0 == (*c).Sequence[gIndex+p1] {
+				b0 = true
+			}
+		}
+
+		// if b1 has not issues
+		// check conflict at p0 of n1
+		if !b1 {
+			if n1 == (*c).Sequence[gIndex+p0] {
+				b1 = true
+			}
+		}
+	}
+	return
+}
+
 // Print writes out to stout
 func (c *chromosome) Print() {
 	fmt.Printf(
@@ -261,10 +355,10 @@ func PrintSequence(s0 *[]byte, gSize int) {
 	index := 0 // index of a nucleotide in the sequence
 
 	for i := 0; i < l; i += gSize {
-		fmt.Printf("%3v[ ", i/gSize)
+		fmt.Printf("%2v[ ", i/gSize)
 		for j := 0; j < gSize; j++ {
 			index = i + j // calculate the index
-			fmt.Printf("%3v ", (*s0)[index])
+			fmt.Printf("%2v ", (*s0)[index])
 		}
 		fmt.Printf("]\n")
 	}

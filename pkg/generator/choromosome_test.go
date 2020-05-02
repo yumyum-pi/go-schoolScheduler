@@ -19,24 +19,21 @@ func TestChromosome_illegalMutation(t *testing.T) {
 	ns0, gSize, _ := pkgs.Decode()
 
 	var nc *chromosome // store new chromosome value
-
+	var n byte
 	for i := 0; i < 256; i++ {
 		nc = newChromo(ns0, gSize) // create new chromosome
 
 		if e := illegalMutation(ns0, &(nc.Sequence), gSize); e != nil {
 			t.Error(e)
 		}
-
-		// make illegal mutation
-		// type of nucleotide not found
-		nc = newChromo(ns0, gSize) // create new chromosome
-		n := byte(rand.Intn(255))  // create random byte
+		n = byte(rand.Intn(255)) // create random byte
 
 		for n == nc.Sequence[n] {
 			n = byte(rand.Intn(255)) // create random byte
 		}
 		nc.Sequence[n] = n
 		if e := illegalMutation(ns0, &(nc.Sequence), gSize); e == nil {
+			t.Error(e)
 			t.Errorf("was exprecting an error but not found")
 		}
 	}
@@ -143,5 +140,46 @@ func BenchmarkChromosome_CheckEM2(b *testing.B) {
 
 			nc.CheckEM2()
 		}
+	}
+}
+
+func TestChromosome_HandleEM1(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	var ns0 *[]byte
+	var gSize int
+	var e error
+	for k := 0; k < 1; k++ {
+		var nc *chromosome
+
+		// get information from the file
+		pkgs := file.ReadRand(inputDir)
+		// decode the pkgs to ns0 and gene-size
+		ns0, gSize, _ = pkgs.Decode()
+		nc = newChromo(ns0, gSize) // create new chromosome
+
+		nc.CheckEM2()
+		fmt.Println(len(nc.ErrIndexL))
+		nc.HandleEM1()
+		e = illegalMutation(ns0, &nc.Sequence, gSize)
+		if e != nil {
+			t.Error(e)
+		}
+	}
+}
+
+func BenchmarkChromosome_HandleEM1(b *testing.B) {
+	l := len(cr.Sequences)
+	gSize := 48
+	k := 0
+
+	var nc chromosome // store new chromosome value
+	nc.GeneSize = gSize
+	for i := 0; i < b.N; i++ {
+		k = i % l
+		nc.Sequence = cr.Sequences[k]
+
+		nc.CheckEM2()
+		nc.HandleEM1()
+
 	}
 }
