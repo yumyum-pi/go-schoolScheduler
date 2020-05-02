@@ -217,27 +217,47 @@ func (c *chromosome) CheckEM2() {
 // are in the same genes and don't overlap anymore
 func (c *chromosome) HandleEM1() {
 	//var n0, n1 byte
-	var g0, g1 int
-	var b0, b1 bool
+	el := len((*c).ErrIndexL)
+	// store values
+	var g0, g1 int            // gene index
+	var b0, b1 bool           // swap safe
+	var e2Begain int = 0      // index for error index list
+	var lastGeneIndex int = 0 // last gene index
+
 	// loop through each error index
 	for eIndex0, sIndex0 := range (*c).ErrIndexL {
 		g0 = sIndex0 / (*c).GeneSize
+
+		// skip if nucleotide has been resolved
 		if sIndex0 == -1 {
 			continue
 		}
-		//n0 = (*c).Sequence[sIndex0]
-		for eIndex1, sIndex1 := range (*c).ErrIndexL {
+
+		// check if gene index has change
+		// rest the index for error index list to the current index
+		// rest the lastGeneIndex to current index
+		if lastGeneIndex < g0 {
+			e2Begain = sIndex0
+			lastGeneIndex = g0
+		}
+
+		// loop through all the index in the current gene
+		// begining from the current gene index start
+		for eIndex1 := e2Begain; eIndex1 < el; eIndex1++ {
+			sIndex1 := (*c).ErrIndexL[eIndex1]
+
 			// skip if this nucleotide is resolved
 			if sIndex1 == -1 || sIndex1 == sIndex0 {
 				continue
 			}
 
 			g1 = sIndex1 / (*c).GeneSize
+
 			// check if in the same gene
 			// since all error index are order
 			// break the loop if not gene0 is smaller than gene1
-			if g0 != g1 {
-				continue
+			if g0 < g1 {
+				break
 			}
 
 			// check if swap is use full
@@ -253,18 +273,22 @@ func (c *chromosome) HandleEM1() {
 				// change the Error index List index to -1
 				(*c).ErrIndexL[eIndex1] = -1
 				if b1 {
+					// change the Error index List index to -1
 					(*c).ErrIndexL[eIndex0] = -1
 				}
 			}
 		}
 	}
-
+	// filter out the resolved index
 	e := make([]int, 0, 0)
 	for _, sIndex := range (*c).ErrIndexL {
+		// add index that are not resolved
 		if sIndex != -1 {
 			e = append(e, sIndex)
 		}
 	}
+
+	// reassign the error
 	(*c).ErrIndexL = e
 
 }
