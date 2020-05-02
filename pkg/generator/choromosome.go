@@ -28,8 +28,8 @@ func (c *chromosome) SwapNucleotide(n1, n2 int) {
 // illegalMutation checks for unwanted mutation cause by badly written code.
 // The function take two nucleotide sequences(points of byte slice) - ns1 && ns2
 // and compared ns2 with ns1 and throws error if :
-//  - ns1 and ns2 had the same types of nucleotides
-//  - quantities of nucleotides are equal
+//  - ns1 and ns2 don't had the same nucleotide types
+//  - quantities of nucleotide types not are equal
 func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
 	// store length
 	ns1l := len(*ns1)
@@ -41,8 +41,8 @@ func illegalMutation(ns1, ns2 *[]byte, gSize int) error {
 	}
 
 	// variables to store values to avoid reassigning
-	// maps to store quantity of each nucleotides type present in a genes
-	// of the respective sequence
+	// maps to store quantity of each nucleotides type present in a
+	// genes of the respective sequence
 	geneMap1 := make(map[byte]int, gSize)
 	geneMap2 := make(map[byte]int, gSize)
 
@@ -117,8 +117,8 @@ func (c *chromosome) MatchN(sIndex int) (sIndex2 int) {
 	return -1
 }
 
-// CheckEM1 (Check Error Method 1) checks for matching nucleotides in each
-// gene position and updates the list of ErrIndexL
+// CheckEM1 (Check Error Method 1) checks for matching nucleotides in
+// each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM1() {
 	var err []int // list of error index
 	l := (*c).Length()
@@ -137,12 +137,12 @@ func (c *chromosome) CheckEM1() {
 	return
 }
 
-// CheckEM2 (Check Error Method 1) checks for matching nucleotides in each
-// gene position and updates the list of ErrIndexL
+// CheckEM2 (Check Error Method 1) checks for matching nucleotides in
+// each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM2() {
-	var err []int // list of error index
-	l := (*c).Length()
-	nGene := l / (*c).GeneSize
+	(*c).ErrIndexL = make([]int, 0, 0) // list of error index
+	//l := (*c).Length()
+	nGene := (*c).Length() / (*c).GeneSize
 
 	// new sequence to edit
 	s := append([]byte{}, (*c).Sequence...)
@@ -182,7 +182,7 @@ func (c *chromosome) CheckEM2() {
 					s[sIndex1] = 0
 
 					// add the index to the error list
-					err = append(err, sIndex1)
+					//err = append(err, sIndex1)
 				}
 
 			}
@@ -193,12 +193,18 @@ func (c *chromosome) CheckEM2() {
 				s[sIndex0] = 0
 
 				// add the index to error list
-				err = append(err, sIndex0)
+				//err = append(err, sIndex0)
 			}
 		}
 	}
+
+	for i, n := range s {
+		if n == 0 {
+			(*c).ErrIndexL = append((*c).ErrIndexL, i)
+		}
+	}
 	// update the chromosome error list
-	(*c).ErrIndexL = err
+	//(*c).ErrIndexL = err
 	return
 }
 
