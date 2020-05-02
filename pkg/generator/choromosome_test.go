@@ -43,7 +43,6 @@ func TestChromosome_illegalMutation(t *testing.T) {
 }
 
 func TestChromosome_CheckEM1(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())
 	l := len(cr.Sequences)
 	gSize := 48
 	for k := 0; k < l; k++ {
@@ -60,17 +59,15 @@ func TestChromosome_CheckEM1(t *testing.T) {
 		}
 
 		// manipulate data to give error
-		r := rand.Intn(len(nc.ErrIndexL))
-		nc.ErrIndexL[r] = 0
+		nc.ErrIndexL[0] = -1
 		e = checkErrLEqual(cr.Errs[k], nc.ErrIndexL)
 		if e == nil {
-			t.Fatalf("was exprecting error but not found")
+			t.Fatalf("was exprecting error but not found at index=%v at k=%v", nc.ErrIndexL[0], k)
 		}
 	}
 }
 
 func TestChromosome_CheckEM2(t *testing.T) {
-	rand.Seed(time.Now().UnixNano())
 	l := len(cr.Sequences)
 	gSize := 48
 	for k := 0; k < l; k++ {
@@ -85,13 +82,11 @@ func TestChromosome_CheckEM2(t *testing.T) {
 		if e != nil {
 			t.Fatal(e)
 		}
-
 		// manipulate data to give error
-		nc.ErrIndexL[0] = 0
-		r := rand.Intn(len(nc.ErrIndexL))
+		nc.ErrIndexL[0] = -1
 		e = checkErrLEqual(cr.Errs[k], nc.ErrIndexL)
 		if e == nil {
-			t.Fatalf("was exprecting error but not found at index=%v r=%v", nc.ErrIndexL[0], r)
+			t.Fatalf("was exprecting error but not found at index=%v at k=%v", nc.ErrIndexL[0], k)
 		}
 	}
 }
