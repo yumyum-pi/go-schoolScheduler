@@ -10,14 +10,10 @@ type chromosome struct {
 	GenCode     string // code of the generation
 	GeneSize    int    // size of a gene sequence - class
 	Sequence    []byte // sequence of nucleotide - period
+	lSequence   int    // length of the sequence
 	ErrSequence []byte // slice of conflicting nucleotides - periods
 	Fitness     int    // fitness of the chromosome
 
-}
-
-// Length return the length of sequence
-func (c *chromosome) Length() int {
-	return len((*c).Sequence)
 }
 
 // SwapNucleotide change the positions of nucleotide in the sequence
@@ -107,12 +103,11 @@ func illegalMutation(s0, s1 *[]byte, gSize int) error {
 // and returns the index of the matching nucleotide . If no match is
 // found then -1 is returned
 func (c *chromosome) MatchN(sIndex int) (sIndex2 int) {
-	l := (*c).Length()
 	n := (*c).Sequence[sIndex]
 	// calculate gene index
 	gIndex := sIndex % (*c).GeneSize
 
-	for i := 0; i < l; i += (*c).GeneSize {
+	for i := 0; i < (*c).lSequence; i += (*c).GeneSize {
 		sIndex2 = i + gIndex
 		if (*c).Sequence[sIndex2] == n && sIndex != sIndex2 {
 			return
@@ -124,10 +119,8 @@ func (c *chromosome) MatchN(sIndex int) (sIndex2 int) {
 // CheckEM1 (Check Error Method 1) checks for matching nucleotides in
 // each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM1() {
-	l := (*c).Length()
-
 	// loop through each element
-	for sIndex := 0; sIndex < l; sIndex++ {
+	for sIndex := 0; sIndex < (*c).lSequence; sIndex++ {
 		// check conflit
 		if n := (*c).MatchN(sIndex); n != -1 {
 			//adding to error list
@@ -137,16 +130,14 @@ func (c *chromosome) CheckEM1() {
 	}
 }
 
-/*
 // CheckEM2 (Check Error Method 1) checks for matching nucleotides in
 // each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM2() {
-	(*c).ErrIndexL = make([]int, 0, 0) // list of error index
-	//l := (*c).Length()
-	nGene := (*c).Length() / (*c).GeneSize
+	(*c).ErrSequence = make([]byte, (*c).lSequence, (*c).lSequence) // list of error index
+	nGene := (*c).lSequence / (*c).GeneSize
 
 	// new sequence to edit
-	s := append([]byte{}, (*c).Sequence...)
+	//s := append([]byte{}, (*c).Sequence...)
 
 	var sIndex0, sIndex1 int // store index for matching nucleotide
 	var n0, n1 byte          // storing nucleotide of each index
@@ -158,7 +149,7 @@ func (c *chromosome) CheckEM2() {
 		for j := 0; j < (*c).GeneSize; j++ {
 			// assigning index 0 value
 			sIndex0 = gIndex0*(*c).GeneSize + j
-			n0 = s[sIndex0]
+			n0 = (*c).Sequence[sIndex0]
 
 			// skip if last gene or if n0 is 0
 			if gIndex0 == nGene-1 || n0 == 0 {
@@ -172,7 +163,7 @@ func (c *chromosome) CheckEM2() {
 			for gIndex1 := gIndex0 + 1; gIndex1 < nGene; gIndex1++ {
 				// assigning index 1
 				sIndex1 = gIndex1*(*c).GeneSize + j
-				n1 = s[sIndex1]
+				n1 = (*c).Sequence[sIndex1]
 
 				// matching nucleotides
 				if n0 == n1 {
@@ -180,7 +171,7 @@ func (c *chromosome) CheckEM2() {
 					found = true
 					// reassign the nucleotide at index1 to 0
 					// to skip in next iterations
-					s[sIndex1] = 0
+					(*c).ErrSequence[sIndex1] = n1
 
 					// add the index to the error list
 					//err = append(err, sIndex1)
@@ -191,24 +182,17 @@ func (c *chromosome) CheckEM2() {
 			if found {
 				// reassign the nucleotide at index1 to 0
 				// to skip in next iterations
-				s[sIndex0] = 0
+				(*c).ErrSequence[sIndex0] = n0
 
 				// add the index to error list
 				//err = append(err, sIndex0)
 			}
 		}
 	}
-
-	for i, n := range s {
-		if n == 0 {
-			(*c).ErrIndexL = append((*c).ErrIndexL, i)
-		}
-	}
-	// update the chromosome error list
-	//(*c).ErrIndexL = err
 	return
 }
 
+/*
 // HandleEM1(Handle Error Method 1) tried to correct the overlapping
 // nucleotides by interchaning the position of the error nucleotides which
 // are in the same genes and don't overlap anymore
@@ -427,10 +411,9 @@ func (c *chromosome) Print() {
 		len((*c).ErrSequence),
 		(*c).Fitness,
 	)
-	l := (*c).Length()
 	index := 0 // index of a nucleotide in the sequence
 
-	for i := 0; i < l; i += (*c).GeneSize {
+	for i := 0; i < (*c).lSequence; i += (*c).GeneSize {
 		fmt.Printf("%2v[ ", i/(*c).GeneSize)
 		for j := 0; j < (*c).GeneSize; j++ {
 			index = i + j

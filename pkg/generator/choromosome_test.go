@@ -47,8 +47,8 @@ func TestChromosome_CheckEM1(t *testing.T) {
 	nc.GeneSize = gSize
 	for k := 0; k < lk; k++ {
 		nc.Sequence = cr.Sequences[k]
-		nL := len(nc.Sequence)
-		nc.ErrSequence = make([]byte, nL, nL)
+		nc.lSequence = len(nc.Sequence)
+		nc.ErrSequence = make([]byte, nc.lSequence, nc.lSequence)
 		nc.CheckEM1()
 
 		e := checkErrLEqual(cr.Errs[k], nc.ErrSequence, gSize)
@@ -74,31 +74,41 @@ func TestChromosome_CheckEM1(t *testing.T) {
 	}
 }
 
-/*
 func TestChromosome_CheckEM2(t *testing.T) {
-	l := len(cr.Sequences)
+	lk := len(cr.Sequences)
 	gSize := 48
-	for k := 0; k < l; k++ {
-
-		var nc chromosome // store new chromosome value
-		nc.GeneSize = gSize
+	var i int         // length of sequence
+	var nc chromosome // store new chromosome value
+	nc.GeneSize = gSize
+	for k := 0; k < lk; k++ {
 		nc.Sequence = cr.Sequences[k]
-
+		nc.lSequence = len(nc.Sequence)
+		nc.ErrSequence = make([]byte, nc.lSequence, nc.lSequence)
 		nc.CheckEM2()
 
-		e := checkErrLEqual(cr.Errs[k], nc.ErrIndexL)
+		e := checkErrLEqual(cr.Errs[k], nc.ErrSequence, gSize)
 		if e != nil {
-			t.Fatal(e)
+			t.Error(e)
+			return
 		}
+
 		// manipulate data to give error
-		nc.ErrIndexL[0] = -1
-		e = checkErrLEqual(cr.Errs[k], nc.ErrIndexL)
+		i = len(nc.Sequence) - 1
+		for i >= 0 {
+			if nc.ErrSequence[i] != 0 {
+				nc.ErrSequence[i] = 0
+				break
+			}
+			i--
+		}
+
+		e = checkErrLEqual(cr.Errs[k], nc.ErrSequence, gSize)
 		if e == nil {
-			t.Fatalf("was exprecting error but not found at index=%v at k=%v", nc.ErrIndexL[0], k)
+			t.Fatalf("was exprecting error but not found at index=%v at k=%v", nc.ErrSequence[i], k)
 		}
 	}
 }
-*/
+
 func checkErrLEqual(err0, err1 []byte, gSize int) error {
 	l := len(err0)
 
@@ -150,37 +160,39 @@ func checkErrLEqual(err0, err1 []byte, gSize int) error {
 	return nil
 }
 
-/*
 func BenchmarkChromosome_CheckEM1(b *testing.B) {
 	l := len(cr.Sequences)
 	gSize := 48
-
+	var nc chromosome // store new chromosome value
+	nc.GeneSize = gSize
+	var k int
 	for i := 0; i < b.N; i++ {
-		for k := 0; k < l; k++ {
-			var nc chromosome // store new chromosome value
-			nc.GeneSize = gSize
-			nc.Sequence = cr.Sequences[k]
+		k = i % l
+		nc.Sequence = cr.Sequences[k]
+		nL := len(nc.Sequence)
+		nc.ErrSequence = make([]byte, nL, nL)
 
-			nc.CheckEM1()
-		}
+		nc.CheckEM1()
 	}
 }
 
 func BenchmarkChromosome_CheckEM2(b *testing.B) {
 	l := len(cr.Sequences)
 	gSize := 48
-
+	var nc chromosome // store new chromosome value
+	nc.GeneSize = gSize
+	var k int
 	for i := 0; i < b.N; i++ {
-		for k := 0; k < l; k++ {
-			var nc chromosome // store new chromosome value
-			nc.GeneSize = gSize
-			nc.Sequence = cr.Sequences[k]
+		k = i % l
+		nc.Sequence = cr.Sequences[k]
+		nL := len(nc.Sequence)
+		nc.ErrSequence = make([]byte, nL, nL)
 
-			nc.CheckEM2()
-		}
+		nc.CheckEM2()
 	}
 }
 
+/*
 func TestChromosome_HandleEM1(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	var ns0 *[]byte
