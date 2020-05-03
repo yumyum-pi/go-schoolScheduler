@@ -213,7 +213,7 @@ func (c *chromosome) CheckEM2() {
 }
 
 // HandleEM1(Handle Error Method 1) tried to correct the overlapping
-// nucleotides by interchaning the position of the nucleotides which
+// nucleotides by interchaning the position of the error nucleotides which
 // are in the same genes and don't overlap anymore
 func (c *chromosome) HandleEM1() {
 	//var n0, n1 byte
@@ -291,6 +291,61 @@ func (c *chromosome) HandleEM1() {
 	// reassign the error
 	(*c).ErrIndexL = e
 
+}
+
+// HandleEM2(Handle Error Method 2) tried to correct the overlapping
+// nucleotides by interchaning the position of the nucleotides which
+// are in the same genes and don't overlap anymore
+func (c *chromosome) HandleEM2() error {
+	// return if error index list length is 0
+	el := len((*c).ErrIndexL)
+	if el == 0 {
+		return nil
+	}
+
+	// store variable
+	var g int             // gene index
+	var gStart, gLast int // gene start, last index
+	var b0, b1 bool       // swap safe
+
+	// loop through error index list
+	for eIndex, sIndex := range (*c).ErrIndexL {
+		g = sIndex / (*c).GeneSize
+		gStart = (g) * (*c).GeneSize
+		gLast = gStart + (*c).GeneSize + 1
+		if sIndex == -1 {
+			continue
+		}
+		for gIndex := gStart; gIndex < gLast; gIndex++ {
+			// check if swap is use full
+			b0, b1 = (*c).CheckSafeSwap(sIndex, gIndex)
+
+			if b0 && b1 {
+				c.SwapNucleotide(sIndex, gIndex)
+				(*c).ErrIndexL[eIndex] = -1
+				// issue resolved
+				break // exist the current loop
+			}
+		}
+	}
+	// filter out the resolved index
+	e := make([]int, 0, 0)
+	for _, sIndex := range (*c).ErrIndexL {
+		// add index that are not resolved
+		if sIndex != -1 {
+			e = append(e, sIndex)
+		}
+	}
+
+	// reassign the error
+	(*c).ErrIndexL = e
+
+	// check for unresolved error and throw error
+	if len((*c).ErrIndexL) != 0 {
+		return fmt.Errorf("not all conflict have been resolved")
+	}
+
+	return nil
 }
 
 // CheckSafeSwap takes two variable in the same gene and checks if swaping
