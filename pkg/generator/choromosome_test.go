@@ -40,30 +40,39 @@ func TestChromosome_illegalMutation(t *testing.T) {
 }
 
 func TestChromosome_CheckEM1(t *testing.T) {
-	l := len(cr.Sequences)
+	lk := len(cr.Sequences)
 	gSize := 48
-	for k := 0; k < l; k++ {
-
-		var nc chromosome // store new chromosome value
-		nc.GeneSize = gSize
-		nc.Sequence = cr.Sequences[k]
-
+	var i int         // length of sequence
+	var nc chromosome // store new chromosome value
+	for k := 0; k < lk; k++ {
+		nc = *newChromo(&cr.Sequences[k], gSize)
 		nc.CheckEM1()
 
-		e := checkErrLEqual(cr.Errs[k], nc.ErrIndexL)
+		e := checkErrLEqual(cr.Errs[k], nc.ErrSequence)
 		if e != nil {
 			t.Fatal(e)
 		}
 
 		// manipulate data to give error
-		nc.ErrIndexL[0] = -1
-		e = checkErrLEqual(cr.Errs[k], nc.ErrIndexL)
-		if e == nil {
-			t.Fatalf("was exprecting error but not found at index=%v at k=%v", nc.ErrIndexL[0], k)
+		i = len(nc.Sequence) - 1
+		for i >= 0 {
+			if nc.ErrSequence[i] != 0 {
+				nc.ErrSequence[i] = 0
+				break
+			}
+			i--
 		}
+
+		e = checkErrLEqual(cr.Errs[k], nc.ErrSequence)
+		if e == nil {
+			t.Fatalf("was exprecting error but not found at index=%v at k=%v", nc.ErrSequence[i], k)
+		}
+		break
+		/**/
 	}
 }
 
+/*
 func TestChromosome_CheckEM2(t *testing.T) {
 	l := len(cr.Sequences)
 	gSize := 48
@@ -87,32 +96,26 @@ func TestChromosome_CheckEM2(t *testing.T) {
 		}
 	}
 }
+*/
+func checkErrLEqual(err0, err1 []byte) error {
+	l := len(err0)
 
-func checkErrLEqual(err1, err2 []int) error {
-	// map for all the index in err2
-	mapErr2 := make(map[int]bool)
-	if len(err1) != len(err2) {
-		return fmt.Errorf("length of the err list don't match. err1=%v err2=%v", len(err1), len(err2))
+	if l != len(err1) {
+		return fmt.Errorf("length of the err list don't match. err0=%v err1=%v", len(err0), len(err1))
 	}
-	// add the values to the map
-	for i, sIndex := range err2 {
-		_, ok := mapErr2[sIndex]
-		if ok {
-			return fmt.Errorf("map should not have repeating sIndex=%v in err2 at i=%v", sIndex, i)
-		}
-		mapErr2[sIndex] = true
-	}
-
-	// compare mapErr2 to err1
-	for _, sIndex := range err1 {
-		_, ok := mapErr2[sIndex]
-		if !ok {
-			return fmt.Errorf("%v not found in err2", sIndex)
+	var n0, n1 byte
+	// loop through each gene
+	for sIndex := 0; sIndex < l; sIndex++ {
+		n0 = err0[sIndex]
+		n1 = err1[sIndex]
+		if n0 != n1 {
+			return fmt.Errorf("nucleotides at sIndex=%v are different. n0=%v, n1=%v", sIndex, n0, n1)
 		}
 	}
 	return nil
 }
 
+/*
 func BenchmarkChromosome_CheckEM1(b *testing.B) {
 	l := len(cr.Sequences)
 	gSize := 48
@@ -146,11 +149,11 @@ func BenchmarkChromosome_CheckEM2(b *testing.B) {
 func TestChromosome_HandleEM1(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	var ns0 *[]byte
-	var gSize int
+	var gSize, err0 int
 	var e error
 	// get information from the file
 	pkgs := file.ReadRand(inputDir)
-	for k := 0; k < 256; k++ {
+	for k := 0; k < 1; k++ {
 		var nc *chromosome
 
 		// decode the pkgs to ns0 and gene-size
@@ -158,7 +161,15 @@ func TestChromosome_HandleEM1(t *testing.T) {
 		nc = newChromo(ns0, gSize) // create new chromosome
 
 		nc.CheckEM2()
+		nc.Print()
 		nc.HandleEM1()
+		nc.Print()
+		err0 = len(nc.ErrIndexL)
+		nc.CheckEM2()
+		nc.Print()
+		if err0 != len(nc.ErrIndexL) {
+			t.Errorf("false error resolve from handleEM1, err0=%v, err=%v", err0, len(nc.ErrIndexL))
+		}
 		e = illegalMutation(ns0, &nc.Sequence, gSize)
 		if e != nil {
 			t.Error(e)
@@ -192,7 +203,7 @@ func BenchmarkChromosome_HandleEM1(b *testing.B) {
 func TestChromosome_HandleEM2(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	var ns0 *[]byte
-	var gSize int
+	var gSize, err0 int
 	var e error
 	// get information from the file
 	pkgs := file.ReadRand(inputDir)
@@ -210,7 +221,12 @@ func TestChromosome_HandleEM2(t *testing.T) {
 			t.Error(e)
 			continue
 		}
-		nc.Print()
+		err0 = len(nc.ErrIndexL)
+		nc.CheckEM2()
+		if err0 != len(nc.ErrIndexL) {
+			t.Errorf("false error resolve from handleEM2")
+		}
+		//nc.Print()
 		e = illegalMutation(ns0, &nc.Sequence, gSize)
 		if e != nil {
 			t.Error(e)
@@ -240,3 +256,8 @@ func BenchmarkChromosome_HandleEM2(b *testing.B) {
 		nc.HandleEM2()
 	}
 }
+
+func TestChromosome_CheckSafeSwap(t *testing.T) {
+
+}
+*/

@@ -7,11 +7,11 @@ var empty = []byte{}
 // Chromosome is the collection of TimeTable of the whole school.
 // arrange in an slice of period.
 type chromosome struct {
-	GenCode   string // code of the generation
-	GeneSize  int    // size of a gene sequence - class
-	Sequence  []byte // sequence of nucleotide - period
-	ErrIndexL []int  // slice of conflicting nucleotides index - periods
-	Fitness   int    // fitness of the chromosome
+	GenCode     string // code of the generation
+	GeneSize    int    // size of a gene sequence - class
+	Sequence    []byte // sequence of nucleotide - period
+	ErrSequence []byte // slice of conflicting nucleotides - periods
+	Fitness     int    // fitness of the chromosome
 
 }
 
@@ -124,23 +124,20 @@ func (c *chromosome) MatchN(sIndex int) (sIndex2 int) {
 // CheckEM1 (Check Error Method 1) checks for matching nucleotides in
 // each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM1() {
-	var err []int // list of error index
 	l := (*c).Length()
 
 	// loop through each element
 	for sIndex := 0; sIndex < l; sIndex++ {
 		// check conflit
 		if n := (*c).MatchN(sIndex); n != -1 {
-			// the sIndex to the error list
-			err = append(err, sIndex)
+			//adding to error list
+			(*c).ErrSequence[sIndex] = (*c).Sequence[sIndex]
 		}
 
 	}
-	// update the chromosome error list
-	(*c).ErrIndexL = err
-	return
 }
 
+/*
 // CheckEM2 (Check Error Method 1) checks for matching nucleotides in
 // each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM2() {
@@ -220,7 +217,7 @@ func (c *chromosome) HandleEM1() {
 	el := len((*c).ErrIndexL)
 	// store values
 	var g0, g1 int            // gene index
-	var b0, b1 bool           // swap safe
+	var b0, b1 int            // swap safe
 	var e2Begain int = 0      // index for error index list
 	var lastGeneIndex int = 0 // last gene index
 
@@ -265,17 +262,18 @@ func (c *chromosome) HandleEM1() {
 
 			// if n at sIndex0 has not conflits at position of sIndex1
 			// swap them
-			if b0 {
+			if b0 >= 0 {
 				// the swap makes sIndex0's n error free
 				// make the swap
 				c.SwapNucleotide(sIndex0, sIndex1)
 				// since sIndex0 n is error free which is now sIndex1
 				// change the Error index List index to -1
 				(*c).ErrIndexL[eIndex1] = -1
-				if b1 {
+				if b1 >= 0 {
 					// change the Error index List index to -1
 					(*c).ErrIndexL[eIndex0] = -1
 				}
+				break
 			}
 		}
 	}
@@ -306,7 +304,7 @@ func (c *chromosome) HandleEM2() error {
 	// store variable
 	var g int             // gene index
 	var gStart, gLast int // gene start, last index
-	var b0, b1 bool       // swap safe
+	var b0, b1 int        // swap safe
 
 	// loop through error index list
 	for eIndex, sIndex := range (*c).ErrIndexL {
@@ -320,7 +318,7 @@ func (c *chromosome) HandleEM2() error {
 			// check if swap is use full
 			b0, b1 = (*c).CheckSafeSwap(sIndex, gIndex)
 
-			if b0 && b1 {
+			if b0 == 0 && b1 == 0 {
 				c.SwapNucleotide(sIndex, gIndex)
 				(*c).ErrIndexL[eIndex] = -1
 				// issue resolved
@@ -349,51 +347,107 @@ func (c *chromosome) HandleEM2() error {
 }
 
 // CheckSafeSwap takes two variable in the same gene and checks if swaping
-// their postion will resolve problem and return bool
-func (c *chromosome) CheckSafeSwap(sIndex0, sIndex1 int) (b0 bool, b1 bool) {
+// their postion will resolve problem and return int. Meaning of returned int
+//  (-1) - can not resolve conflict
+//	(0) - can resolve conflict
+//  (0 <) - can resolve given index conflict and return conflict
+func (c *chromosome) CheckSafeSwap(sIndex0, sIndex1 int) (int, int) {
+	var b0, b1 int
 	l := (*c).Length()
 	n0 := (*c).Sequence[sIndex0]
 	n1 := (*c).Sequence[sIndex1]
-
+	o0 := make([]int, 0) //
+	o1 := make([]int, 0) //
+	gIndex0 := sIndex0 / (*c).GeneSize
+	var t0, t1 byte
 	p0 := sIndex0 % (*c).GeneSize
 	p1 := sIndex1 % (*c).GeneSize
+	var ng0, ng1 int
 	// loop through each gene
 	for gIndex := 0; gIndex < l; gIndex += (*c).GeneSize {
-		if b0 && b1 {
-			return
+		if gIndex == gIndex0 {
+			continue
 		}
+		ng0 = gIndex + p0
+		ng1 = gIndex + p1
+
+		t0 = (*c).Sequence[ng1]
+		t1 = (*c).Sequence[ng0]
+
 		// if b1 has not issues
 		// check conflict at p1 of n0
-		if !b0 {
-			if n0 == (*c).Sequence[gIndex+p1] {
-				b0 = true
+		if b0 == 0 {
+			// check if n0 has a match at p1 position
+			if n0 == t0 {
+				b0 = -1
+			}
+			// check if n0 has a match at p0 position
+			if n0 == t1 {
+				o0 = append(o0, ng0)
 			}
 		}
 
 		// if b1 has not issues
 		// check conflict at p0 of n1
-		if !b1 {
-			if n1 == (*c).Sequence[gIndex+p0] {
-				b1 = true
+		if b1 == 0 {
+			if n1 == t1 {
+				b1 = -1
+			}
+			// check if n1 has a match at p1 position
+			if n1 == t0 {
+				o1 = append(o1, ng1)
 			}
 		}
 	}
-	return
+	if b0 == 0 {
+		if len(o0) == 1 {
+			b0 = o0[0]
+		}
+	}
+
+	if b1 == 0 {
+		if len(o1) == 1 {
+			b1 = o1[0]
+		}
+	}
+
+	return b0, b1
 }
+*/
 
 // Print writes out to stout
 func (c *chromosome) Print() {
+	colorReset := "\033[0m"
+	colorGreen := "\033[32m"
+	colorRed := "\033[1;31m"
 	fmt.Printf(
 		"genCode=%v\tgeneSize=%v\tnErr=%v\tFitness=%v\n",
 		(*c).GenCode,
 		(*c).GeneSize,
-		len((*c).ErrIndexL),
+		len((*c).ErrSequence),
 		(*c).Fitness,
 	)
+	l := (*c).Length()
+	index := 0 // index of a nucleotide in the sequence
 
-	PrintSequence(&(*c).Sequence, (*c).GeneSize)
+	for i := 0; i < l; i += (*c).GeneSize {
+		fmt.Printf("%2v[ ", i/(*c).GeneSize)
+		for j := 0; j < (*c).GeneSize; j++ {
+			index = i + j
+			if (*c).ErrSequence[index] != 0 {
+				fmt.Printf("%v%3v ", string(colorRed), (*c).Sequence[index])
+				continue
+
+			}
+
+			fmt.Printf("%v%3v ", string(colorGreen), (*c).Sequence[index])
+		}
+		fmt.Printf("%v]\n", string(colorReset))
+
+	}
 }
 
+/*
 func (c *chromosome) PrintError() {
 	l := (*c).Length()
 	index := 0 // index of a nucleotide in the sequence
@@ -442,3 +496,4 @@ func PrintSequence(s0 *[]byte, gSize int) {
 		fmt.Printf("]\n")
 	}
 }
+*/
