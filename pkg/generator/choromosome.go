@@ -102,14 +102,19 @@ func illegalMutation(s0, s1 *[]byte, gSize int) error {
 // MatchN check nucleotides at the given position in each gene
 // and returns the index of the matching nucleotide . If no match is
 // found then -1 is returned
-func (c *chromosome) MatchN(sIndex int) (sIndex2 int) {
-	n := (*c).Sequence[sIndex]
-	// calculate gene index
-	gIndex := sIndex % (*c).GeneSize
+func (c *chromosome) MatchN(sIndex0 int) (sIndex1 int) {
+	n := (*c).Sequence[sIndex0]
 
-	for i := 0; i < (*c).lSequence; i += (*c).GeneSize {
-		sIndex2 = i + gIndex
-		if (*c).Sequence[sIndex2] == n && sIndex != sIndex2 {
+	// calculate gene position
+	p := sIndex0 % (*c).GeneSize
+
+	// loop though each gene
+	for gIndex := 0; gIndex < (*c).lSequence; gIndex += (*c).GeneSize {
+		sIndex1 = gIndex + p // calc the sequence index
+
+		// check for matching nucleotide
+		// avoid same sequence index
+		if (*c).Sequence[sIndex1] == n && sIndex0 != sIndex1 {
 			return
 		}
 	}
@@ -133,11 +138,9 @@ func (c *chromosome) CheckEM1() {
 // CheckEM2 (Check Error Method 1) checks for matching nucleotides in
 // each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM2() {
-	(*c).ErrSequence = make([]byte, (*c).lSequence, (*c).lSequence) // list of error index
+	// create a new empty byte slice to store error nucleotides
+	(*c).ErrSequence = make([]byte, (*c).lSequence, (*c).lSequence)
 	nGene := (*c).lSequence / (*c).GeneSize
-
-	// new sequence to edit
-	//s := append([]byte{}, (*c).Sequence...)
 
 	var sIndex0, sIndex1 int // store index for matching nucleotide
 	var n0, n1 byte          // storing nucleotide of each index
@@ -180,12 +183,8 @@ func (c *chromosome) CheckEM2() {
 			}
 			// check if match is found
 			if found {
-				// reassign the nucleotide at index1 to 0
-				// to skip in next iterations
+				// add nucleotide at sequence index0 to error slice
 				(*c).ErrSequence[sIndex0] = n0
-
-				// add the index to error list
-				//err = append(err, sIndex0)
 			}
 		}
 	}
@@ -404,6 +403,9 @@ func (c *chromosome) Print() {
 	colorReset := "\033[0m"
 	colorGreen := "\033[32m"
 	colorRed := "\033[1;31m"
+
+	index := 0 // index of a nucleotide in the sequence
+
 	fmt.Printf(
 		"genCode=%v\tgeneSize=%v\tnErr=%v\tFitness=%v\n",
 		(*c).GenCode,
@@ -411,22 +413,20 @@ func (c *chromosome) Print() {
 		len((*c).ErrSequence),
 		(*c).Fitness,
 	)
-	index := 0 // index of a nucleotide in the sequence
 
 	for i := 0; i < (*c).lSequence; i += (*c).GeneSize {
 		fmt.Printf("%2v[ ", i/(*c).GeneSize)
 		for j := 0; j < (*c).GeneSize; j++ {
 			index = i + j
+			// check if error
 			if (*c).ErrSequence[index] != 0 {
 				fmt.Printf("%v%3v ", string(colorRed), (*c).Sequence[index])
 				continue
 
 			}
-
 			fmt.Printf("%v%3v ", string(colorGreen), (*c).Sequence[index])
 		}
 		fmt.Printf("%v]\n", string(colorReset))
-
 	}
 }
 
