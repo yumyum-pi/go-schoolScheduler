@@ -44,13 +44,17 @@ func TestChromosome_CheckEM1(t *testing.T) {
 	gSize := 48
 	var i int         // length of sequence
 	var nc chromosome // store new chromosome value
+	nc.GeneSize = gSize
 	for k := 0; k < lk; k++ {
-		nc = *newChromo(&cr.Sequences[k], gSize)
+		nc.Sequence = cr.Sequences[k]
+		nL := len(nc.Sequence)
+		nc.ErrSequence = make([]byte, nL, nL)
 		nc.CheckEM1()
 
-		e := checkErrLEqual(cr.Errs[k], nc.ErrSequence)
+		e := checkErrLEqual(cr.Errs[k], nc.ErrSequence, gSize)
 		if e != nil {
-			t.Fatal(e)
+			t.Error(e)
+			return
 		}
 
 		// manipulate data to give error
@@ -63,12 +67,10 @@ func TestChromosome_CheckEM1(t *testing.T) {
 			i--
 		}
 
-		e = checkErrLEqual(cr.Errs[k], nc.ErrSequence)
+		e = checkErrLEqual(cr.Errs[k], nc.ErrSequence, gSize)
 		if e == nil {
 			t.Fatalf("was exprecting error but not found at index=%v at k=%v", nc.ErrSequence[i], k)
 		}
-		break
-		/**/
 	}
 }
 
@@ -97,20 +99,53 @@ func TestChromosome_CheckEM2(t *testing.T) {
 	}
 }
 */
-func checkErrLEqual(err0, err1 []byte) error {
+func checkErrLEqual(err0, err1 []byte, gSize int) error {
 	l := len(err0)
 
 	if l != len(err1) {
 		return fmt.Errorf("length of the err list don't match. err0=%v err1=%v", len(err0), len(err1))
 	}
 	var n0, n1 byte
+	var index int
+
+	errMap0 := make(map[byte]int)
+	errMap1 := make(map[byte]int)
+	var q0, q1 int
+	var ok0, ok1 bool
 	// loop through each gene
-	for sIndex := 0; sIndex < l; sIndex++ {
-		n0 = err0[sIndex]
-		n1 = err1[sIndex]
-		if n0 != n1 {
-			return fmt.Errorf("nucleotides at sIndex=%v are different. n0=%v, n1=%v", sIndex, n0, n1)
+	for gIndex := 0; gIndex < l; gIndex += gSize {
+		for p := 0; p < gSize; p++ {
+			index = gIndex + p
+
+			n0 = err0[index]
+			n1 = err1[index]
+
+			q0, ok0 = errMap0[n0]
+			if !ok0 {
+				q0 = 0
+			}
+			q0++
+			errMap0[err0[index]] = q0
+
+			q1, ok1 = errMap1[n1]
+			if !ok1 {
+				q1 = 0
+			}
+			q1++
+			errMap1[err1[index]] = q1
 		}
+
+		for n, q := range errMap0 {
+			q1, ok1 = errMap1[n]
+			if !ok1 {
+				return fmt.Errorf("n=%v at gene=%v not found", n, gIndex)
+			}
+
+			if q != q1 {
+				return fmt.Errorf("n=%v at gene=%v, q=%v, q1=%v", n, gIndex, q, q1)
+			}
+		}
+
 	}
 	return nil
 }
