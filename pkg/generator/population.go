@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"fmt"
 	"math/rand"
 )
 
@@ -53,6 +54,7 @@ func newChromo(ns0 *[]byte, gSize, generation, index int) *chromosome {
 	chromo.HandleEM2()
 	chromo.CalFitness()
 
+	chromo.GenCode = fmt.Sprintf("%02dN%02d:%04v", generation, index, chromo.nErr)
 	return &chromo
 }
 
