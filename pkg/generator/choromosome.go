@@ -17,8 +17,10 @@ type chromosome struct {
 }
 
 // SwapNucleotide change the positions of nucleotide in the sequence
+// and the error
 func (c *chromosome) SwapNucleotide(n0, n1 int) {
 	(*c).Sequence[n0], (*c).Sequence[n1] = (*c).Sequence[n1], (*c).Sequence[n0]
+	(*c).ErrSequence[n0], (*c).ErrSequence[n1] = (*c).ErrSequence[n1], (*c).ErrSequence[n0]
 }
 
 // illegalMutation checks for unwanted mutation cause by badly written code.
@@ -191,89 +193,48 @@ func (c *chromosome) CheckEM2() {
 	return
 }
 
-/*
 // HandleEM1(Handle Error Method 1) tried to correct the overlapping
 // nucleotides by interchaning the position of the error nucleotides which
 // are in the same genes and don't overlap anymore
 func (c *chromosome) HandleEM1() {
-	//var n0, n1 byte
-	el := len((*c).ErrIndexL)
+	var n0, n1 byte
+
 	// store values
-	var g0, g1 int            // gene index
-	var b0, b1 int            // swap safe
-	var e2Begain int = 0      // index for error index list
-	var lastGeneIndex int = 0 // last gene index
+	var g0, g1 int // gene index
+	//var b0, b1 int // swap safe
 
+	var sIndex0, sIndex1 int
 	// loop through each error index
-	for eIndex0, sIndex0 := range (*c).ErrIndexL {
+	for sIndex0, n0 = range (*c).ErrSequence {
 		g0 = sIndex0 / (*c).GeneSize
+		g1 = (g0 + 1) * (*c).GeneSize
 
-		// skip if nucleotide has been resolved
-		if sIndex0 == -1 {
+		// skip if nucleotide is error free
+		if n0 == 0 {
 			continue
-		}
-
-		// check if gene index has change
-		// rest the index for error index list to the current index
-		// rest the lastGeneIndex to current index
-		if lastGeneIndex < g0 {
-			e2Begain = sIndex0
-			lastGeneIndex = g0
 		}
 
 		// loop through all the index in the current gene
 		// begining from the current gene index start
-		for eIndex1 := e2Begain; eIndex1 < el; eIndex1++ {
-			sIndex1 := (*c).ErrIndexL[eIndex1]
+		for sIndex1 = sIndex0; sIndex1 < g1; sIndex1++ {
+			n1 = (*c).ErrSequence[sIndex1]
 
-			// skip if this nucleotide is resolved
-			if sIndex1 == -1 || sIndex1 == sIndex0 {
+			// skip if
+			// nucleotide is error free
+			// index match
+			if n1 == 0 || sIndex1 == sIndex0 {
 				continue
 			}
 
-			g1 = sIndex1 / (*c).GeneSize
-
-			// check if in the same gene
-			// since all error index are order
-			// break the loop if not gene0 is smaller than gene1
-			if g0 < g1 {
-				break
-			}
-
 			// check if swap is use full
-			b0, b1 = (*c).CheckSafeSwap(sIndex0, sIndex1)
-
-			// if n at sIndex0 has not conflits at position of sIndex1
-			// swap them
-			if b0 >= 0 {
-				// the swap makes sIndex0's n error free
-				// make the swap
-				c.SwapNucleotide(sIndex0, sIndex1)
-				// since sIndex0 n is error free which is now sIndex1
-				// change the Error index List index to -1
-				(*c).ErrIndexL[eIndex1] = -1
-				if b1 >= 0 {
-					// change the Error index List index to -1
-					(*c).ErrIndexL[eIndex0] = -1
-				}
+			if (*c).CheckSafeSwap(sIndex0, sIndex1) {
 				break
 			}
 		}
 	}
-	// filter out the resolved index
-	e := make([]int, 0, 0)
-	for _, sIndex := range (*c).ErrIndexL {
-		// add index that are not resolved
-		if sIndex != -1 {
-			e = append(e, sIndex)
-		}
-	}
-
-	// reassign the error
-	(*c).ErrIndexL = e
-
 }
 
+/*
 // HandleEM2(Handle Error Method 2) tried to correct the overlapping
 // nucleotides by interchaning the position of the nucleotides which
 // are in the same genes and don't overlap anymore
@@ -328,75 +289,66 @@ func (c *chromosome) HandleEM2() error {
 
 	return nil
 }
+*/
 
 // CheckSafeSwap takes two variable in the same gene and checks if swaping
 // their postion will resolve problem and return int. Meaning of returned int
 //  (-1) - can not resolve conflict
 //	(0) - can resolve conflict
-//  (0 <) - can resolve given index conflict and return conflict
-func (c *chromosome) CheckSafeSwap(sIndex0, sIndex1 int) (int, int) {
-	var b0, b1 int
-	l := (*c).Length()
-	n0 := (*c).Sequence[sIndex0]
-	n1 := (*c).Sequence[sIndex1]
-	o0 := make([]int, 0) //
-	o1 := make([]int, 0) //
-	gIndex0 := sIndex0 / (*c).GeneSize
-	var t0, t1 byte
-	p0 := sIndex0 % (*c).GeneSize
-	p1 := sIndex1 % (*c).GeneSize
-	var ng0, ng1 int
+//  (0 <) - can resolve conflict of given and return index
+func (c *chromosome) CheckSafeSwap(sIndex0, sIndex1 int) bool {
+	var b0, b1 bool = true, true
+
+	// get nucleotide
+	n0 := (*c).Sequence[sIndex0] // sequence index 0
+	n1 := (*c).Sequence[sIndex1] // sequence index 1
+
+	// position of nucleotide
+	p0 := sIndex0 % (*c).GeneSize // sequence index 0
+	p1 := sIndex1 % (*c).GeneSize // sequence index 1
+
+	gIndex0 := sIndex0 / (*c).GeneSize // current gene index
+
+	var tn0, tn1 byte // nucleotide at test index
+
 	// loop through each gene
-	for gIndex := 0; gIndex < l; gIndex += (*c).GeneSize {
+	for gIndex := 0; gIndex < (*c).lSequence; gIndex += (*c).GeneSize {
+		// skip if the gene index is same
 		if gIndex == gIndex0 {
 			continue
 		}
-		ng0 = gIndex + p0
-		ng1 = gIndex + p1
 
-		t0 = (*c).Sequence[ng1]
-		t1 = (*c).Sequence[ng0]
+		// get nucleotides with the same position in different gene
+		tn0 = (*c).Sequence[gIndex+p0]
+		tn1 = (*c).Sequence[gIndex+p1]
 
 		// if b1 has not issues
 		// check conflict at p1 of n0
-		if b0 == 0 {
+		if b0 {
 			// check if n0 has a match at p1 position
-			if n0 == t0 {
-				b0 = -1
-			}
-			// check if n0 has a match at p0 position
-			if n0 == t1 {
-				o0 = append(o0, ng0)
+			if n0 == tn0 {
+				b0 = false
 			}
 		}
 
 		// if b1 has not issues
 		// check conflict at p0 of n1
-		if b1 == 0 {
-			if n1 == t1 {
-				b1 = -1
-			}
-			// check if n1 has a match at p1 position
-			if n1 == t0 {
-				o1 = append(o1, ng1)
+		if b1 {
+			if n1 == tn1 {
+				b1 = false
 			}
 		}
 	}
-	if b0 == 0 {
-		if len(o0) == 1 {
-			b0 = o0[0]
-		}
+	// no conflicting match is found
+	if b0 && b1 {
+		(*c).SwapNucleotide(sIndex0, sIndex1)
+		// remove the error from the list
+		(*c).ErrSequence[sIndex0] = 0
+		(*c).ErrSequence[sIndex1] = 0
+		return true
 	}
-
-	if b1 == 0 {
-		if len(o1) == 1 {
-			b1 = o1[0]
-		}
-	}
-
-	return b0, b1
+	return false
 }
-*/
 
 // Print writes out to stout
 func (c *chromosome) Print() {

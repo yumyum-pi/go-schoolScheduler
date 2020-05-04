@@ -192,31 +192,24 @@ func BenchmarkChromosome_CheckEM2(b *testing.B) {
 	}
 }
 
-/*
 func TestChromosome_HandleEM1(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	var ns0 *[]byte
-	var gSize, err0 int
+	var gSize int
 	var e error
 	// get information from the file
 	pkgs := file.ReadRand(inputDir)
-	for k := 0; k < 1; k++ {
-		var nc *chromosome
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ = pkgs.Decode()
 
-		// decode the pkgs to ns0 and gene-size
-		ns0, gSize, _ = pkgs.Decode()
+	for k := 0; k < 256; k++ {
+		var nc *chromosome
 		nc = newChromo(ns0, gSize) // create new chromosome
 
 		nc.CheckEM2()
-		nc.Print()
 		nc.HandleEM1()
-		nc.Print()
-		err0 = len(nc.ErrIndexL)
 		nc.CheckEM2()
-		nc.Print()
-		if err0 != len(nc.ErrIndexL) {
-			t.Errorf("false error resolve from handleEM1, err0=%v, err=%v", err0, len(nc.ErrIndexL))
-		}
+
 		e = illegalMutation(ns0, &nc.Sequence, gSize)
 		if e != nil {
 			t.Error(e)
@@ -243,10 +236,11 @@ func BenchmarkChromosome_HandleEM1(b *testing.B) {
 
 		nc.CheckEM2()
 		nc.HandleEM1()
-
+		nc.CheckEM2()
 	}
 }
 
+/*
 func TestChromosome_HandleEM2(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	var ns0 *[]byte
