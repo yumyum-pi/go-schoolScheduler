@@ -333,7 +333,7 @@ func (c *chromosome) Print() {
 		"genCode=%v\tgeneSize=%v\tnErr=%v\tFitness=%v\n",
 		(*c).GenCode,
 		(*c).GeneSize,
-		len((*c).ErrSequence),
+		(*c).nErr,
 		(*c).Fitness,
 	)
 
