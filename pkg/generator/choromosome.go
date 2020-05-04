@@ -322,7 +322,7 @@ func (c *chromosome) CheckSafeSwap(sIndex0, sIndex1 int) bool {
 }
 
 // Print writes out to stout
-func (c *chromosome) Print() {
+func (c *chromosome) Print(detail bool) {
 	colorReset := "\033[0m"
 	colorGreen := "\033[32m"
 	colorRed := "\033[1;31m"
@@ -336,21 +336,23 @@ func (c *chromosome) Print() {
 		(*c).nErr,
 		(*c).Fitness,
 	)
+	if detail {
+		for i := 0; i < (*c).lSequence; i += (*c).GeneSize {
+			fmt.Printf("%2v[ ", i/(*c).GeneSize)
+			for j := 0; j < (*c).GeneSize; j++ {
+				index = i + j
+				// check if error
+				if (*c).ErrSequence[index] != 0 {
+					fmt.Printf("%v%3v ", string(colorRed), (*c).Sequence[index])
+					continue
 
-	for i := 0; i < (*c).lSequence; i += (*c).GeneSize {
-		fmt.Printf("%2v[ ", i/(*c).GeneSize)
-		for j := 0; j < (*c).GeneSize; j++ {
-			index = i + j
-			// check if error
-			if (*c).ErrSequence[index] != 0 {
-				fmt.Printf("%v%3v ", string(colorRed), (*c).Sequence[index])
-				continue
-
+				}
+				fmt.Printf("%v%3v ", string(colorGreen), (*c).Sequence[index])
 			}
-			fmt.Printf("%v%3v ", string(colorGreen), (*c).Sequence[index])
+			fmt.Printf("%v]\n", string(colorReset))
 		}
-		fmt.Printf("%v]\n", string(colorReset))
 	}
+
 }
 
 func (c *chromosome) CalFitness() {
@@ -424,7 +426,7 @@ func PrintSequence(s0 *[]byte, gSize int) {
 		fmt.Printf("%2v[ ", i/gSize)
 		for j := 0; j < gSize; j++ {
 			index = i + j // calculate the index
-			fmt.Printf("%2v ", (*s0)[index])
+			fmt.Printf("%3v ", (*s0)[index])
 		}
 		fmt.Printf("]\n")
 	}
