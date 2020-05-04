@@ -353,6 +353,67 @@ func (c *chromosome) Print() {
 	}
 }
 
+func (c *chromosome) CalFitness() {
+	// update the check list
+	(*c).CheckEM2()
+
+	// calculate the fitness by error
+	if (*c).nErr != 0 {
+		// negative fitness for error
+		(*c).Fitness = (*c).lSequence - (5 * (*c).nErr)
+	} else {
+		// additional fitness for 0 error
+		(*c).Fitness = (*c).lSequence * 2
+	}
+	// make map of nucleotide that contains the slice of bool which
+	// represents the gene position they are in.
+	mapN := make(map[byte][]bool)
+	// store values
+	var ok bool  // is present in the map
+	var p int    // position in the gene
+	var q []bool // list of position in the gene
+
+	// loop though each nucleotide in the sequence
+	for sIndex, n := range (*c).Sequence {
+		// calculate the position
+		p = sIndex % (*c).GeneSize
+
+		q, ok = mapN[n]
+		if !ok {
+			q = make([]bool, (*c).GeneSize)
+		}
+		// assgin the position in slice
+		q[p] = true
+		// reassign the bool slice to the map
+		mapN[n] = q
+
+	}
+
+	i := 0 // sum of all the variation
+	for _, q := range mapN {
+		sumDiff := 0         // sum of all the difference
+		var sumDiff2 float32 // sum of diff^2
+		dif := 0             // difference between 2 position in the gene
+		var d float32        // total no. of diff
+		l := 0               // last position
+		for j, b := range q {
+			if b {
+				dif = j - l // subtract the current position with last
+				l = j       // make current position current position
+				sumDiff += dif
+				sumDiff2 += float32(dif * dif)
+				d++ // increse the diff no.
+			}
+		}
+
+		m := float32(sumDiff) / d     // calculate mean
+		v := (sumDiff2 / d) - (m * m) // calculate variance
+		i += int(v * 100)             // decrease decimal point
+	}
+
+	(*c).Fitness -= i
+}
+
 // PrintSequence writes to the stout
 func PrintSequence(s0 *[]byte, gSize int) {
 	l := len(*s0)
