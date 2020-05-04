@@ -28,6 +28,21 @@ func TestNewChromo(t *testing.T) {
 	}
 }
 
+func BenchmarkPopulation_Init(b *testing.B) {
+	rand.Seed(time.Now().UnixNano())
+	// get information from the file
+	pkgs := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := pkgs.Decode()
+
+	var p Population
+
+	for i := 0; i < b.N; i++ {
+		p.Init(ns0, gSize)
+	}
+}
+
 func TestPopulation_Sort(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
