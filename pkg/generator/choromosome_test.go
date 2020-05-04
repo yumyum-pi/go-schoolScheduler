@@ -293,7 +293,3 @@ func BenchmarkChromosome_HandleEM2(b *testing.B) {
 		nc.CheckEM2()
 	}
 }
-
-func TestChromosome_CheckSafeSwap(t *testing.T) {
-
-}

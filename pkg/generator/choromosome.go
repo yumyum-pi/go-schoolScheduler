@@ -371,40 +371,6 @@ func (c *chromosome) Print() {
 	}
 }
 
-/*
-func (c *chromosome) PrintError() {
-	l := (*c).Length()
-	index := 0 // index of a nucleotide in the sequence
-
-	nextIndex := 0
-	el := len((*c).ErrIndexL)
-	for i := 0; i < l; i += (*c).GeneSize {
-		fmt.Printf("%2v[ ", i/(*c).GeneSize)
-		for j := 0; j < (*c).GeneSize; j++ {
-			index = i + j
-			if nextIndex >= el {
-				fmt.Printf("-- ")
-				continue
-			}
-			n := (*c).ErrIndexL[nextIndex]
-			if index == n {
-				nextIndex++
-				fmt.Printf("%2v ", (*c).Sequence[n])
-				continue
-			}
-			fmt.Printf("-- ")
-		}
-		fmt.Printf("]\n")
-
-	}
-}
-
-func deleteEml(s *[]byte, i int) {
-	l := len(*s) - 1
-	(*s)[i] = (*s)[l] // Copy last element to index i.
-	(*s) = (*s)[:l]
-}
-
 // PrintSequence writes to the stout
 func PrintSequence(s0 *[]byte, gSize int) {
 	l := len(*s0)
@@ -420,4 +386,3 @@ func PrintSequence(s0 *[]byte, gSize int) {
 		fmt.Printf("]\n")
 	}
 }
-*/
