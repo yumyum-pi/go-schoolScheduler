@@ -4,7 +4,7 @@ import (
 	"math/rand"
 )
 
-const pSize = 1          //32         // population size
+const pSize = 32         // population size
 const p2Size = pSize / 2 // half of population size
 const p4Size = pSize / 4 // quater of population size
 
@@ -25,18 +25,20 @@ func (p *Population) Init(ns0 *[]byte, gSize int) {
 	// make a new chromosome var
 
 	for i := 0; i < pSize; i++ {
-		(*p).P[i] = *newChromo(ns0, gSize)
+		(*p).P[i] = *newChromo(ns0, gSize, 0, i)
 	}
 }
 
 // newChromo creates a new chromosome with the given sequence of nucleotides
-func newChromo(ns0 *[]byte, gSize int) *chromosome {
+func newChromo(ns0 *[]byte, gSize, generation, index int) *chromosome {
 	// make a new chromosome
 	var chromo chromosome
 	chromo.GeneSize = gSize
 	nL := len(*ns0) // length of nucleotides
 
 	chromo.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	chromo.ErrSequence = make([]byte, nL, nL)
+	chromo.lSequence = nL
 
 	// loop though the nucleotides
 	for nIndex := 0; nIndex < nL; nIndex += gSize {
@@ -45,6 +47,11 @@ func newChromo(ns0 *[]byte, gSize int) *chromosome {
 			chromo.SwapNucleotide(nIndex+n1, nIndex+n2)
 		}
 	}
+
+	chromo.CheckEM2()
+	chromo.HandleEM1()
+	chromo.HandleEM2()
+	chromo.CalFitness()
 
 	return &chromo
 }

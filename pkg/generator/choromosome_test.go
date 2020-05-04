@@ -21,7 +21,7 @@ func TestChromosome_illegalMutation(t *testing.T) {
 	var nc *chromosome // store new chromosome value
 	var n byte
 	for i := 0; i < 256; i++ {
-		nc = newChromo(ns0, gSize) // create new chromosome
+		nc = newChromo(ns0, gSize, 0, i) // create new chromosome
 
 		if e := illegalMutation(ns0, &(nc.Sequence), gSize); e != nil {
 			t.Error(e)
@@ -204,7 +204,7 @@ func TestChromosome_HandleEM1(t *testing.T) {
 
 	for k := 0; k < 256; k++ {
 		var nc *chromosome
-		nc = newChromo(ns0, gSize) // create new chromosome
+		nc = newChromo(ns0, gSize, 0, k) // create new chromosome
 
 		nc.CheckEM2()
 		nc.HandleEM1()
@@ -232,7 +232,7 @@ func BenchmarkChromosome_HandleEM1(b *testing.B) {
 		var nc *chromosome
 		// decode the pkgs to ns0 and gene-size
 		ns0, gSize, _ = pkgs.Decode()
-		nc = newChromo(ns0, gSize) // create new chromosome
+		nc = newChromo(ns0, gSize, 0, i) // create new chromosome
 
 		nc.CheckEM2()
 		nc.HandleEM1()
@@ -252,7 +252,7 @@ func TestChromosome_HandleEM2(t *testing.T) {
 	var nErr0, nErr1, nErr2 int
 	for k := 0; k < 64; k++ {
 		var nc *chromosome
-		nc = newChromo(ns0, gSize) // create new chromosome
+		nc = newChromo(ns0, gSize, 0, k) // create new chromosome
 
 		nc.CheckEM2()
 		nErr0 = nc.nErr
@@ -286,7 +286,7 @@ func BenchmarkChromosome_HandleEM2(b *testing.B) {
 	var nc *chromosome
 
 	for i := 0; i < b.N; i++ {
-		nc = newChromo(ns0, gSize) // create new chromosome
+		nc = newChromo(ns0, gSize, 0, i) // create new chromosome
 		nc.CheckEM2()
 		nc.HandleEM1()
 		nc.HandleEM2()
@@ -305,7 +305,7 @@ func TestChromosome_CalFitness(t *testing.T) {
 
 	var nc *chromosome
 	for k := 0; k < 64; k++ {
-		nc = newChromo(ns0, gSize)
+		nc = newChromo(ns0, gSize, 0, k)
 		nc.CheckEM2()
 		nc.HandleEM1()
 		nc.HandleEM2()
@@ -327,7 +327,7 @@ func BenchmarkChromosome_CalFitness(b *testing.B) {
 	ns0, gSize, _ = pkgs.Decode()
 	for i := 0; i < b.N; i++ {
 		// decode the pkgs to ns0 and gene-size
-		nc := newChromo(ns0, gSize) // create new chromosome
+		nc := newChromo(ns0, gSize, 0, i) // create new chromosome
 
 		nc.CheckEM2()
 		nc.HandleEM1()
