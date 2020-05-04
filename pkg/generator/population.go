@@ -3,6 +3,7 @@ package generator
 import (
 	"fmt"
 	"math/rand"
+	"sort"
 )
 
 const pSize = 32         // population size
@@ -28,6 +29,8 @@ func (p *Population) Init(ns0 *[]byte, gSize int) {
 	for i := 0; i < pSize; i++ {
 		(*p).P[i] = *newChromo(ns0, gSize, 0, i)
 	}
+
+	(*p).Sort()
 }
 
 // newChromo creates a new chromosome with the given sequence of nucleotides
@@ -68,15 +71,21 @@ func (p *Population) PrintChromo() {
 }
 
 // Next creates the next gene of chromosome
-func (p *Population) Next() {
+func (p *Population) Next(g int) {
 	(*p).Wip()
 	(*p).CrossOver()
+	(*p).Mutate()
 	(*p).Sort()
 }
 
 // CrossOver creates new chromosomes form the existing chromosomes
 // by cross overing the genes
 func (p *Population) CrossOver() {
+
+}
+
+// Mutate creates new chromosomes by changing
+func (p *Population) Mutate() {
 
 }
 
@@ -90,11 +99,34 @@ func (p *Population) Wip() {
 
 // Sort will sort the data by fitness
 func (p *Population) Sort() {
+	nc := (*p).P
+	sort.Slice(nc[:], func(p, q int) bool {
+		return nc[p].Fitness > nc[q].Fitness
+	})
 
+	(*p).P = nc
 }
 
 // crossOver creates new nucleotide sequence by exchanging genes between two
 // nucleotide sequence
-func crossOver() {
+func crossOver(s0, s1 *[]byte, gSize int) (*[]byte, *[]byte) {
+	sl := len((*s0))
+	// loop through gene
+	s3 := make([]byte, 0, sl)
+	s4 := make([]byte, 0, sl)
 
+	flip := false
+	for gIndex := 0; gIndex < sl; gIndex += gSize {
+		geneEnd := gIndex + gSize
+
+		if flip {
+			s3 = append(s3, (*s0)[gIndex:geneEnd]...)
+			s4 = append(s4, (*s1)[gIndex:geneEnd]...)
+		} else {
+			s3 = append(s3, (*s1)[gIndex:geneEnd]...)
+			s4 = append(s4, (*s0)[gIndex:geneEnd]...)
+		}
+		flip = !flip
+	}
+	return &s3, &s4
 }
