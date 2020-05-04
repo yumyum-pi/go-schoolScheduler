@@ -259,24 +259,6 @@ func (c *chromosome) HandleEM2() error {
 			}
 		}
 	}
-	/*
-		// filter out the resolved index
-		e := make([]int, 0, 0)
-		for _, sIndex := range (*c).ErrIndexL {
-			// add index that are not resolved
-			if sIndex != -1 {
-				e = append(e, sIndex)
-			}
-		}
-
-		// reassign the error
-		(*c).ErrIndexL = e
-
-		// check for unresolved error and throw error
-		if len((*c).ErrIndexL) != 0 {
-			return fmt.Errorf("not all conflict have been resolved")
-		}
-	*/
 	return nil
 }
 
