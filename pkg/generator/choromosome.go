@@ -12,6 +12,7 @@ type chromosome struct {
 	Sequence    []byte // sequence of nucleotide - period
 	lSequence   int    // length of the sequence
 	ErrSequence []byte // slice of conflicting nucleotides - periods
+	nErr        int    // no of error
 	Fitness     int    // fitness of the chromosome
 
 }
@@ -126,12 +127,14 @@ func (c *chromosome) MatchN(sIndex0 int) (sIndex1 int) {
 // CheckEM1 (Check Error Method 1) checks for matching nucleotides in
 // each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM1() {
+	(*c).nErr = 0
 	// loop through each element
 	for sIndex := 0; sIndex < (*c).lSequence; sIndex++ {
 		// check conflit
 		if n := (*c).MatchN(sIndex); n != -1 {
 			//adding to error list
 			(*c).ErrSequence[sIndex] = (*c).Sequence[sIndex]
+			(*c).nErr++
 		}
 
 	}
@@ -140,6 +143,7 @@ func (c *chromosome) CheckEM1() {
 // CheckEM2 (Check Error Method 1) checks for matching nucleotides in
 // each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM2() {
+	(*c).nErr = 0
 	// create a new empty byte slice to store error nucleotides
 	(*c).ErrSequence = make([]byte, (*c).lSequence, (*c).lSequence)
 	nGene := (*c).lSequence / (*c).GeneSize
@@ -177,9 +181,7 @@ func (c *chromosome) CheckEM2() {
 					// reassign the nucleotide at index1 to 0
 					// to skip in next iterations
 					(*c).ErrSequence[sIndex1] = n1
-
-					// add the index to the error list
-					//err = append(err, sIndex1)
+					(*c).nErr++
 				}
 
 			}
@@ -187,6 +189,7 @@ func (c *chromosome) CheckEM2() {
 			if found {
 				// add nucleotide at sequence index0 to error slice
 				(*c).ErrSequence[sIndex0] = n0
+				(*c).nErr++
 			}
 		}
 	}
@@ -234,62 +237,48 @@ func (c *chromosome) HandleEM1() {
 	}
 }
 
-/*
 // HandleEM2(Handle Error Method 2) tried to correct the overlapping
 // nucleotides by interchaning the position of the nucleotides which
 // are in the same genes and don't overlap anymore
 func (c *chromosome) HandleEM2() error {
-	// return if error index list length is 0
-	el := len((*c).ErrIndexL)
-	if el == 0 {
-		return nil
-	}
-
 	// store variable
-	var g int             // gene index
-	var gStart, gLast int // gene start, last index
-	var b0, b1 int        // swap safe
+	var g, sIndex1 int // gene index
 
 	// loop through error index list
-	for eIndex, sIndex := range (*c).ErrIndexL {
-		g = sIndex / (*c).GeneSize
-		gStart = (g) * (*c).GeneSize
-		gLast = gStart + (*c).GeneSize + 1
-		if sIndex == -1 {
+	for sIndex0, n := range (*c).ErrSequence {
+		g = sIndex0 / (*c).GeneSize
+		if n == 0 {
 			continue
 		}
-		for gIndex := gStart; gIndex < gLast; gIndex++ {
-			// check if swap is use full
-			b0, b1 = (*c).CheckSafeSwap(sIndex, gIndex)
+		for p := 0; p < (*c).GeneSize; p++ {
+			sIndex1 = g*(*c).GeneSize + p
 
-			if b0 == 0 && b1 == 0 {
-				c.SwapNucleotide(sIndex, gIndex)
-				(*c).ErrIndexL[eIndex] = -1
-				// issue resolved
-				break // exist the current loop
+			// check if swap is use full
+			if (*c).CheckSafeSwap(sIndex0, sIndex1) {
+				break
 			}
 		}
 	}
-	// filter out the resolved index
-	e := make([]int, 0, 0)
-	for _, sIndex := range (*c).ErrIndexL {
-		// add index that are not resolved
-		if sIndex != -1 {
-			e = append(e, sIndex)
+	/*
+		// filter out the resolved index
+		e := make([]int, 0, 0)
+		for _, sIndex := range (*c).ErrIndexL {
+			// add index that are not resolved
+			if sIndex != -1 {
+				e = append(e, sIndex)
+			}
 		}
-	}
 
-	// reassign the error
-	(*c).ErrIndexL = e
+		// reassign the error
+		(*c).ErrIndexL = e
 
-	// check for unresolved error and throw error
-	if len((*c).ErrIndexL) != 0 {
-		return fmt.Errorf("not all conflict have been resolved")
-	}
-
+		// check for unresolved error and throw error
+		if len((*c).ErrIndexL) != 0 {
+			return fmt.Errorf("not all conflict have been resolved")
+		}
+	*/
 	return nil
 }
-*/
 
 // CheckSafeSwap takes two variable in the same gene and checks if swaping
 // their postion will resolve problem and return int. Meaning of returned int
@@ -319,8 +308,8 @@ func (c *chromosome) CheckSafeSwap(sIndex0, sIndex1 int) bool {
 		}
 
 		// get nucleotides with the same position in different gene
-		tn0 = (*c).Sequence[gIndex+p0]
-		tn1 = (*c).Sequence[gIndex+p1]
+		tn0 = (*c).Sequence[gIndex+p1]
+		tn1 = (*c).Sequence[gIndex+p0]
 
 		// if b1 has not issues
 		// check conflict at p1 of n0
