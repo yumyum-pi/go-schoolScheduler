@@ -1,7 +1,6 @@
 package file
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -13,7 +12,6 @@ import (
 
 // Read file from thr disk
 func Read(fileName string) *models.TimeTable {
-	fmt.Println(fileName)
 	in, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Fatalln("Error reading file:", err)
@@ -46,5 +44,6 @@ func ReadRand(dir string) *models.TimeTable {
 		return nil
 	}
 	i := rand.Intn(fl)
+	//fmt.Println(filePath[i])
 	return Read(filePath[i])
 }
