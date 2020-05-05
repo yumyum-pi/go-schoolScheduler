@@ -10,7 +10,8 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/file"
 )
 
-var inputDir = "/Users/vivekrawat/go/src/github.com/yumyum-pi/go-schoolScheduler/test/inputs"
+var inputDirMax = "/Users/vivekrawat/go/src/github.com/yumyum-pi/go-schoolScheduler/test/inputs/v0.0.3.41.NUUbofsR.tt"
+var inputDir = "/Users/vivekrawat/go/src/github.com/yumyum-pi/go-schoolScheduler/test/inputs/"
 
 func TestNewChromo(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
@@ -31,7 +32,7 @@ func TestNewChromo(t *testing.T) {
 func BenchmarkPopulation_Init(b *testing.B) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	pkgs := file.Read(inputDirMax)
 
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := pkgs.Decode()
