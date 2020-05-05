@@ -105,3 +105,21 @@ func BenchmarkCrossOver(b *testing.B) {
 		crossOver(&c0.Sequence, &c1.Sequence, gSize)
 	}
 }
+
+func TestPopulation_CrossOver(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	// get information from the file
+	pkgs := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := pkgs.Decode()
+
+	var p Population
+	p.Init(ns0, gSize)
+	p.Wip()
+	p.CrossOver(1)
+
+	for _, c := range p.P {
+		c.Print(false)
+	}
+}

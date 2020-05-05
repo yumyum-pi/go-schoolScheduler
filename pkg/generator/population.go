@@ -12,12 +12,8 @@ const p4Size = pSize / 4 // quater of population size
 
 // Population is a fixed array of size 64 containing chromosomes
 type Population struct {
-	P            [pSize]chromosome
-	totalError   int
-	minErr       int
-	maxErr       int
-	errChrmsmIDs []int
-	ns0          *[]byte
+	P   [pSize]chromosome
+	ns0 *[]byte
 }
 
 // Init create the initail population
@@ -77,28 +73,75 @@ func (p *Population) PrintChromo() {
 // Next creates the next gene of chromosome
 func (p *Population) Next(g int) {
 	(*p).Wip()
-	(*p).CrossOver()
-	(*p).Mutate()
+	(*p).CrossOver(g)
+	(*p).Mutate(g)
+	(*p).New(g)
 	(*p).Sort()
 }
 
 // CrossOver creates new chromosomes form the existing chromosomes
 // by cross overing the genes
-func (p *Population) CrossOver() {
+func (p *Population) CrossOver(g int) {
+	// loop through 1/4 for the list in pair of two
+	for i := 0; i < p4Size; i += 2 {
+		// get the new cross over sequences
+		ns0, ns1 := crossOver(&(*p).P[i].Sequence, &(*p).P[i+1].Sequence, (*p).P[i].GeneSize)
 
+		// create chromosomes
+		var c0, c1 chromosome
+		c0.GeneSize = (*p).P[i].GeneSize
+		c1.GeneSize = (*p).P[i].GeneSize
+
+		nL := len(*ns0) // length of nucleotides
+
+		c0.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+		c1.Sequence = append((*ns1)[:0:0], (*ns1)...) // copy the value
+
+		c0.ErrSequence = make([]byte, nL, nL)
+		c1.ErrSequence = make([]byte, nL, nL)
+
+		c0.lSequence = nL
+		c1.lSequence = nL
+
+		// handle error
+		c0.CheckEM2()
+		c1.CheckEM2()
+
+		c0.HandleEM1()
+		c1.HandleEM1()
+
+		c0.HandleEM2()
+		c1.HandleEM2()
+
+		c0.CalFitness()
+		c1.CalFitness()
+
+		// generate code name
+		c0.GenCode = fmt.Sprintf("%02dC%02d:%04v", g, i, c0.nErr)
+		c1.GenCode = fmt.Sprintf("%02dC%02d:%04v", g, i+1, c1.nErr)
+
+		// assign to the populations at index after the fittest
+		// population
+		(*p).P[p4Size+i] = c0
+		(*p).P[p4Size+i+1] = c1
+	}
 }
 
 // Mutate creates new chromosomes by changing
-func (p *Population) Mutate() {
+func (p *Population) Mutate(g int) {
+
+}
+
+// New creates new chromosomes from the source sequence
+func (p *Population) New(g int) {
 
 }
 
 // Wip will delete
 func (p *Population) Wip() {
 	nc := make([]chromosome, pSize)
-	copy(nc, (*p).P[:p2Size])
+	copy(nc, (*p).P[:p4Size])
 	copy((*p).P[:], nc)
-
 }
 
 // Sort will sort the data by fitness
