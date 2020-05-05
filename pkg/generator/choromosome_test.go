@@ -194,17 +194,23 @@ func BenchmarkChromosome_CheckEM2(b *testing.B) {
 
 func TestChromosome_HandleEM1(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
-	var ns0 *[]byte
-	var gSize int
+
 	var e error
 	// get information from the file
 	pkgs := file.ReadRand(inputDir)
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ = pkgs.Decode()
+	ns0, gSize, _ := pkgs.Decode()
+
+	var nc chromosome
+	nc.GeneSize = gSize
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
 
 	for k := 0; k < 256; k++ {
-		var nc *chromosome
-		nc = newChromo(ns0, gSize, 0, k) // create new chromosome
+		shuffleNucleotide(&nc)
 
 		nc.CheckEM2()
 		nc.HandleEM1()
@@ -218,21 +224,21 @@ func TestChromosome_HandleEM1(t *testing.T) {
 }
 
 func BenchmarkChromosome_HandleEM1(b *testing.B) {
-	rand.Seed(time.Now().UnixNano())
-	var ns0 *[]byte
-	var gSize int
-	//	var e error
-
-	var nc chromosome // store new chromosome value
-	nc.GeneSize = gSize
-
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	pkgs := file.Read(inputDirMax)
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := pkgs.Decode()
+
+	var nc chromosome
+	nc.GeneSize = gSize
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
+
 	for i := 0; i < b.N; i++ {
-		var nc *chromosome
-		// decode the pkgs to ns0 and gene-size
-		ns0, gSize, _ = pkgs.Decode()
-		nc = newChromo(ns0, gSize, 0, i) // create new chromosome
+		shuffleNucleotide(&nc)
 
 		nc.CheckEM2()
 		nc.HandleEM1()
@@ -242,31 +248,39 @@ func BenchmarkChromosome_HandleEM1(b *testing.B) {
 
 func TestChromosome_HandleEM2(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
-	var ns0 *[]byte
-	var gSize int
+
 	var e error
 	// get information from the file
 	pkgs := file.ReadRand(inputDir)
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ = pkgs.Decode()
+	ns0, gSize, _ := pkgs.Decode()
+
+	var nc chromosome
+	nc.GeneSize = gSize
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
+
 	var nErr0, nErr1, nErr2 int
-	for k := 0; k < 64; k++ {
-		var nc *chromosome
-		nc = newChromo(ns0, gSize, 0, k) // create new chromosome
+	for k := 0; k < 256; k++ {
+		shuffleNucleotide(&nc)
 
 		nc.CheckEM2()
 		nErr0 = nc.nErr
 		nc.HandleEM1()
 		nc.CheckEM2()
 		nErr1 = nc.nErr
+		if nErr0/2 <= nErr1 {
+			t.Errorf("nErr0=%v\tnErr1=%v\n", nErr0, nErr1)
+		}
 		nc.HandleEM2()
 		nc.CheckEM2()
-
-		//	nc.Print()
 		nErr2 = nc.nErr
-
-		fmt.Println(nErr0, nErr1, nErr2)
-
+		if nErr1/2 <= nErr2 {
+			t.Errorf("nErr0=%v\tnErr1=%v\n", nErr1, nErr2)
+		}
 		e = illegalMutation(ns0, &nc.Sequence, gSize)
 		if e != nil {
 			t.Error(e)
@@ -275,37 +289,42 @@ func TestChromosome_HandleEM2(t *testing.T) {
 }
 
 func BenchmarkChromosome_HandleEM2(b *testing.B) {
-	rand.Seed(time.Now().UnixNano())
-	var ns0 *[]byte
-	var gSize int
-
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
-	ns0, gSize, _ = pkgs.Decode()
+	pkgs := file.Read(inputDirMax)
+	ns0, gSize, _ := pkgs.Decode()
 
-	var nc *chromosome
+	var nc chromosome
+	nc.GeneSize = gSize
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
 
 	for i := 0; i < b.N; i++ {
-		nc = newChromo(ns0, gSize, 0, i) // create new chromosome
+		shuffleNucleotide(&nc)
 		nc.CheckEM2()
 		nc.HandleEM1()
 		nc.HandleEM2()
-		nc.CheckEM2()
 	}
 }
 
 func TestChromosome_CalFitness(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
-	var ns0 *[]byte
-	var gSize int
-
 	// get information from the file
 	pkgs := file.ReadRand(inputDir)
-	ns0, gSize, _ = pkgs.Decode()
+	ns0, gSize, _ := pkgs.Decode()
 
-	var nc *chromosome
+	var nc chromosome
+	nc.GeneSize = gSize
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
+
 	for k := 0; k < 64; k++ {
-		nc = newChromo(ns0, gSize, 0, k)
+		shuffleNucleotide(&nc)
 		nc.CheckEM2()
 		nc.HandleEM1()
 		nc.HandleEM2()
@@ -315,23 +334,12 @@ func TestChromosome_CalFitness(t *testing.T) {
 
 func BenchmarkChromosome_CalFitness(b *testing.B) {
 	rand.Seed(time.Now().UnixNano())
-	var ns0 *[]byte
-	var gSize int
-	//	var e error
-
-	//var nc *chromosome // store new chromosome value
-	//nc.GeneSize = gSize
 
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
-	ns0, gSize, _ = pkgs.Decode()
+	pkgs := file.Read(inputDirMax)
+	ns0, gSize, _ := pkgs.Decode()
 	for i := 0; i < b.N; i++ {
 		// decode the pkgs to ns0 and gene-size
-		nc := newChromo(ns0, gSize, 0, i) // create new chromosome
-
-		nc.CheckEM2()
-		nc.HandleEM1()
-		nc.HandleEM2()
-		nc.CalFitness()
+		newChromo(ns0, gSize, 0, i) // create new chromosome
 	}
 }

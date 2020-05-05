@@ -44,13 +44,7 @@ func newChromo(ns0 *[]byte, gSize, generation, index int) *chromosome {
 	chromo.ErrSequence = make([]byte, nL, nL)
 	chromo.lSequence = nL
 
-	// loop though the nucleotides
-	for nIndex := 0; nIndex < nL; nIndex += gSize {
-		for n1 := 0; n1 < gSize; n1++ {
-			n2 := rand.Intn(gSize)
-			chromo.SwapNucleotide(nIndex+n1, nIndex+n2)
-		}
-	}
+	shuffleNucleotide(&chromo)
 
 	chromo.CheckEM2()
 	chromo.HandleEM1()
@@ -59,6 +53,16 @@ func newChromo(ns0 *[]byte, gSize, generation, index int) *chromosome {
 
 	chromo.GenCode = fmt.Sprintf("%02dN%02d:%04v", generation, index, chromo.nErr)
 	return &chromo
+}
+
+func shuffleNucleotide(c *chromosome) {
+	// loop though the nucleotides
+	for nIndex := 0; nIndex < (*c).lSequence; nIndex += (*c).GeneSize {
+		for n1 := 0; n1 < (*c).GeneSize; n1++ {
+			n2 := rand.Intn((*c).GeneSize)
+			(*c).SwapNucleotide(nIndex+n1, nIndex+n2)
+		}
+	}
 }
 
 // Print will write data to console
