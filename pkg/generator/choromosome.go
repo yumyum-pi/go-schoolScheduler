@@ -341,13 +341,16 @@ func (c *chromosome) Print(detail bool) {
 			fmt.Printf("%2v[ ", i/(*c).GeneSize)
 			for j := 0; j < (*c).GeneSize; j++ {
 				index = i + j
+				if j%8 == 0 && j != 0 {
+					fmt.Printf("%v| ", string(colorReset))
+				}
 				// check if error
 				if (*c).ErrSequence[index] != 0 {
-					fmt.Printf("%v%2v%v ", string(colorRed), (*c).Sequence[index], string(colorReset))
+					fmt.Printf("%v%02v%v ", string(colorRed), (*c).Sequence[index], string(colorReset))
 					continue
 
 				}
-				fmt.Printf("%v%2v ", string(colorGreen), (*c).Sequence[index])
+				fmt.Printf("%v%02v ", string(colorGreen), (*c).Sequence[index])
 			}
 			fmt.Printf("%v]\n", string(colorReset))
 		}
