@@ -139,9 +139,9 @@ func (p *Population) New(g int) {
 
 // Wip will delete
 func (p *Population) Wip() {
-	nc := make([]chromosome, pSize)
-	copy(nc, (*p).P[:p4Size])
-	copy((*p).P[:], nc)
+	for i := p4Size; i < pSize; i++ {
+		(*p).P[i] = (chromosome{})
+	}
 }
 
 // Sort will sort the data by fitness

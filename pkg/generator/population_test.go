@@ -106,6 +106,43 @@ func BenchmarkCrossOver(b *testing.B) {
 	}
 }
 
+func TestPopulation_Wip(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	// get information from the file
+	pkgs := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := pkgs.Decode()
+
+	var p Population
+	p.Init(ns0, gSize)
+	p.Wip()
+
+	for i := p4Size; i < pSize; i++ {
+		if p.P[i].GenCode != "" {
+			t.Errorf("not wide properly")
+			break
+		}
+	}
+
+}
+
+func BenchmarkPopulation_Wip(b *testing.B) {
+	rand.Seed(time.Now().UnixNano())
+	// get information from the file
+	pkgs := file.Read(inputDirMax)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := pkgs.Decode()
+
+	var p Population
+	p.Init(ns0, gSize)
+	for i := 0; i < b.N; i++ {
+		p1 := p
+		p1.Wip()
+	}
+}
+
 func TestPopulation_CrossOver(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
@@ -118,8 +155,4 @@ func TestPopulation_CrossOver(t *testing.T) {
 	p.Init(ns0, gSize)
 	p.Wip()
 	p.CrossOver(1)
-
-	for _, c := range p.P {
-		c.Print(false)
-	}
 }
