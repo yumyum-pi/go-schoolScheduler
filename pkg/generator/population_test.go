@@ -156,3 +156,32 @@ func TestPopulation_CrossOver(t *testing.T) {
 	p.Wip()
 	p.CrossOver(1)
 }
+
+func TestPopulation_Mutate(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	// get information from the file
+	pkgs := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := pkgs.Decode()
+
+	var p Population
+	p.Init(ns0, gSize)
+	p.CrossOver(1)
+	p.Mutate(1)
+}
+
+func TestPopulation_New(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+	// get information from the file
+	pkgs := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := pkgs.Decode()
+
+	var p Population
+	p.Init(ns0, gSize)
+	p.CrossOver(1)
+	p.Mutate(1)
+	p.New(1)
+}

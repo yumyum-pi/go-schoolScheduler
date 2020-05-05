@@ -6,24 +6,27 @@ import (
 	"sort"
 )
 
-const pSize = 32         // population size
-const p2Size = pSize / 2 // half of population size
-const p4Size = pSize / 4 // quater of population size
+const pSize = 32                // population size
+const p2Size = pSize / 2        // half of population size
+const p4Size = pSize / 4        // quater of population size
+const p34Size = p4Size + p2Size // 3/4 of population size
 
 // Population is a fixed array of size 64 containing chromosomes
 type Population struct {
-	P   [pSize]chromosome
-	ns0 *[]byte
+	P     [pSize]chromosome
+	ns0   *[]byte
+	gSize int
 }
 
 // Init create the initail population
 func (p *Population) Init(ns0 *[]byte, gSize int) {
 	//nL := len(*ns0) // length of nucleotides
 	(*p).ns0 = ns0
+	(*p).gSize = gSize
 	// make a new chromosome var
 
 	for i := 0; i < pSize; i++ {
-		(*p).P[i] = *newChromo(ns0, gSize, 0, i)
+		(*p).P[i] = *newChromo(ns0, (*p).gSize, 0, i)
 	}
 
 	(*p).Sort()
@@ -62,12 +65,10 @@ func shuffleNucleotide(c *chromosome) {
 }
 
 // Print will write data to console
-func (p *Population) Print() {
-}
-
-// PrintChromo will write data to console
-func (p *Population) PrintChromo() {
-
+func (p *Population) Print(details bool) {
+	for i := 0; i < pSize; i++ {
+		(*p).P[i].Print(details)
+	}
 }
 
 // Next creates the next gene of chromosome
@@ -89,8 +90,8 @@ func (p *Population) CrossOver(g int) {
 
 		// create chromosomes
 		var c0, c1 chromosome
-		c0.GeneSize = (*p).P[i].GeneSize
-		c1.GeneSize = (*p).P[i].GeneSize
+		c0.GeneSize = (*p).gSize
+		c1.GeneSize = (*p).gSize
 
 		nL := len(*ns0) // length of nucleotides
 
@@ -127,14 +128,22 @@ func (p *Population) CrossOver(g int) {
 	}
 }
 
-// Mutate creates new chromosomes by changing
-func (p *Population) Mutate(g int) {
-
-}
-
 // New creates new chromosomes from the source sequence
 func (p *Population) New(g int) {
+	// loop through 1/4 for the list
+	for i := p34Size; i < pSize; i++ {
+		(*p).P[i] = *newChromo((*p).ns0, (*p).gSize, g, i-p34Size)
+	}
+}
 
+// Mutate creates new chromosomes by changing
+func (p *Population) Mutate(g int) {
+	for i := p2Size; i < p34Size; i++ {
+		(*p).P[i].HandleEM2()
+		(*p).P[i].HandleEM2()
+		(*p).P[i].CheckEM2()
+		(*p).P[i].GenCode = fmt.Sprintf("%02dM%02d:%04v", g, i-p2Size, (*p).P[i].nErr)
+	}
 }
 
 // Wip will delete
