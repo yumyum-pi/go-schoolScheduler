@@ -73,7 +73,6 @@ func (p *Population) Print(details bool) {
 
 // Next creates the next gene of chromosome
 func (p *Population) Next(g int) {
-	(*p).Wip()
 	(*p).CrossOver(g)
 	(*p).Mutate(g)
 	(*p).New(g)
@@ -140,16 +139,8 @@ func (p *Population) New(g int) {
 func (p *Population) Mutate(g int) {
 	for i := p2Size; i < p34Size; i++ {
 		(*p).P[i].HandleEM2()
-		(*p).P[i].HandleEM2()
 		(*p).P[i].CheckEM2()
 		(*p).P[i].GenCode = fmt.Sprintf("%02dM%02d:%04v", g, i-p2Size, (*p).P[i].nErr)
-	}
-}
-
-// Wip will delete
-func (p *Population) Wip() {
-	for i := p4Size; i < pSize; i++ {
-		(*p).P[i] = (chromosome{})
 	}
 }
 
