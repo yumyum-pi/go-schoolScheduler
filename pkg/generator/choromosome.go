@@ -343,11 +343,11 @@ func (c *chromosome) Print(detail bool) {
 				index = i + j
 				// check if error
 				if (*c).ErrSequence[index] != 0 {
-					fmt.Printf("%v%3v ", string(colorRed), (*c).Sequence[index])
+					fmt.Printf("%v%2v%v ", string(colorRed), (*c).Sequence[index], string(colorReset))
 					continue
 
 				}
-				fmt.Printf("%v%3v ", string(colorGreen), (*c).Sequence[index])
+				fmt.Printf("%v%2v ", string(colorGreen), (*c).Sequence[index])
 			}
 			fmt.Printf("%v]\n", string(colorReset))
 		}
