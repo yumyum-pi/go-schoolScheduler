@@ -10,8 +10,6 @@ get_name() {
     read NAME
 
     #input formatting
-    #make the input lower case
-    NAME=$( tr '[:upper:]' '[:lower:]' <<< $NAME) 
     #remove the white space
     NAME="${NAME// /_}" 
 }
