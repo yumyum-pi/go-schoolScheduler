@@ -2,7 +2,9 @@ package models
 
 import "fmt"
 
-// Decode nucleotide sequence data
+const byteSize = 32
+
+// Decode nucleotide sequence data from package
 func (s *SequencePkgs) Decode() (*[]byte, int, error) {
 	// calculate the capacity
 	l := len((*s).Pkgs)
@@ -62,4 +64,42 @@ func checkData(s0 *[]byte, geneSize int) error {
 	}
 
 	return nil
+}
+
+// Encode nucleotide sequence data to packages
+func (s *SequencePkgs) Encode(pp *[]byte) {
+	l := len(*pp)
+	nPPkg := (byteSize) // no of period per package
+	tnPPkg := l / nPPkg // total no. of package
+	rem := l % nPPkg    // check if their is a remainder
+
+	// create package array
+	pkg := make([][]byte, tnPPkg)
+
+	//p := make([]byte, nPPkg) // package
+	var pi int = 0 // period index
+	for i := 0; i < tnPPkg; i++ {
+		// create package array
+		p := make([]byte, nPPkg) // package
+		for j := 0; j < nPPkg; j++ {
+			pi = (i * nPPkg) + j
+			//fmt.Println(pi)
+			p[j] = (*pp)[pi] // get the byes of periods
+			// add the period byte to the package
+		}
+		pkg[i] = p
+	}
+	// add remaining
+	if rem != 0 {
+		//	tnPPkg
+		p := make([]byte, rem)
+		for j := 0; j < rem; j++ {
+			pi = (tnPPkg * byteSize) + j
+			p[j] = (*pp)[pi] // get the byes of periods
+			// add the period byte to the package
+		}
+		pkg = append(pkg, p)
+	}
+
+	(*s).Pkgs = pkg
 }

@@ -34,15 +34,15 @@ var genCMD = &cobra.Command{
 			os.Exit(1)
 		}
 
-		var tt *models.SequencePkgs
+		var pkgs *models.SequencePkgs
 		// if directory select random file
 		if info.IsDir() {
-			tt = file.ReadRand(args[0])
+			pkgs = file.ReadRand(args[0])
 		} else {
-			tt = file.Read(args[0])
+			pkgs = file.Read(args[0])
 		}
 
-		s0, geneSize, err := (*tt).Decode()
+		s0, geneSize, err := (*pkgs).Decode()
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

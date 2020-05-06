@@ -36,7 +36,7 @@ func init() {
 		"version", // name
 		"v",       // shothand
 		false,     // default
-		"config file (default is $HOME/.cobra.yaml)",
+		"version of the application",
 	)
 }
 
