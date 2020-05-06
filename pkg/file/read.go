@@ -11,12 +11,12 @@ import (
 )
 
 // Read file from thr disk
-func Read(fileName string) *models.TimeTable {
+func Read(fileName string) *models.SequencePkgs {
 	in, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Fatalln("Error reading file:", err)
 	}
-	tt := &models.TimeTable{}
+	tt := &models.SequencePkgs{}
 	if err := proto.Unmarshal(in, tt); err != nil {
 		log.Fatalln("Failed to parse address book:", err)
 	}
@@ -24,7 +24,7 @@ func Read(fileName string) *models.TimeTable {
 }
 
 // ReadRand reads a random file from the directory
-func ReadRand(dir string) *models.TimeTable {
+func ReadRand(dir string) *models.SequencePkgs {
 	files, err := ioutil.ReadDir(dir)
 	var filePath []string
 	if err == nil {

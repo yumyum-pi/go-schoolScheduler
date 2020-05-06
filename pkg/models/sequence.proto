@@ -1,0 +1,13 @@
+syntax = "proto3";
+package models;
+
+option go_package = "github.com/yumyum-pi/go-schoolScheduler/pkg/models";
+
+service Sequence {
+    rpc GenerateTT( SequencePkgs) returns (SequencePkgs) {}
+}
+
+message SequencePkgs {
+    int32 gSize = 1; // gene size
+    repeated bytes pkgs = 2; // packages of 32 periods
+}

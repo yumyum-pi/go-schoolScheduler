@@ -3,28 +3,25 @@ package models
 import "fmt"
 
 // Decode nucleotide sequence data
-func (tt *TimeTable) Decode() (*[]byte, int, error) {
+func (s *SequencePkgs) Decode() (*[]byte, int, error) {
 	// calculate the capacity
-	l := len((*tt).Period)
+	l := len((*s).Pkgs)
 	// get the length of the last byte
-	lb := len((*tt).Period[l-1])
+	lb := len((*s).Pkgs[l-1])
 	cap := (l - 1) * 32
 	cap += lb
 
 	s0 := make([]byte, 0, cap)
 	// loop through each package byte
-	for _, pkg := range (*tt).Period {
+	for _, pkg := range (*s).Pkgs {
 		s0 = append(s0, pkg...)
 	}
 
-	// calculate maxcap
-	geneSize := int((*tt).NDays * (*tt).NPeriods)
-
-	if e := checkData(&s0, geneSize); e != nil {
+	if e := checkData(&s0, int((*s).GSize)); e != nil {
 		return nil, 0, e
 	}
 
-	return &s0, geneSize, nil
+	return &s0, int((*s).GSize), nil
 }
 
 // checkData checks if the quantity of each nucleotide type is < geneSize

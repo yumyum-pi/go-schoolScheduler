@@ -34,7 +34,7 @@ var genCMD = &cobra.Command{
 			os.Exit(1)
 		}
 
-		var tt *models.TimeTable
+		var tt *models.SequencePkgs
 		// if directory select random file
 		if info.IsDir() {
 			tt = file.ReadRand(args[0])
