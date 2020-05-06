@@ -1,15 +1,22 @@
 package generator
 
-import (
-	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
-)
+import "fmt"
 
-const nGeneration = 4
+const nGeneration = 16
 
 // Start begin the generating process
-func Start(s0 *[]byte, geneSize int) (*models.TimeTable, error) {
+func Start(s0 *[]byte, geneSize int) (*[]byte, error) {
 	var p Population
 	p.Init(s0, geneSize)
-
-	return nil, nil
+	for g := 0; g < nGeneration; g++ {
+		p.Next(g + 1)
+	}
+	for _, c := range p.P {
+		if c.nErr == 0 {
+			return &c.Sequence, nil
+		}
+	}
+	return &p.P[0].Sequence, fmt.Errorf(
+		"returned sequence with error",
+	)
 }
