@@ -10,8 +10,6 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
-var input, output string
-
 var genCMD = &cobra.Command{
 	Use:   "gen",
 	Short: "Generating timetable",
@@ -50,7 +48,12 @@ var genCMD = &cobra.Command{
 			os.Exit(1)
 		}
 		// start the generating process
-		generator.Start(s0, geneSize)
+		s, e := generator.Start(s0, geneSize)
+		generator.PrintSequence(s, geneSize)
+
+		if e != nil {
+			fmt.Println(e)
+		}
 	},
 }
 
