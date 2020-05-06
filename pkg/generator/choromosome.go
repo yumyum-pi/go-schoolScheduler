@@ -429,7 +429,10 @@ func PrintSequence(s0 *[]byte, gSize int) {
 		fmt.Printf("%2v[ ", i/gSize)
 		for j := 0; j < gSize; j++ {
 			index = i + j // calculate the index
-			fmt.Printf("%3v ", (*s0)[index])
+			if j%8 == 0 && j != 0 {
+				fmt.Printf("| ")
+			}
+			fmt.Printf("%02v ", (*s0)[index])
 		}
 		fmt.Printf("]\n")
 	}
