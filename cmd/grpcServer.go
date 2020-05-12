@@ -24,7 +24,6 @@ func (s *server) GenerateTT(ctx context.Context, seq *models.SequencePkgs) (*mod
 	}
 	// start the generating process
 	s1, e := generator.Start(s0, geneSize)
-	generator.PrintSequence(s1, geneSize)
 	seq.Encode(s1)
 	if e != nil {
 		return seq, e
