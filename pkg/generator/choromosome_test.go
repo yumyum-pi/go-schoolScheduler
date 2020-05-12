@@ -225,7 +225,7 @@ func TestChromosome_HandleEM1(t *testing.T) {
 
 func BenchmarkChromosome_HandleEM1(b *testing.B) {
 	// get information from the file
-	pkgs := file.Read(inputDirMax)
+	pkgs := file.ReadRand(inputDir)
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := pkgs.Decode()
 
@@ -290,7 +290,7 @@ func TestChromosome_HandleEM2(t *testing.T) {
 
 func BenchmarkChromosome_HandleEM2(b *testing.B) {
 	// get information from the file
-	pkgs := file.Read(inputDirMax)
+	pkgs := file.ReadRand(inputDir)
 	ns0, gSize, _ := pkgs.Decode()
 
 	var nc chromosome
@@ -336,7 +336,7 @@ func BenchmarkChromosome_CalFitness(b *testing.B) {
 	rand.Seed(time.Now().UnixNano())
 
 	// get information from the file
-	pkgs := file.Read(inputDirMax)
+	pkgs := file.ReadRand(inputDir)
 	ns0, gSize, _ := pkgs.Decode()
 	for i := 0; i < b.N; i++ {
 		// decode the pkgs to ns0 and gene-size
