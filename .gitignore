@@ -4,3 +4,5 @@ resource/*
 test/inputs/*
 *~
 *.swp
+test/bench/*
+
