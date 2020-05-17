@@ -33,9 +33,11 @@ func (s *server) GenerateTT(ctx context.Context, req *models.GRequest) (*models.
 	res.NError = int32(nErr)
 	res.Pkgs = *models.Encode(s1)
 	if e != nil {
-		l.Error(req.ClientID, req.ServerID, len(*s0), geneSize, 48, e.Error())
+		l.Error(req.ClientID, req.ServerID, len(*s0), geneSize, int(req.NNType), e.Error())
+	} else {
+		l.Info(req.ClientID, req.ServerID, len(*s0), geneSize, int(req.NNType), "")
+
 	}
-	l.Info(req.ClientID, req.ServerID, len(*s0), geneSize, 48, "")
 	return &res, nil
 }
 
