@@ -5,25 +5,25 @@ import "fmt"
 const byteSize = 32
 
 // Decode nucleotide sequence data from package
-func (s *SequencePkgs) Decode() (*[]byte, int, error) {
+func Decode(pkgs *[][]byte, gSize int32) (*[]byte, int, error) {
 	// calculate the capacity
-	l := len((*s).Pkgs)
+	l := len((*pkgs))
 	// get the length of the last byte
-	lb := len((*s).Pkgs[l-1])
+	lb := len((*pkgs)[l-1])
 	cap := (l - 1) * 32
 	cap += lb
 
 	s0 := make([]byte, 0, cap)
 	// loop through each package byte
-	for _, pkg := range (*s).Pkgs {
+	for _, pkg := range *pkgs {
 		s0 = append(s0, pkg...)
 	}
 
-	if e := checkData(&s0, int((*s).GSize)); e != nil {
+	if e := checkData(&s0, int(gSize)); e != nil {
 		return nil, 0, e
 	}
 
-	return &s0, int((*s).GSize), nil
+	return &s0, int(gSize), nil
 }
 
 // checkData checks if the quantity of each nucleotide type is < geneSize
@@ -67,7 +67,7 @@ func checkData(s0 *[]byte, geneSize int) error {
 }
 
 // Encode nucleotide sequence data to packages
-func (s *SequencePkgs) Encode(pp *[]byte) {
+func Encode(pp *[]byte) (pkgs *[][]byte) {
 	l := len(*pp)
 	nPPkg := (byteSize) // no of period per package
 	tnPPkg := l / nPPkg // total no. of package
@@ -101,5 +101,5 @@ func (s *SequencePkgs) Encode(pp *[]byte) {
 		pkg = append(pkg, p)
 	}
 
-	(*s).Pkgs = pkg
+	return &pkg
 }

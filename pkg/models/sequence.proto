@@ -4,10 +4,18 @@ package models;
 option go_package = "github.com/yumyum-pi/go-schoolScheduler/pkg/models";
 
 service Sequence {
-    rpc GenerateTT( SequencePkgs) returns (SequencePkgs) {}
+    rpc GenerateTT( GRequest) returns (GResponse) {}
 }
 
-message SequencePkgs {
-    int32 gSize = 1; // gene size
-    repeated bytes pkgs = 2; // packages of 32 periods
+message GRequest {
+   string serverID = 1;
+   string clientID = 2;
+   int32 gSize = 3;
+   int32 nNType = 4;
+   repeated bytes pkgs = 5;
+}
+
+message GResponse {
+   int32 nError = 1;
+   repeated bytes pkgs = 2;
 }

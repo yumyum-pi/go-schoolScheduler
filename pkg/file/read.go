@@ -11,12 +11,12 @@ import (
 )
 
 // Read file from thr disk
-func Read(fileName string) *models.SequencePkgs {
+func Read(fileName string) *models.GRequest {
 	in, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		log.Fatalln("Error reading file:", err)
 	}
-	tt := &models.SequencePkgs{}
+	tt := &models.GRequest{}
 	if err := proto.Unmarshal(in, tt); err != nil {
 		log.Fatalln("Failed to parse address book:", err)
 	}
@@ -24,7 +24,7 @@ func Read(fileName string) *models.SequencePkgs {
 }
 
 // ReadRand reads a random file from the directory
-func ReadRand(dir string) *models.SequencePkgs {
+func ReadRand(dir string) *models.GRequest {
 	files, err := ioutil.ReadDir(dir)
 	var filePath []string
 	if err == nil {

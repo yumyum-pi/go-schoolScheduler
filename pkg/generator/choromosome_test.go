@@ -7,16 +7,17 @@ import (
 	"time"
 
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/file"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 	cr "github.com/yumyum-pi/go-schoolScheduler/test/checkerror"
 )
 
 func TestChromosome_illegalMutation(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var nc *chromosome // store new chromosome value
 	var n byte
@@ -197,9 +198,10 @@ func TestChromosome_HandleEM1(t *testing.T) {
 
 	var e error
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
+
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var nc chromosome
 	nc.GeneSize = gSize
@@ -225,9 +227,10 @@ func TestChromosome_HandleEM1(t *testing.T) {
 
 func BenchmarkChromosome_HandleEM1(b *testing.B) {
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
+
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var nc chromosome
 	nc.GeneSize = gSize
@@ -251,9 +254,10 @@ func TestChromosome_HandleEM2(t *testing.T) {
 
 	var e error
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
+
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var nc chromosome
 	nc.GeneSize = gSize
@@ -290,8 +294,10 @@ func TestChromosome_HandleEM2(t *testing.T) {
 
 func BenchmarkChromosome_HandleEM2(b *testing.B) {
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
-	ns0, gSize, _ := pkgs.Decode()
+	req := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var nc chromosome
 	nc.GeneSize = gSize
@@ -312,8 +318,10 @@ func BenchmarkChromosome_HandleEM2(b *testing.B) {
 func TestChromosome_CalFitness(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
-	ns0, gSize, _ := pkgs.Decode()
+	req := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var nc chromosome
 	nc.GeneSize = gSize
@@ -336,8 +344,10 @@ func BenchmarkChromosome_CalFitness(b *testing.B) {
 	rand.Seed(time.Now().UnixNano())
 
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
-	ns0, gSize, _ := pkgs.Decode()
+	req := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 	for i := 0; i < b.N; i++ {
 		// decode the pkgs to ns0 and gene-size
 		newChromo(ns0, gSize, 0, i) // create new chromosome

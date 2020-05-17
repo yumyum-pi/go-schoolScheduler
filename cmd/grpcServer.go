@@ -17,26 +17,26 @@ import (
 var port int32
 var ip string
 
-// server is used to implement customer.CustomerServer.
 type server struct {
-	savedCustomers *models.SequencePkgs
+	savedCustomers *models.SequenceServer
 }
 
-// Genereate is the gRPC function to resend response data back to the client
-func (s *server) GenerateTT(ctx context.Context, seq *models.SequencePkgs) (*models.SequencePkgs, error) {
-	s0, geneSize, e := (*seq).Decode()
+// GenerateTT is the gRPC function to resend response data back to the client
+func (s *server) GenerateTT(ctx context.Context, req *models.GRequest) (*models.GResponse, error) {
+	s0, geneSize, e := models.Decode(&req.Pkgs, req.GetGSize())
 	if e != nil {
 		return nil, e
 	}
 	// start the generating process
-	s1, e := generator.Start(s0, geneSize)
-	seq.Encode(s1)
+	s1, nErr, e := generator.Start(s0, geneSize)
+	res := models.GResponse{}
+	res.NError = int32(nErr)
+	res.Pkgs = *models.Encode(s1)
 	if e != nil {
-		l.Error("0.0.0.0", "clientID", "serverID", len(*s0), geneSize, 48, e.Error())
-		return seq, nil
+		l.Error(req.ClientID, req.ServerID, len(*s0), geneSize, 48, e.Error())
 	}
-	l.Info("0.0.0.0", "clientID", "serverID", len(*s0), geneSize, 48, "")
-	return seq, nil
+	l.Info(req.ClientID, req.ServerID, len(*s0), geneSize, 48, "")
+	return &res, nil
 }
 
 var serverCMD = &cobra.Command{
@@ -74,7 +74,7 @@ func init() {
 		"ip",      // name
 		"i",       // shothand
 		"0.0.0.0", // default
-		"Ip of the server",
+		"ip of the server",
 	)
 	rootCmd.AddCommand(serverCMD)
 }

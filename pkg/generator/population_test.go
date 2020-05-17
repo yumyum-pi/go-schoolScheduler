@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/file"
+	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
 var inputDir = "/Users/vivekrawat/go/src/github.com/yumyum-pi/go-schoolScheduler/test/inputs/"
@@ -15,10 +16,10 @@ var inputDir = "/Users/vivekrawat/go/src/github.com/yumyum-pi/go-schoolScheduler
 func TestNewChromo(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	// create new chromosome
 	nc := newChromo(ns0, gSize, 0, 0)
@@ -31,10 +32,10 @@ func TestNewChromo(t *testing.T) {
 func BenchmarkPopulation_Init(b *testing.B) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var p Population
 
@@ -46,10 +47,10 @@ func BenchmarkPopulation_Init(b *testing.B) {
 func TestPopulation_Sort(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var p Population
 	p.Init(ns0, gSize)
@@ -69,10 +70,10 @@ func TestPopulation_Sort(t *testing.T) {
 func TestCrossOver(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	// create new chromosome
 	c0 := newChromo(ns0, gSize, 0, 0)
@@ -92,10 +93,10 @@ func TestCrossOver(t *testing.T) {
 func BenchmarkCrossOver(b *testing.B) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	// create new chromosome
 	c0 := newChromo(ns0, gSize, 0, 0)
@@ -108,10 +109,10 @@ func BenchmarkCrossOver(b *testing.B) {
 func TestPopulation_CrossOver(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var p Population
 	p.Init(ns0, gSize)
@@ -121,10 +122,10 @@ func TestPopulation_CrossOver(t *testing.T) {
 func TestPopulation_Mutate(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var p Population
 	p.Init(ns0, gSize)
@@ -135,10 +136,10 @@ func TestPopulation_Mutate(t *testing.T) {
 func TestPopulation_New(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var p Population
 	p.Init(ns0, gSize)
@@ -150,10 +151,10 @@ func TestPopulation_New(t *testing.T) {
 func BenchmarkPopulation_Next(b *testing.B) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
-	pkgs := file.ReadRand(inputDir)
+	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
-	ns0, gSize, _ := pkgs.Decode()
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
 
 	var p Population
 	p.Init(ns0, gSize)

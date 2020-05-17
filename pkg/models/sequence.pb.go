@@ -29,17 +29,20 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type SequencePkgs struct {
+type GRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	GSize int32    `protobuf:"varint,1,opt,name=gSize,proto3" json:"gSize,omitempty"` // gene size
-	Pkgs  [][]byte `protobuf:"bytes,2,rep,name=pkgs,proto3" json:"pkgs,omitempty"`    // packages of 32 periods
+	ServerID string   `protobuf:"bytes,1,opt,name=serverID,proto3" json:"serverID,omitempty"`
+	ClientID string   `protobuf:"bytes,2,opt,name=clientID,proto3" json:"clientID,omitempty"`
+	GSize    int32    `protobuf:"varint,3,opt,name=gSize,proto3" json:"gSize,omitempty"`
+	NNType   int32    `protobuf:"varint,4,opt,name=nNType,proto3" json:"nNType,omitempty"`
+	Pkgs     [][]byte `protobuf:"bytes,5,rep,name=pkgs,proto3" json:"pkgs,omitempty"`
 }
 
-func (x *SequencePkgs) Reset() {
-	*x = SequencePkgs{}
+func (x *GRequest) Reset() {
+	*x = GRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_sequence_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -47,13 +50,13 @@ func (x *SequencePkgs) Reset() {
 	}
 }
 
-func (x *SequencePkgs) String() string {
+func (x *GRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SequencePkgs) ProtoMessage() {}
+func (*GRequest) ProtoMessage() {}
 
-func (x *SequencePkgs) ProtoReflect() protoreflect.Message {
+func (x *GRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_sequence_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -65,19 +68,95 @@ func (x *SequencePkgs) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SequencePkgs.ProtoReflect.Descriptor instead.
-func (*SequencePkgs) Descriptor() ([]byte, []int) {
+// Deprecated: Use GRequest.ProtoReflect.Descriptor instead.
+func (*GRequest) Descriptor() ([]byte, []int) {
 	return file_sequence_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SequencePkgs) GetGSize() int32 {
+func (x *GRequest) GetServerID() string {
+	if x != nil {
+		return x.ServerID
+	}
+	return ""
+}
+
+func (x *GRequest) GetClientID() string {
+	if x != nil {
+		return x.ClientID
+	}
+	return ""
+}
+
+func (x *GRequest) GetGSize() int32 {
 	if x != nil {
 		return x.GSize
 	}
 	return 0
 }
 
-func (x *SequencePkgs) GetPkgs() [][]byte {
+func (x *GRequest) GetNNType() int32 {
+	if x != nil {
+		return x.NNType
+	}
+	return 0
+}
+
+func (x *GRequest) GetPkgs() [][]byte {
+	if x != nil {
+		return x.Pkgs
+	}
+	return nil
+}
+
+type GResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	NError int32    `protobuf:"varint,1,opt,name=nError,proto3" json:"nError,omitempty"`
+	Pkgs   [][]byte `protobuf:"bytes,2,rep,name=pkgs,proto3" json:"pkgs,omitempty"`
+}
+
+func (x *GResponse) Reset() {
+	*x = GResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sequence_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GResponse) ProtoMessage() {}
+
+func (x *GResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_sequence_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GResponse.ProtoReflect.Descriptor instead.
+func (*GResponse) Descriptor() ([]byte, []int) {
+	return file_sequence_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *GResponse) GetNError() int32 {
+	if x != nil {
+		return x.NError
+	}
+	return 0
+}
+
+func (x *GResponse) GetPkgs() [][]byte {
 	if x != nil {
 		return x.Pkgs
 	}
@@ -88,19 +167,27 @@ var File_sequence_proto protoreflect.FileDescriptor
 
 var file_sequence_proto_rawDesc = []byte{
 	0x0a, 0x0e, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x12, 0x06, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x22, 0x38, 0x0a, 0x0c, 0x53, 0x65, 0x71, 0x75,
-	0x65, 0x6e, 0x63, 0x65, 0x50, 0x6b, 0x67, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x67, 0x53, 0x69, 0x7a,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x67, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x12,
-	0x0a, 0x04, 0x70, 0x6b, 0x67, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x04, 0x70, 0x6b,
-	0x67, 0x73, 0x32, 0x46, 0x0a, 0x08, 0x53, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x12, 0x3a,
-	0x0a, 0x0a, 0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x54, 0x54, 0x12, 0x14, 0x2e, 0x6d,
-	0x6f, 0x64, 0x65, 0x6c, 0x73, 0x2e, 0x53, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x50, 0x6b,
-	0x67, 0x73, 0x1a, 0x14, 0x2e, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x2e, 0x53, 0x65, 0x71, 0x75,
-	0x65, 0x6e, 0x63, 0x65, 0x50, 0x6b, 0x67, 0x73, 0x22, 0x00, 0x42, 0x34, 0x5a, 0x32, 0x67, 0x69,
-	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x79, 0x75, 0x6d, 0x79, 0x75, 0x6d, 0x2d,
-	0x70, 0x69, 0x2f, 0x67, 0x6f, 0x2d, 0x73, 0x63, 0x68, 0x6f, 0x6f, 0x6c, 0x53, 0x63, 0x68, 0x65,
-	0x64, 0x75, 0x6c, 0x65, 0x72, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x12, 0x06, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x22, 0x84, 0x01, 0x0a, 0x08, 0x47, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x49,
+	0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x49,
+	0x44, 0x12, 0x1a, 0x0a, 0x08, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x44, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x63, 0x6c, 0x69, 0x65, 0x6e, 0x74, 0x49, 0x44, 0x12, 0x14, 0x0a,
+	0x05, 0x67, 0x53, 0x69, 0x7a, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x67, 0x53,
+	0x69, 0x7a, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x6e, 0x4e, 0x54, 0x79, 0x70, 0x65, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x05, 0x52, 0x06, 0x6e, 0x4e, 0x54, 0x79, 0x70, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x70,
+	0x6b, 0x67, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x04, 0x70, 0x6b, 0x67, 0x73, 0x22,
+	0x37, 0x0a, 0x09, 0x47, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06,
+	0x6e, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6e, 0x45,
+	0x72, 0x72, 0x6f, 0x72, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x6b, 0x67, 0x73, 0x18, 0x02, 0x20, 0x03,
+	0x28, 0x0c, 0x52, 0x04, 0x70, 0x6b, 0x67, 0x73, 0x32, 0x3f, 0x0a, 0x08, 0x53, 0x65, 0x71, 0x75,
+	0x65, 0x6e, 0x63, 0x65, 0x12, 0x33, 0x0a, 0x0a, 0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65,
+	0x54, 0x54, 0x12, 0x10, 0x2e, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x2e, 0x47, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x11, 0x2e, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x2e, 0x47, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x34, 0x5a, 0x32, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x79, 0x75, 0x6d, 0x79, 0x75, 0x6d, 0x2d, 0x70,
+	0x69, 0x2f, 0x67, 0x6f, 0x2d, 0x73, 0x63, 0x68, 0x6f, 0x6f, 0x6c, 0x53, 0x63, 0x68, 0x65, 0x64,
+	0x75, 0x6c, 0x65, 0x72, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -115,13 +202,14 @@ func file_sequence_proto_rawDescGZIP() []byte {
 	return file_sequence_proto_rawDescData
 }
 
-var file_sequence_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_sequence_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_sequence_proto_goTypes = []interface{}{
-	(*SequencePkgs)(nil), // 0: models.SequencePkgs
+	(*GRequest)(nil),  // 0: models.GRequest
+	(*GResponse)(nil), // 1: models.GResponse
 }
 var file_sequence_proto_depIdxs = []int32{
-	0, // 0: models.Sequence.GenerateTT:input_type -> models.SequencePkgs
-	0, // 1: models.Sequence.GenerateTT:output_type -> models.SequencePkgs
+	0, // 0: models.Sequence.GenerateTT:input_type -> models.GRequest
+	1, // 1: models.Sequence.GenerateTT:output_type -> models.GResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -136,7 +224,19 @@ func file_sequence_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_sequence_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SequencePkgs); i {
+			switch v := v.(*GRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sequence_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -154,7 +254,7 @@ func file_sequence_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sequence_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -180,7 +280,7 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type SequenceClient interface {
-	GenerateTT(ctx context.Context, in *SequencePkgs, opts ...grpc.CallOption) (*SequencePkgs, error)
+	GenerateTT(ctx context.Context, in *GRequest, opts ...grpc.CallOption) (*GResponse, error)
 }
 
 type sequenceClient struct {
@@ -191,8 +291,8 @@ func NewSequenceClient(cc grpc.ClientConnInterface) SequenceClient {
 	return &sequenceClient{cc}
 }
 
-func (c *sequenceClient) GenerateTT(ctx context.Context, in *SequencePkgs, opts ...grpc.CallOption) (*SequencePkgs, error) {
-	out := new(SequencePkgs)
+func (c *sequenceClient) GenerateTT(ctx context.Context, in *GRequest, opts ...grpc.CallOption) (*GResponse, error) {
+	out := new(GResponse)
 	err := c.cc.Invoke(ctx, "/models.Sequence/GenerateTT", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -202,14 +302,14 @@ func (c *sequenceClient) GenerateTT(ctx context.Context, in *SequencePkgs, opts 
 
 // SequenceServer is the server API for Sequence service.
 type SequenceServer interface {
-	GenerateTT(context.Context, *SequencePkgs) (*SequencePkgs, error)
+	GenerateTT(context.Context, *GRequest) (*GResponse, error)
 }
 
 // UnimplementedSequenceServer can be embedded to have forward compatible implementations.
 type UnimplementedSequenceServer struct {
 }
 
-func (*UnimplementedSequenceServer) GenerateTT(context.Context, *SequencePkgs) (*SequencePkgs, error) {
+func (*UnimplementedSequenceServer) GenerateTT(context.Context, *GRequest) (*GResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateTT not implemented")
 }
 
@@ -218,7 +318,7 @@ func RegisterSequenceServer(s *grpc.Server, srv SequenceServer) {
 }
 
 func _Sequence_GenerateTT_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SequencePkgs)
+	in := new(GRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -230,7 +330,7 @@ func _Sequence_GenerateTT_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/models.Sequence/GenerateTT",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SequenceServer).GenerateTT(ctx, req.(*SequencePkgs))
+		return srv.(SequenceServer).GenerateTT(ctx, req.(*GRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

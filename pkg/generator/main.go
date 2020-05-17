@@ -5,7 +5,7 @@ import "fmt"
 const nGeneration = 16
 
 // Start begin the generating process
-func Start(s0 *[]byte, geneSize int) (*[]byte, error) {
+func Start(s0 *[]byte, geneSize int) (*[]byte, int, error) {
 	var p Population
 	p.Init(s0, geneSize)
 	for g := 0; g < nGeneration; g++ {
@@ -13,9 +13,9 @@ func Start(s0 *[]byte, geneSize int) (*[]byte, error) {
 	}
 	for _, c := range p.P {
 		if c.nErr == 0 {
-			return &c.Sequence, nil
+			return &c.Sequence, 0, nil
 		}
 	}
 
-	return &p.P[0].Sequence, fmt.Errorf("Error=%04v ng=%03v", p.P[0].nErr, nGeneration)
+	return &p.P[0].Sequence, p.P[0].nErr, fmt.Errorf("Error=%04v ng=%03v", p.P[0].nErr, nGeneration)
 }
