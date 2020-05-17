@@ -74,9 +74,8 @@ func Init(logDir string) {
 //  gSize - size of gene
 //  nNType - no. of nucleotide type
 //  msg - log messeage
-func Info(ip, clientID, serverID string, lSeq, gSize, nNType int, msg string) {
+func Info(clientID, serverID string, lSeq, gSize, nNType int, msg string) {
 	i.Println(
-		ip,
 		clientID,
 		serverID,
 		lSeq,
@@ -94,9 +93,8 @@ func Info(ip, clientID, serverID string, lSeq, gSize, nNType int, msg string) {
 //  gSize - size of gene
 //  nNType - no. of nucleotide type
 //  msg - log messeage
-func Warning(ip, clientID, serverID string, lSeq, gSize, nNType int, msg string) {
+func Warning(clientID, serverID string, lSeq, gSize, nNType int, msg string) {
 	i.Println(
-		ip,
 		clientID,
 		serverID,
 		lSeq,
@@ -114,9 +112,8 @@ func Warning(ip, clientID, serverID string, lSeq, gSize, nNType int, msg string)
 //  gSize - size of gene
 //  nNType - no. of nucleotide type
 //  msg - log messeage
-func Error(ip, clientID, serverID string, lSeq, gSize, nNType int, msg string) {
+func Error(clientID, serverID string, lSeq, gSize, nNType int, msg string) {
 	e.Println(
-		ip,
 		clientID,
 		serverID,
 		lSeq,
@@ -134,9 +131,8 @@ func Error(ip, clientID, serverID string, lSeq, gSize, nNType int, msg string) {
 //  gSize - size of gene
 //  nNType - no. of nucleotide type
 //  msg - log messeage
-func Fatal(ip, clientID, serverID string, lSeq, gSize, nNType int, msg string) {
+func Fatal(clientID, serverID string, lSeq, gSize, nNType int, msg string) {
 	f.Println(
-		ip,
 		clientID,
 		serverID,
 		lSeq,
