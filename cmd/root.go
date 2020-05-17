@@ -10,6 +10,7 @@ import (
 
 var checkV bool
 var version string
+var logDir string // directory for log files
 
 var rootCmd = &cobra.Command{
 	Use:   "go-tt",
@@ -37,6 +38,15 @@ func init() {
 		"v",       // shothand
 		false,     // default
 		"version of the application",
+	)
+
+	// for specifing log directory
+	rootCmd.PersistentFlags().StringVarP(
+		&logDir,  // variable
+		"log",    // name
+		"d",      // shothand
+		"./logs", // default
+		"directory for log files",
 	)
 }
 
