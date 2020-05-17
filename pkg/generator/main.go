@@ -16,7 +16,6 @@ func Start(s0 *[]byte, geneSize int) (*[]byte, error) {
 			return &c.Sequence, nil
 		}
 	}
-	return &p.P[0].Sequence, fmt.Errorf(
-		"returned sequence with error",
-	)
+
+	return &p.P[0].Sequence, fmt.Errorf("Error=%04v ng=%03v\n", p.P[0].nErr, nGeneration)
 }
