@@ -32,9 +32,10 @@ func (s *server) GenerateTT(ctx context.Context, seq *models.SequencePkgs) (*mod
 	s1, e := generator.Start(s0, geneSize)
 	seq.Encode(s1)
 	if e != nil {
-		l.ErrorLogger("0.0.0.0", "23rewG", 48, 51, e.Error())
+		l.Error("0.0.0.0", "clientID", "serverID", len(*s0), geneSize, 48, e.Error())
 		return seq, nil
 	}
+	l.Info("0.0.0.0", "clientID", "serverID", len(*s0), geneSize, 48, "")
 	return seq, nil
 }
 
