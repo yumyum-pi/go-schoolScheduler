@@ -28,7 +28,7 @@ func (s *server) GenerateTT(ctx context.Context, req *models.GRequest) (*models.
 		return nil, e
 	}
 	// start the generating process
-	s1, nErr, e := generator.Start(s0, geneSize)
+	s1, nErr, e := generator.Start(s0, geneSize, int(req.NNType))
 	res := models.GResponse{}
 	res.NError = int32(nErr)
 	res.Pkgs = *models.Encode(s1)
