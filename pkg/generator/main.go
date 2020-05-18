@@ -5,9 +5,10 @@ import "fmt"
 const nGeneration = 16
 
 // Start begin the generating process
-func Start(s0 *[]byte, geneSize int) (*[]byte, int, error) {
-	var p Population
-	p.Init(s0, geneSize)
+func Start(s0 *[]byte, geneSize, nNType int) (*[]byte, int, error) {
+	nDist := nDistribution(s0, geneSize, nNType)
+	p := CreatePopulation(s0, nDist, geneSize, nNType)
+	p.Init()
 	for g := 0; g < nGeneration; g++ {
 		p.Next(g + 1)
 	}
@@ -21,7 +22,7 @@ func Start(s0 *[]byte, geneSize int) (*[]byte, int, error) {
 }
 
 // create nucleotide
-func nDistrubution(s0 *[]byte, gSize int, NNType int) (nDist *[]byte) {
+func nDistribution(s0 *[]byte, gSize, NNType int) (nDist *[]byte) {
 	var n int
 	dist := make([]byte, NNType*gSize)
 	// loop though each nucleotide in the sequence
