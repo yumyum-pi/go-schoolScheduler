@@ -14,17 +14,27 @@ const p34Size = p4Size + p2Size // 3/4 of population size
 
 // Population is a fixed array of size 64 containing chromosomes
 type Population struct {
-	P     [pSize]chromosome
-	ns0   *[]byte
-	gSize int
+	P      []chromosome
+	ns0    *[]byte
+	nDist  *[]byte
+	gSize  int
+	nNType int
+}
+
+// CreatePopulation return a new population
+func CreatePopulation(ns0, nDist *[]byte, gSize, nNType int) *Population {
+	chromosomes := make([]chromosome, pSize)
+	return &Population{
+		chromosomes,
+		ns0,
+		nDist,
+		gSize,
+		nNType,
+	}
 }
 
 // Init create the initial population
-func (p *Population) Init(ns0 *[]byte, gSize int) {
-	// assign the initial values
-	(*p).ns0 = ns0
-	(*p).gSize = gSize
-
+func (p *Population) Init() {
 	var wg sync.WaitGroup
 
 	for i := 0; i < pSize; i++ {
@@ -32,7 +42,7 @@ func (p *Population) Init(ns0 *[]byte, gSize int) {
 
 		// run the function concurrently
 		go func(i int) {
-			(*p).P[i] = *newChromo((*p).ns0, (*p).gSize, 0, i-p34Size)
+			(*p).P[i] = *newChromo((*p).ns0, (*p).nDist, (*p).gSize, 0, i-p34Size)
 			wg.Done()
 		}(i)
 	}
@@ -45,13 +55,14 @@ func (p *Population) Init(ns0 *[]byte, gSize int) {
 }
 
 // newChromo creates a new chromosome with the given sequence of nucleotides
-func newChromo(ns0 *[]byte, gSize, generation, index int) *chromosome {
+func newChromo(ns0, nDist *[]byte, gSize, generation, index int) *chromosome {
 	// make a new chromosome
 	var chromo chromosome
 	chromo.GeneSize = gSize
 	nL := len(*ns0) // length of nucleotides
 
 	chromo.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	chromo.NDist = append((*nDist)[:0:0], (*nDist)...)
 	chromo.ErrSequence = make([]byte, nL, nL)
 	chromo.lSequence = nL
 
@@ -107,7 +118,7 @@ func (p *Population) Next(g int) {
 	(*p).Sort()
 }
 
-// Crossover creates new chromosomes form the existing chromosomes
+// CrossOver creates new chromosomes form the existing chromosomes
 // by mixing the genes of two chromosome
 func (p *Population) CrossOver(g int) {
 	var wg sync.WaitGroup
@@ -118,7 +129,8 @@ func (p *Population) CrossOver(g int) {
 		go func(i int) {
 			// get the new cross over sequences
 			ns0, ns1 := crossOver(&(*p).P[i].Sequence, &(*p).P[i+1].Sequence, (*p).P[i].GeneSize)
-
+			nDist0 := nDistribution(ns0, p.gSize, p.nNType)
+			nDist1 := nDistribution(ns0, p.gSize, p.nNType)
 			// create chromosomes
 			var c0, c1 chromosome
 			c0.GeneSize = (*p).gSize
@@ -128,6 +140,9 @@ func (p *Population) CrossOver(g int) {
 
 			c0.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
 			c1.Sequence = append((*ns1)[:0:0], (*ns1)...) // copy the value
+
+			c0.NDist = append((*nDist0)[:0:0], (*nDist0)...)
+			c1.NDist = append((*nDist1)[:0:0], (*nDist1)...)
 
 			c0.ErrSequence = make([]byte, nL, nL)
 			c1.ErrSequence = make([]byte, nL, nL)
@@ -171,7 +186,7 @@ func (p *Population) New(g int) {
 		wg.Add(1)
 
 		go func(i int) {
-			(*p).P[i] = *newChromo((*p).ns0, (*p).gSize, g, i-p34Size)
+			(*p).P[i] = *newChromo((*p).ns0, (*p).nDist, (*p).gSize, g, i-p34Size)
 			wg.Done()
 		}(i)
 	}
