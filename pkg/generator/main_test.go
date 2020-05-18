@@ -10,8 +10,8 @@ import (
 	"github.com/yumyum-pi/go-schoolScheduler/pkg/models"
 )
 
-// ittrate no
-var ittrate int = 1
+// iterate no
+var iterate int = 1
 
 func TestNDistribution(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
@@ -24,9 +24,9 @@ func TestNDistribution(t *testing.T) {
 	fmt.Println(req.NNType)
 	//var nc *chromosome // store new chromosome value
 	//var n byte
-	for i := 0; i < ittrate; i++ {
-		nDist := nDistrubution(ns0, gSize, int(req.NNType))
-		printNDistribution(nDist, gSize)
+	for i := 0; i < iterate; i++ {
+		nDist := nDistribution(ns0, gSize, int(req.NNType))
+		//	printNDistribution(nDist, gSize)
 		for i, n := range *ns0 {
 			p := i % gSize
 			j := nMatch(ns0, gSize, i)
