@@ -211,6 +211,27 @@ func (c *chromosome) CheckEM2() {
 	return
 }
 
+// CheckEM3 (Check Error Method 1) checks for matching nucleotides in
+// each gene position and updates the list of ErrIndexL
+func (c *chromosome) CheckEM3() {
+	(*c).nErr = 0
+	var p, dIndex int
+	var f byte
+	// loop through each element
+	for sIndex, n := range (*c).Sequence {
+		p = sIndex % (*c).GeneSize
+		dIndex = int(n-1) * (*c).GeneSize
+
+		f = (*c).NDist[dIndex+p]
+
+		if f > 1 {
+			//adding to error list
+			(*c).ErrSequence[sIndex] = n
+			(*c).nErr++
+		}
+	}
+}
+
 // HandleEM1(Handle Error Method 1) tried to correct the overlapping
 // nucleotides by interchaning the position of the error nucleotides which
 // are in the same genes and don't overlap anymore

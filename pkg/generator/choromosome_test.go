@@ -112,6 +112,52 @@ func TestChromosome_CheckEM2(t *testing.T) {
 	}
 }
 
+func TestChromosome_CheckEM3(t *testing.T) {
+
+	rand.Seed(time.Now().UnixNano())
+
+	//var i int // length of sequence
+	var e error
+	// get information from the file
+	req := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
+	var nc0 chromosome
+	//var nc chromosome
+	nc0.GeneSize = gSize
+	nL := len(*ns0) // length of nucleotides
+
+	nc0.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc0.NDist = append((*nDist)[:0:0], (*nDist)...)
+	nc0.ErrSequence = make([]byte, nL, nL)
+	nc0.lSequence = nL
+
+	nc1 := nc0
+	nc2 := nc0
+	for k := 0; k < iteration; k++ {
+		shuffleNucleotide(&nc0)
+		nc1.Sequence = append(nc0.Sequence[:0:0], nc0.Sequence...)
+		nc2.Sequence = append(nc0.Sequence[:0:0], nc0.Sequence...)
+
+		nc1.NDist = append(nc0.NDist[:0:0], nc0.NDist...)
+		nc2.NDist = append(nc0.NDist[:0:0], nc0.NDist...)
+
+		nc1.ErrSequence = make([]byte, nL, nL)
+		nc2.ErrSequence = make([]byte, nL, nL)
+
+		nc1.CheckEM2()
+		nc2.CheckEM3()
+
+		e = checkErrLEqual(nc1.ErrSequence, nc2.ErrSequence, gSize)
+		if e != nil {
+			t.Error(e)
+			return
+		}
+	}
+}
+
 func checkErrLEqual(err0, err1 []byte, gSize int) error {
 	l := len(err0)
 
@@ -164,34 +210,74 @@ func checkErrLEqual(err0, err1 []byte, gSize int) error {
 }
 
 func BenchmarkChromosome_CheckEM1(b *testing.B) {
-	l := len(cr.Sequences)
-	gSize := 48
-	var nc chromosome // store new chromosome value
+	rand.Seed(time.Now().UnixNano())
+
+	// get information from the file
+	req := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
+	var nc chromosome
 	nc.GeneSize = gSize
-	var k int
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
 	for i := 0; i < b.N; i++ {
-		k = i % l
-		nc.Sequence = cr.Sequences[k]
-		nL := len(nc.Sequence)
-		nc.ErrSequence = make([]byte, nL, nL)
+		shuffleNucleotide(&nc)
 
 		nc.CheckEM1()
 	}
 }
 
 func BenchmarkChromosome_CheckEM2(b *testing.B) {
-	l := len(cr.Sequences)
-	gSize := 48
-	var nc chromosome // store new chromosome value
+	rand.Seed(time.Now().UnixNano())
+
+	// get information from the file
+	req := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
+	var nc chromosome
 	nc.GeneSize = gSize
-	var k int
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
 	for i := 0; i < b.N; i++ {
-		k = i % l
-		nc.Sequence = cr.Sequences[k]
-		nL := len(nc.Sequence)
-		nc.ErrSequence = make([]byte, nL, nL)
+		shuffleNucleotide(&nc)
 
 		nc.CheckEM2()
+	}
+}
+
+func BenchmarkChromosome_CheckEM3(b *testing.B) {
+	rand.Seed(time.Now().UnixNano())
+
+	// get information from the file
+	req := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
+	var nc chromosome
+	nc.GeneSize = gSize
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
+	for i := 0; i < b.N; i++ {
+		shuffleNucleotide(&nc)
+
+		nc.CheckEM3()
 	}
 }
 
