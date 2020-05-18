@@ -14,14 +14,29 @@ type chromosome struct {
 	ErrSequence []byte // slice of conflicting nucleotides - periods
 	nErr        int    // no of error
 	Fitness     int    // fitness of the chromosome
-
+	NDist       []byte // distribution of each nucleotide
 }
 
 // SwapNucleotide change the positions of nucleotide in the sequence
 // and the error
-func (c *chromosome) SwapNucleotide(n0, n1 int) {
-	(*c).Sequence[n0], (*c).Sequence[n1] = (*c).Sequence[n1], (*c).Sequence[n0]
-	(*c).ErrSequence[n0], (*c).ErrSequence[n1] = (*c).ErrSequence[n1], (*c).ErrSequence[n0]
+func (c *chromosome) SwapNucleotide(sIndex0, sIndex1 int) {
+	n0 := (*c).Sequence[sIndex0]
+	n1 := (*c).Sequence[sIndex1]
+	p0 := sIndex0 % (*c).GeneSize
+	p1 := sIndex1 % (*c).GeneSize
+	(*c).Sequence[sIndex0], (*c).Sequence[sIndex1] = (*c).Sequence[sIndex1], (*c).Sequence[sIndex0]
+	(*c).ErrSequence[sIndex0], (*c).ErrSequence[sIndex1] = (*c).ErrSequence[sIndex1], (*c).ErrSequence[sIndex0]
+
+	// swap the NDist
+	n0Index := (int(n0-1) * (*c).GeneSize)
+	n1Index := (int(n1-1) * (*c).GeneSize)
+	// remove reduce from current position
+	(*c).NDist[n0Index+p0]--
+	(*c).NDist[n1Index+p1]--
+
+	// add to current position
+	(*c).NDist[n0Index+p1]++
+	(*c).NDist[n1Index+p0]++
 }
 
 // illegalMutation checks for unwanted mutation cause by badly written code.

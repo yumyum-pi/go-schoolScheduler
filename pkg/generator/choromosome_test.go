@@ -18,11 +18,11 @@ func TestChromosome_illegalMutation(t *testing.T) {
 
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
-
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
 	var nc *chromosome // store new chromosome value
 	var n byte
 	for i := 0; i < 256; i++ {
-		nc = newChromo(ns0, gSize, 0, i) // create new chromosome
+		nc = newChromo(ns0, nDist, gSize, 0, i) // create new chromosome
 
 		if e := illegalMutation(ns0, &(nc.Sequence), gSize); e != nil {
 			t.Error(e)
@@ -202,12 +202,13 @@ func TestChromosome_HandleEM1(t *testing.T) {
 
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
-
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
 	var nc chromosome
 	nc.GeneSize = gSize
 	nL := len(*ns0) // length of nucleotides
 
 	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
 	nc.ErrSequence = make([]byte, nL, nL)
 	nc.lSequence = nL
 
@@ -231,12 +232,13 @@ func BenchmarkChromosome_HandleEM1(b *testing.B) {
 
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
-
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
 	var nc chromosome
 	nc.GeneSize = gSize
 	nL := len(*ns0) // length of nucleotides
 
 	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
 	nc.ErrSequence = make([]byte, nL, nL)
 	nc.lSequence = nL
 
@@ -258,12 +260,13 @@ func TestChromosome_HandleEM2(t *testing.T) {
 
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
-
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
 	var nc chromosome
 	nc.GeneSize = gSize
 	nL := len(*ns0) // length of nucleotides
 
 	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
 	nc.ErrSequence = make([]byte, nL, nL)
 	nc.lSequence = nL
 
@@ -298,12 +301,13 @@ func BenchmarkChromosome_HandleEM2(b *testing.B) {
 
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
-
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
 	var nc chromosome
 	nc.GeneSize = gSize
 	nL := len(*ns0) // length of nucleotides
 
 	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
 	nc.ErrSequence = make([]byte, nL, nL)
 	nc.lSequence = nL
 
@@ -317,17 +321,19 @@ func BenchmarkChromosome_HandleEM2(b *testing.B) {
 
 func TestChromosome_CalFitness(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
+
 	// get information from the file
 	req := file.ReadRand(inputDir)
 
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
-
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
 	var nc chromosome
 	nc.GeneSize = gSize
 	nL := len(*ns0) // length of nucleotides
 
 	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
 	nc.ErrSequence = make([]byte, nL, nL)
 	nc.lSequence = nL
 
@@ -348,8 +354,9 @@ func BenchmarkChromosome_CalFitness(b *testing.B) {
 
 	// decode the pkgs to ns0 and gene-size
 	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
 	for i := 0; i < b.N; i++ {
 		// decode the pkgs to ns0 and gene-size
-		newChromo(ns0, gSize, 0, i) // create new chromosome
+		newChromo(ns0, nDist, gSize, 0, i) // create new chromosome
 	}
 }
