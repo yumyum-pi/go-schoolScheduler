@@ -360,3 +360,34 @@ func BenchmarkChromosome_CalFitness(b *testing.B) {
 		newChromo(ns0, nDist, gSize, 0, i) // create new chromosome
 	}
 }
+
+func TestChromosome_SwapNucleotide(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+
+	// get information from the file
+	req := file.ReadRand(inputDir)
+
+	// decode the pkgs to ns0 and gene-size
+	ns0, gSize, _ := models.Decode(&req.Pkgs, req.GSize)
+	nDist := nDistribution(ns0, gSize, int(req.NNType))
+	var nc chromosome
+	nc.GeneSize = gSize
+	nL := len(*ns0) // length of nucleotides
+
+	nc.Sequence = append((*ns0)[:0:0], (*ns0)...) // copy the value
+	nc.NDist = append((*nDist)[:0:0], (*nDist)...)
+	nc.ErrSequence = make([]byte, nL, nL)
+	nc.lSequence = nL
+	for k := 0; k < 64; k++ {
+		shuffleNucleotide(&nc)
+		for i, n := range nc.Sequence {
+			p := i % nc.GeneSize
+			j := nMatch(&nc.Sequence, gSize, i)
+			distI := (int((n - 1)) * gSize) + p
+			k := nc.NDist[distI]
+			if int(k) != j {
+				t.Errorf("no match found k=%v j =%v", k, j)
+			}
+		}
+	}
+}
