@@ -28,15 +28,15 @@ func (c *chromosome) SwapNucleotide(sIndex0, sIndex1 int) {
 	(*c).ErrSequence[sIndex0], (*c).ErrSequence[sIndex1] = (*c).ErrSequence[sIndex1], (*c).ErrSequence[sIndex0]
 
 	// swap the NDist
-	n0Index := (int(n0-1) * (*c).GeneSize)
-	n1Index := (int(n1-1) * (*c).GeneSize)
+	dIndex0 := (int(n0-1) * (*c).GeneSize)
+	dIndex1 := (int(n1-1) * (*c).GeneSize)
 	// remove reduce from current position
-	(*c).NDist[n0Index+p0]--
-	(*c).NDist[n1Index+p1]--
+	(*c).NDist[dIndex0+p0]--
+	(*c).NDist[dIndex1+p1]--
 
 	// add to current position
-	(*c).NDist[n0Index+p1]++
-	(*c).NDist[n1Index+p0]++
+	(*c).NDist[dIndex0+p1]++
+	(*c).NDist[dIndex1+p0]++
 }
 
 // illegalMutation checks for unwanted mutation cause by badly written code.
@@ -277,6 +277,55 @@ func (c *chromosome) HandleEM2() error {
 	return nil
 }
 
+// HandleEM3(Handle Error Method 2) tried to correct the overlapping
+// nucleotides by interchaning the position of the nucleotides which
+// are in the same genes and don't overlap anymore
+func (c *chromosome) HandleEM3() {
+	var n0, n1 byte          // nucleotide
+	var dIndex0, dIndex1 int // index of nucleotide distribution
+	var f0, f1 byte          // frequency of nucleotide
+	var p0, p1 int           // position of nucleotides
+
+	for gIndex := 0; gIndex < (*c).lSequence; gIndex += (*c).GeneSize {
+		for p0 = 0; p0 < (*c).GeneSize; p0++ {
+			n0 = (*c).Sequence[gIndex+p0]
+			dIndex0 = int(n0-1) * (*c).GeneSize
+
+			f0 = (*c).NDist[dIndex0+p0] // get the frequency at p0
+
+			// skip if nucleotide has not overlaps
+			if f0 < 2 {
+				continue
+			}
+			for p1 = 0; p1 < (*c).GeneSize; p1++ {
+				if p1 == p0 {
+					continue
+				}
+				n1 = (*c).Sequence[gIndex+p1]
+				dIndex1 = int(n1-1) * (*c).GeneSize
+
+				// check if nucleotides have overlaps
+				f0 = (*c).NDist[dIndex0+p1] // n0 at p1
+				f1 = (*c).NDist[dIndex1+p0] // n1 at p2
+
+				// swap positions if nucleotide has not overlaps
+				if f1 == 0 && f0 == 0 {
+
+					(*c).Sequence[gIndex+p0], (*c).Sequence[gIndex+p1] = (*c).Sequence[gIndex+p1], (*c).Sequence[gIndex+p0]
+					(*c).NDist[dIndex0+p0]--
+					(*c).NDist[dIndex1+p1]--
+
+					(*c).NDist[dIndex0+p1]++
+					(*c).NDist[dIndex1+p0]++
+
+					//(*c).SwapNucleotide((gIndex + p0), (gIndex + p1))
+					break
+				}
+			}
+		}
+	}
+}
+
 // CheckSafeSwap takes two variable in the same gene and checks if swaping
 // their postion will resolve problem and return int. Meaning of returned int
 //  (-1) - can not resolve conflict
@@ -353,7 +402,7 @@ func (c *chromosome) Print(detail bool) {
 	)
 	if detail {
 		for i := 0; i < (*c).lSequence; i += (*c).GeneSize {
-			fmt.Printf("%2v[ ", i/(*c).GeneSize)
+			fmt.Printf("%3v[ ", i/(*c).GeneSize)
 			for j := 0; j < (*c).GeneSize; j++ {
 				index = i + j
 				if j%8 == 0 && j != 0 {
