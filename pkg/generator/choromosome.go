@@ -215,6 +215,7 @@ func (c *chromosome) CheckEM2() {
 // each gene position and updates the list of ErrIndexL
 func (c *chromosome) CheckEM3() {
 	(*c).nErr = 0
+	(*c).ErrSequence = make([]byte, (*c).lSequence, (*c).lSequence)
 	var p, dIndex int
 	var f byte
 	// loop through each element
