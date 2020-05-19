@@ -2,13 +2,11 @@ package generator
 
 import "fmt"
 
-const nGeneration = 16
-
 // Start begin the generating process
 func Start(s0 *[]byte, geneSize, nNType int) (*[]byte, int, error) {
 	nGene := len(*s0) / geneSize
 	nGene /= 12
-	nGene = nGene * nGene * nGene / 2
+	nGene = nGene * nGene * 5
 	nDist := nDistribution(s0, geneSize, nNType)
 	p := CreatePopulation(s0, nDist, geneSize, nNType)
 	p.Init()
