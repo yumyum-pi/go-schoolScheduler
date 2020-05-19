@@ -325,13 +325,15 @@ func (c *chromosome) HandleEM3() {
 				n1 = (*c).Sequence[gIndex+p1]
 				dIndex1 = int(n1-1) * (*c).GeneSize
 
+				if (*c).NDist[dIndex1+p1] == 0 {
+					continue
+				}
 				// check if nucleotides have overlaps
 				f0 = (*c).NDist[dIndex0+p1] // n0 at p1
 				f1 = (*c).NDist[dIndex1+p0] // n1 at p2
 
 				// swap positions if nucleotide has not overlaps
 				if f1 == 0 && f0 == 0 {
-
 					(*c).Sequence[gIndex+p0], (*c).Sequence[gIndex+p1] = (*c).Sequence[gIndex+p1], (*c).Sequence[gIndex+p0]
 					(*c).NDist[dIndex0+p0]--
 					(*c).NDist[dIndex1+p1]--
@@ -431,11 +433,11 @@ func (c *chromosome) Print(detail bool) {
 				}
 				// check if error
 				if (*c).ErrSequence[index] != 0 {
-					fmt.Printf("%v%02v%v ", string(colorRed), (*c).Sequence[index], string(colorReset))
+					fmt.Printf("%v%03v%v ", string(colorRed), (*c).Sequence[index], string(colorReset))
 					continue
 
 				}
-				fmt.Printf("%v%02v ", string(colorGreen), (*c).Sequence[index])
+				fmt.Printf("%v%03v ", string(colorGreen), (*c).Sequence[index])
 			}
 			fmt.Printf("%v]\n", string(colorReset))
 		}
@@ -445,7 +447,7 @@ func (c *chromosome) Print(detail bool) {
 
 func (c *chromosome) CalFitness() {
 	// update the check list
-	(*c).CheckEM2()
+	(*c).CheckEM3()
 
 	// calculate the fitness by error
 	if (*c).nErr != 0 {
