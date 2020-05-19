@@ -11,8 +11,6 @@ import (
 	cr "github.com/yumyum-pi/go-schoolScheduler/test/checkerror"
 )
 
-var iteration int = 256
-
 func TestChromosome_illegalMutation(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 	// get information from the file
@@ -23,7 +21,7 @@ func TestChromosome_illegalMutation(t *testing.T) {
 	nDist := nDistribution(ns0, gSize, int(req.NNType))
 	var nc *chromosome // store new chromosome value
 	var n byte
-	for i := 0; i < iteration; i++ {
+	for i := 0; i < iterate; i++ {
 		nc = newChromo(ns0, nDist, gSize, 0, i) // create new chromosome
 
 		if e := illegalMutation(ns0, &(nc.Sequence), gSize); e != nil {
@@ -136,7 +134,7 @@ func TestChromosome_CheckEM3(t *testing.T) {
 
 	nc1 := nc0
 	nc2 := nc0
-	for k := 0; k < iteration; k++ {
+	for k := 0; k < iterate; k++ {
 		shuffleNucleotide(&nc0)
 		nc1.Sequence = append(nc0.Sequence[:0:0], nc0.Sequence...)
 		nc2.Sequence = append(nc0.Sequence[:0:0], nc0.Sequence...)
@@ -300,7 +298,7 @@ func TestChromosome_HandleEM1(t *testing.T) {
 	nc.ErrSequence = make([]byte, nL, nL)
 	nc.lSequence = nL
 
-	for k := 0; k < iteration; k++ {
+	for k := 0; k < iterate; k++ {
 		shuffleNucleotide(&nc)
 
 		nc.CheckEM2()
@@ -359,7 +357,7 @@ func TestChromosome_HandleEM2(t *testing.T) {
 	nc.lSequence = nL
 
 	var nErr0, nErr1, nErr2 int
-	for k := 0; k < iteration; k++ {
+	for k := 0; k < iterate; k++ {
 		shuffleNucleotide(&nc)
 
 		nc.CheckEM2()
@@ -427,7 +425,7 @@ func TestChromosome_HandleEM3(t *testing.T) {
 	nc.lSequence = nL
 
 	//var nErr0, nErr1, nErr2 int
-	for k := 0; k < iteration; k++ {
+	for k := 0; k < iterate; k++ {
 		shuffleNucleotide(&nc)
 		nc.HandleEM3()
 
@@ -478,11 +476,9 @@ func TestChromosome_CalFitness(t *testing.T) {
 	nc.ErrSequence = make([]byte, nL, nL)
 	nc.lSequence = nL
 
-	for k := 0; k < 64; k++ {
+	for k := 0; k < iterate; k++ {
 		shuffleNucleotide(&nc)
-		nc.CheckEM2()
-		nc.HandleEM1()
-		nc.HandleEM2()
+		nc.HandleEM3()
 		nc.CalFitness()
 	}
 }

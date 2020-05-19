@@ -11,7 +11,7 @@ import (
 )
 
 // iterate no
-var iterate int = 1
+var iterate int = 128
 
 func TestNDistribution(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
