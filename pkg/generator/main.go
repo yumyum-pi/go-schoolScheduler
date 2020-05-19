@@ -6,19 +6,27 @@ const nGeneration = 16
 
 // Start begin the generating process
 func Start(s0 *[]byte, geneSize, nNType int) (*[]byte, int, error) {
+	nGene := len(*s0) / geneSize
+	nGene /= 12
+	nGene = nGene * nGene * nGene / 2
 	nDist := nDistribution(s0, geneSize, nNType)
 	p := CreatePopulation(s0, nDist, geneSize, nNType)
 	p.Init()
-	for g := 0; g < nGeneration; g++ {
+	for g := 0; g < nGene; g++ {
 		p.Next(g + 1)
 	}
 	for _, c := range p.P {
 		if c.nErr == 0 {
+			if er := illegalMutation(s0, &c.Sequence, geneSize); er != nil {
+				fmt.Println(er)
+			}
 			return &c.Sequence, 0, nil
 		}
 	}
-
-	return &p.P[0].Sequence, p.P[0].nErr, fmt.Errorf("Error=%04v ng=%03v", p.P[0].nErr, nGeneration)
+	if er := illegalMutation(s0, &p.P[0].Sequence, geneSize); er != nil {
+		fmt.Println(er)
+	}
+	return &p.P[0].Sequence, p.P[0].nErr, fmt.Errorf("Error=%04v ng=%03v", p.P[0].nErr, nGene)
 }
 
 // create nucleotide
