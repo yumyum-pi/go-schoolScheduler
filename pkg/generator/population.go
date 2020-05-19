@@ -68,9 +68,8 @@ func newChromo(ns0, nDist *[]byte, gSize, generation, index int) *chromosome {
 
 	shuffleNucleotide(&chromo)
 
-	chromo.CheckEM2()
-	chromo.HandleEM1()
-	chromo.HandleEM2()
+	chromo.HandleEM3()
+	chromo.HandleEM3()
 	chromo.CalFitness()
 
 	chromo.GenCode = fmt.Sprintf("%02dN%02d:%04v", generation, index, chromo.nErr)
@@ -130,7 +129,7 @@ func (p *Population) CrossOver(g int) {
 			// get the new cross over sequences
 			ns0, ns1 := crossOver(&(*p).P[i].Sequence, &(*p).P[i+1].Sequence, (*p).P[i].GeneSize)
 			nDist0 := nDistribution(ns0, p.gSize, p.nNType)
-			nDist1 := nDistribution(ns0, p.gSize, p.nNType)
+			nDist1 := nDistribution(ns1, p.gSize, p.nNType)
 			// create chromosomes
 			var c0, c1 chromosome
 			c0.GeneSize = (*p).gSize
@@ -151,14 +150,10 @@ func (p *Population) CrossOver(g int) {
 			c1.lSequence = nL
 
 			// handle error
-			c0.CheckEM2()
-			c1.CheckEM2()
-
-			c0.HandleEM1()
-			c1.HandleEM1()
-
-			c0.HandleEM2()
-			c1.HandleEM2()
+			c0.HandleEM3()
+			c1.HandleEM3()
+			c0.HandleEM3()
+			c1.HandleEM3()
 
 			c0.CalFitness()
 			c1.CalFitness()
@@ -200,8 +195,10 @@ func (p *Population) Mutate(g int) {
 	for i := p2Size; i < p34Size; i++ {
 		wg.Add(1)
 		go func(i int) {
-			(*p).P[i].HandleEM2()
-			(*p).P[i].CheckEM2()
+			(*p).P[i].HandleEM3()
+			(*p).P[i].HandleEM3()
+			(*p).P[i].HandleEM3()
+			(*p).P[i].CalFitness()
 			(*p).P[i].GenCode = fmt.Sprintf("%02dM%02d:%04v", g, i-p2Size, (*p).P[i].nErr)
 
 			wg.Done()
